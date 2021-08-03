@@ -221,7 +221,7 @@ export default class Contact extends Component {
     return (
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
 
-        <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", marginTop: "70px"}}>
+        <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%"}}>
               
             {(this.state.step === 1 || this.state.step === 4)  &&
               <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
@@ -280,16 +280,16 @@ export default class Contact extends Component {
                         <input onChange={this.handlerOnChange} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                       </div>
 
-                      <div className="form-group mb-3">
-                        <div className="row mb-3 w-100">
+                      {/* <div className="form-group mb-3 w-100"> */}
+                        <div className="row mb-3 align-items-center">
                           <div className="col">
-                            <label className="form-label" for="dateFNacimiento">Fecha de nacimiento:</label>
+                            <small>Fecha de nacimiento:</small>
                           </div>
                           <div className="col">
                             <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
                           </div>
                         </div>
-                      </div>
+                      {/* </div> */}
 
                       <div className="form-group mb-3">
                         {/* Select Sexo*/}
@@ -366,13 +366,10 @@ export default class Contact extends Component {
                                            
                   </div>                
                 </div>
-                <div style={{ height: "150px"}}>
-                  <br></br>
-                </div>
-                <div className="row mb-3">
-                   <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                   <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}}>SIGUIENTE</button>
-                   </div>
+                <div className="row">
+                  <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                    <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
+                  </div>
                 </div> 
               </div>
             }
@@ -675,11 +672,11 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
-                  <div className="form-group mb-3">
-                    <div className="row mb-3 w-100">
+                  {/* <div className="form-group mb-3"> */}
+                    <div className=" row mb-3 align-items-center">
                       <div className="col">
                         <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
-                        <label className="form-label" for="swLGBT">¿Pertenece a la comunidad LGBTTTQA?</label>
+                        <label className="form-label">&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
                       </div>
                       {/* Select LGBT*/}
                       <div className="col">
@@ -700,13 +697,13 @@ export default class Contact extends Component {
                         </select>
                       </div>
                     </div>
-                  </div>
+                  {/* </div> */}
 
-                  <div className="form-group mb-3">
-                    <div className="row mb-3 w-100">
+                  {/* <div className="form-group mb-3"> */}
+                    <div className="row mb-3 align-items-center">
                       <div className="col">
                         <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
-                        <label className="form-label" for="swDiscapacidad">¿Tiene alguna discapacidad?</label>
+                        <label className="form-label">&nbsp;¿Tiene alguna discapacidad?</label>
                       </div>
                       {/* Select Discapacidad*/}
                       <div className="col">
@@ -727,16 +724,13 @@ export default class Contact extends Component {
                         </select>
                       </div>
                     </div>
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
-              <div style={{ height: "150px"}}>
-                <br></br>
-              </div>
-              <div className="row mb-3">
-                <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                  <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}}>SIGUIENTE</button>
+              <div className="row">
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                  <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
+                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
                 </div>
               </div>
             </div>
@@ -952,15 +946,28 @@ export default class Contact extends Component {
                         
                         </select>
                       </div>
-                      <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} type="time" className="form-control" placeholder="Hora del suceso (24hrs)" id="timeHoraSuceso" name="timeHoraSuceso" value={this.state.timeHoraSuceso} ref={timeHoraSuceso=>this.inputTimeHoraSuceso = timeHoraSuceso}/> 
-                        
-                      </div>
 
-                      <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" placeholder="Fecha del suceso" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
-                        
-                      </div>
+                      {/* <div className="form-group mb-3"> */}
+                        <div className="row mb-3 align-items-center">
+                          <div className="col">
+                            <small>Hora del suceso:</small>
+                          </div>
+                          <div className="col">
+                            <input onChange={this.handlerOnChange} type="time" className="form-control" placeholder="Hora del suceso (24hrs)" id="timeHoraSuceso" name="timeHoraSuceso" value={this.state.timeHoraSuceso} ref={timeHoraSuceso=>this.inputTimeHoraSuceso = timeHoraSuceso}/>
+                          </div>
+                        </div>
+                      {/* </div> */}
+
+                      {/* <div className="form-group mb-3"> */}
+                        <div className="row mb-3 align-items-center">
+                          <div className="col">
+                            <small>Fecha del suceso:</small>
+                          </div>
+                          <div className="col">
+                            <input onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" placeholder="Fecha del suceso" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
+                          </div>
+                        </div>
+                      {/* </div> */}
                       
                       <div className="form-group mb-3">
                         <input onChange={this.handlerOnChange} id="txtCalle" name="txtCalle" value={this.state.txtCalle} type="text" className="form-control" placeholder="Calle" ref={txtCalle=>this.inputTxtCalle = txtCalle} />
@@ -1296,10 +1303,10 @@ export default class Contact extends Component {
 
                     </div>
                   </div>
-                  <div className="row mb-3">
-                    <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                      <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
-                      <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}} type="submit">FINALIZAR</button>
+                  <div className="row">
+                    <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                      <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
+                      <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
                     </div>
                   </div>
                 </div>
