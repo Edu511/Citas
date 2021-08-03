@@ -698,28 +698,31 @@ export default class Contact extends Component {
 
                   <div className="form-group mb-3">
                     <div className="form-group mb-3" style={{width: "50%"}}>
-                      <label>
-                        <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
-                        <span>&nbsp;¿Tiene alguna discapacidad?</span>
-                      </label>
+                      
                     </div>
-                    <div className="form-group mb-3" style={{width: "50%"}}>
+                    <div className="row mb-3 w-100">
+                      <div className="col">
+                        <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
+                        <label className="form-label" for="swDiscapacidad">¿Tiene alguna discapacidad?</label>
+                      </div>
                       {/* Select Discapacidad*/}
-                      <select onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
-                        <option value="defaultDiscapacidad" >Seleccione...</option>
-                        <option value="Autismo">Autismo</option>
-                        <option value="Deficiencia Visual">Deficiencia Visual</option>
-                        <option value="Discapacidad Fisica">Discapacidad Fisica</option>
-                        <option value="Enfermedades Mentales">Enfermedades Mentales</option>
-                        <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
-                        <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
-                        <option value="Enfermedad Cronica">Enfermedad Cronica</option>
-                        <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
-                        <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
-                        <option value="Perdida de Memoria">Perdida de Memoria</option>
-                        <option value="Otra">Otra</option>
-                        <option value="Ninguna">Ninguna</option>
-                      </select>
+                        <div className="col">
+                          <select onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
+                            <option value="defaultDiscapacidad" >Seleccione...</option>
+                            <option value="Autismo">Autismo</option>
+                            <option value="Deficiencia Visual">Deficiencia Visual</option>
+                            <option value="Discapacidad Fisica">Discapacidad Fisica</option>
+                            <option value="Enfermedades Mentales">Enfermedades Mentales</option>
+                            <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
+                            <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
+                            <option value="Enfermedad Cronica">Enfermedad Cronica</option>
+                            <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
+                            <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
+                            <option value="Perdida de Memoria">Perdida de Memoria</option>
+                            <option value="Otra">Otra</option>
+                            <option value="Ninguna">Ninguna</option>
+                          </select>
+                        </div>
                     </div>
                   </div>
                 </div>
