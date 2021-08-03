@@ -55,8 +55,6 @@ export default class Contact extends Component {
 
   }
 
-
-
 //  Cambia el valor de persona fisica y moral
   checkF(){
     this.setState({
@@ -723,10 +721,10 @@ export default class Contact extends Component {
                     </div>
                   </div>
                 </div>
-              </div>
+              {/* </div>
               <div style={{ height: "150px"}}>
                 <br></br>
-              </div>
+              </div> */}
               <div className="row mb-3">
                 <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
                   <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
