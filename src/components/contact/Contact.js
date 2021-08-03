@@ -681,24 +681,24 @@ export default class Contact extends Component {
                         <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
                         <label className="form-label" for="swLGBT">¿Pertenece a la comunidad LGBTTTQA?</label>
                       </div>
-                    </div>
-                    {/* Select LGBT*/}
-                    <div className="col">
-                      <select onChange={this.handlerOnChange} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
-                        <option value="defaultLGBT" >Seleccione...</option>
-                        <option value="Lesbiana">Lesbiana</option>
-                        <option value="Gay">Gay</option>
-                        <option value="Bisexual">Bisexual</option>
-                        <option value="Transgénero">Transgénero</option>
-                        <option value="Transexual">Transexual</option>
-                        <option value="Travesti">Travesti</option>
-                        <option value="Queer">Queer</option>
-                        <option value="Questioning">Questioning</option>
-                        <option value="Intersexual">Intersexual</option>
-                        <option value="Asexual">Asexual</option>
-                        <option value="Pansexual">Pansexual</option>
-                        <option value="Otro">Otro</option>
-                      </select>
+                      {/* Select LGBT*/}
+                      <div className="col">
+                        <select onChange={this.handlerOnChange} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
+                          <option value="defaultLGBT" >Seleccione...</option>
+                          <option value="Lesbiana">Lesbiana</option>
+                          <option value="Gay">Gay</option>
+                          <option value="Bisexual">Bisexual</option>
+                          <option value="Transgénero">Transgénero</option>
+                          <option value="Transexual">Transexual</option>
+                          <option value="Travesti">Travesti</option>
+                          <option value="Queer">Queer</option>
+                          <option value="Questioning">Questioning</option>
+                          <option value="Intersexual">Intersexual</option>
+                          <option value="Asexual">Asexual</option>
+                          <option value="Pansexual">Pansexual</option>
+                          <option value="Otro">Otro</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
 
