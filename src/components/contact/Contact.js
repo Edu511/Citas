@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import firebase from '../../firebase/firebaseConfig'
-import axios from 'axios';
-
 export default class Contact extends Component {
   
   constructor(props){
@@ -10,6 +8,8 @@ export default class Contact extends Component {
       step: 1,
       swAnonimo: false,
       raPersona: "Fisica",
+      txtRFC: "",
+      txtRazonSocial: "",
       selClasPersona: "",
       txtNombre: "",
       txtApPaterno: "",
@@ -53,10 +53,63 @@ export default class Contact extends Component {
       txtLongitud: ""
       
     }
+    if (this.swAnonimo) {
+      this.state = {
+        raPersona: "Anonimo",
+        txtRFC: "Anonimo",
+        txtRazonSocial: "Anonimo",
+        selClasPersona: "Anonimo",
+        txtNombre: "Anonimo",
+        txtApPaterno: "Anonimo",
+        txtApMaterno: "Anonimo",
+        txtAlias: "Anonimo",
+        dateFNacimiento: "01/01/0001",
+        selSexo: "Anonimo",
+        selEntidadFederativa: "Anonimo",
+        selIdentificacion: "Anonimo",
+        fileDocumento: " ",
+        txtCurp: "XXXX010101XXXXXXX1",
+        selNotificacion: "",
+        txtnumTel1: "Anonimo",
+        txtnumTel2: "Anonimo",
+        emailCorreo: "",
+        txtNacionalidad: "Anonimo",
+        selEstadoCivil: "Anonimo",
+        selOcupacion: "Anonimo",
+        selNivelEstudios: "Anonimo",
+        selLengua: "Anonimo",
+        selReligion: "Anonimo",
+        swLGBT: false,
+        selLGBT: "Anonimo",
+        swDiscapacidad: false,
+        selDiscapacidad: "Anonimo",
+        selTipoDelito: "",
+        timeHoraSuceso: "",
+        dateFSuceso: "",
+        txtCalle: "",
+        txtNumInt: "",
+        txtNumExt: "",
+        txtEntCalle1: "",
+        txtEntCalle2: "",
+        txtReferencias: "",
+        selPais: "",
+        selEstado: "",
+        selMunicipio: "",
+        selLocalidad: "",
+        txtCodPostal: "",
+        txtLatitud: "",
+        txtLongitud: ""
+      }
+    }
 
   }
 
+  checkAnonimo(){
+    this.setState({
+      swAnonimo: !this.state.swAnonimo
+    })
 
+  }
 
 //  Cambia el valor de persona fisica y moral
   checkF(){
@@ -72,6 +125,18 @@ export default class Contact extends Component {
      })
 
   }
+  checkLGBT(){
+    this.setState({
+      swLGBT: !this.state.swLGBT
+    })
+
+  }
+  checkDisc(){
+    this.setState({
+      swDiscapacidad: !this.state.swDiscapacidad
+    })
+
+  }
 
   //Se ocupa de cambiar de seccion
   siguiente=()=>{
@@ -85,655 +150,7 @@ export default class Contact extends Component {
     })    
   }
 
-  guardar(){
-    //************************** */
-   let me=this;
-   let header={"Authorization" : "Bearer " + this.$store.state.token};
-   let configuracion= {headers : header};
-// /---------------------------------------------------------------------------------------------------------/
-// /---------------------------------------------------------------------------------------------------------/
-   var listaMediosNotificacion='';
-   if(me.medionotificacion.length<=0)
-   {
-       listaMediosNotificacion='';
-   }
-   else
-   {
-       me.medionotificacion.forEach(function(notificacion)
-       {
-           listaMediosNotificacion+=notificacion.text+',';                                     
-       });
-       listaMediosNotificacion = listaMediosNotificacion.slice(0, -1);
-   }    
 
-// /---------------------------------------------------------------------------------------------------------/
-// /---------------------------------------------------------------------------------------------------------/
-
-   this.$validator.validate().then(result => {
-       if (result) {
-           if(me.fnacimiento != "")
-               me.edadf = me.generaredad();
-           else    
-               me.edadf = 999
-
-           if(me.edadf <18)
-               me.datosprotegidos = true;
-                  
-           if (me.switch2==true){  
-               
-               me.radios= 'Anonimo'
-               me.rfc= 'Anonimo'
-               me.razonsocial='Anonimo'
-               me.clasificacionpersona='Anonimo'
-               me.nombres='Anonimo'
-               me.apaterno='Anonimo'
-               me.amaterno='Anonimo'
-               me.alias="Anonimo"
-               me.fnacimiento='01/01/0001'
-               me.abreviacion= 'Anonimo'
-               me.docidentificacion = ''
-               me.curp='XXXX010101XXXXXXX1'
-               me.sexo='Anonimo'
-               me.estadocivil='Anonimo'
-               me.genero='Anonimo'
-               me.telefono1='Anonimo'
-               me.telefono2='Anonimo'
-               me.correo='Anonimo'
-               me.medionotificacion='Anonimo'
-               me.nacionalidad='Anonimo'
-               me.ocupacion='Anonimo'
-               me.nivelestudio='Anonimo'
-               me.lengua='Anonimo'
-               me.religion='Anonimo'
-               me.switch1= false
-               me.discapacidad='Anonimo'
-               me.calle='Anonimo'
-               me.noExt='Anonimo'
-               me.noInt='Anonimo'
-               me.entreCalle1='Anonimo'
-               me.entreCalle2='Anonimo'
-               me.referencia='Anonimo'
-               me.pais='Anonimo'
-               me.estado='Anonimo'
-               me.municipio='Anonimo'
-               me.localidad='Anonimo'
-               me.cp= 0
-           }
-           
-           axios.post('api/Racs/GenerarRac',{
-               'distritoId': me.u_iddistrito,
-               'agenciaId': me.u_idagencia,
-           },configuracion).then(function(response){
-               me.rac = response.data.rac;
-               me.racid =  response.data.idrac;
-               if (me.statusActualizar==true)
-                   {
-                       if(me.lat =='')
-                       me.lat = 0;
-                       if(me.lng =='')
-                       me.lng = 0;
-
-                       axios.post('api/RAPs/CrearRAP',{
-                           'distritoInicial': me.u_distrito,  
-                           'dirSubProcuInicial': me.u_dirSubPro,
-                           'agenciaInicial': me.u_agencia,
-                           'agenciaId': me.u_idagencia,
-                           'racId':me.racid,  
-                           'personaId': me.idPersona,
-                           'clasificacionpersona': me.clasificacionpersona,
-                           'pInicio': true,
-                           'modulo':me.u_modulo,
-                       },configuracion).then(function(response){
-                         
-                           var rac = "RAC: " +   me.rac
-                           var fechahora = response.data.fh
-                           var notu = "A-" + response.data.notu
-
-                           axios.put('api/Personas/Actualizar',{
-                               'personaId': me.idPersona,
-                               'statusAnonimo': me.switch2,
-                               'tipoPersona': me.radios,
-                               'rfc': me.rfc,
-                               'razonsocial': me.razonsocial,  
-                               'nombre': me.nombres,
-                               'apellidoPaterno' : me.apaterno,
-                               'apellidoMaterno' : me.amaterno,
-                               'alias': me.alias,
-                               'statusAlias': false,
-                               'fechaNacimiento' : me.fnacimiento,
-                               'entidadFederativa': me.abreviacion.text,
-                               'docIdentificacion': me.docidentificacion,
-                               'curp': me.curp,
-
-                               'sexo' : me.sexo,
-                               'estadoCivil': me.estadocivil,
-                               'genero': me.genero,
-                               'telefono1': me.telefono1,
-                               'telefono2': me.telefono2,
-                               'correo': me.correo,
-                               'medioNotificacion': listaMediosNotificacion,
-                               'nacionalidad': me.nacionalidad,
-                               'ocupacion': me.ocupacion,
-                               'nivelEstudio': me.nivelestudio,
-                               'lengua': me.lengua,
-                               'religion': me.religion,
-                               'discapacidad': me.switch1,
-                               'tipoDiscapacidad': me.discapacidad,
-                               'Relacion': me.relacion,
-                               'Parentesco': me.relacionado,
-                               'Edad': me.edadf,
-                               'DocPoderNotarial':me.documentoacredita,
-                               
-                               //Direccion personal
-                               'calle': me.calle,
-                               'noExt': me.noExt,
-                               'noInt': me.noInt,
-                               'entreCalle1': me.entreCalle1,
-                               'entreCalle2': me.entreCalle2,
-                               'referencia': me.referencia,
-                               'pais': me.pais,
-                               'estado': me.estado,
-                               'municipio': me.municipio,
-                               'localidad': me.localidad,
-                               'cp': me.cp,
-                               'lat': me.lat,
-                               'lng':me.lng,
-                           },configuracion).then(function(response){
-                               me.$notify('La información se guardo correctamente !!!','success')
-                               //this.ticketModal=1;
-                           
-                               var doc = new jsPDF('p', 'mm', [200,200]);
-                               doc.setFontStyle("bold");
-                               doc.setFontSize(16);
-                               doc.text(40, 5, 'Bienvenido','center');
-                               doc.setFontStyle("normal");
-                               doc.setFontSize(12);
-                               doc.text(fechahora, 40, 15,'center');
-                               doc.setFontSize(10);
-                               doc.text(40, 25, rac, 'center');
-                               doc.text('Usted sera atendido con el turno:', 40, 35,'center');
-                               doc.setFontSize(35);
-                               doc.text(notu, 40, 50,'center');
-                               doc.setFontStyle("normal");
-                               doc.setFontSize(10);
-                               doc.text(40, 60, 'Hidalgo crece contigo', 'center');
-                               doc.autoPrint();
-                               var iframe = document.getElementById('iframepdf');
-                               iframe.src = doc.output('bloburl');
-                               //window.open(doc.output('bloburl'), '_blank');  
-                           
-                               me.limpiar();
-                                           
-                           }).catch(err => {
-                               if (err.response.status==400){
-                                   me.$notify("No es un usuario válido", 'error')
-                               } else if (err.response.status==401){
-                                   me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                                   me.e401 = true,
-                                   me.showpage= false
-                               } else if (err.response.status==403){
-                                   me.$notify("No esta autorizado para ver esta pagina", 'error')
-                                   me.e403= true
-                                   me.showpage= false
-                               } else if (err.response.status==404){
-                                   me.$notify("El recuso no ha sido encontrado", 'error')
-                               }else{
-                                   me.$notify('Error al intentar actualizar el registro!!!','error')   
-                               }
-                           });
-
-                       }).catch(err => {
-                           if (err.response.status==400){
-                               me.$notify("No es un usuario válido", 'error')
-                           } else if (err.response.status==401){
-                               me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                               me.e401 = true,
-                               me.showpage= false
-                           } else if (err.response.status==403){
-                               me.$notify("No esta autorizado para ver esta pagina", 'error')
-                               me.e403= true
-                               me.showpage= false
-                           } else if (err.response.status==404){
-                               me.$notify("El recuso no ha sido encontrado", 'error')
-                           }else{
-                               me.$notify('Error al intentar crear el  registro!!!','error')  
-                           }
-                       });
-                       
-                   }
-                   else
-                   {
-                       if (me.imageFile){
-                           let formData = new FormData();  
-                           formData.append('file', me.imageFile );
-                           var nombreCarpeta = me.rac;
-                           me.GUID = me.generateUUID();
-
-                           axios.post('api/RAtencions/Post/'+nombreCarpeta+'/'+me.GUID,
-                               formData,
-                               {
-                               headers: {
-                                           'Content-Type': 'multipart/form-data'
-                                       }
-                               }  
-                                   
-                               ).then(function(response){
-                                   console.log('SUCCESS!!');
-                                   me.ruta = response.data.ruta
-
-                                   if(me.cp =='')
-                                   me.cp = 0
-                                   if(me.curp == '')
-                                   me.curp =0
-                                   if(me.lat =='')
-                                   me.lat =0
-                                   if(me.lng == '')
-                                   me.lng=0
-                                   if(me.noInt == '')
-                                   me.noInt = 0
-                                   if(me.telefono1 == '')
-                                   me.telefono1 = 0
-                                   if(me.telefono2 == '')
-                                   me.telefono2 = 0
-
-                                   var nombre = ''
-                                   var apaterno =      ''
-                                   var amaterno =  ''
-                                   var fnacimiento =  ''
-                                   var rfc =  ''
-                                   var curp =  ''
-                                   var rutadocumento =  ''
-
-                                   if(me.datosprotegidos){
-                                       nombre = me.nombres;
-                                       apaterno = me.apaterno;
-                                       amaterno = me.amaterno;
-                                       fnacimiento = me.fnacimiento;
-                                       rfc = me.rfc;
-                                       curp = me.curp;
-                                       rutadocumento = me.ruta;
-
-                                       me.nombres = me.alias;
-                                       me.apaterno ="";
-                                       me.amaterno = "";
-                                       me.fnacimiento = "";
-                                       me.rfc = "";
-                                       me.curp = "";
-                                       me.ruta ="";
-                                   }
-
-                                   axios.post('api/RAtencions/CrearSinTurno',{  
-                                   //********** REGISTRO DE ATENCION/                                   
-                                       'distritoInicial': me.u_distrito,  
-                                       'agenciaInicial': me.u_agencia,
-                                       'dirSubProcuInicial': me.u_dirSubPro,
-                                       'agenciaId': me.u_idagencia,
-                                       'racId':me.racid,
-                                       'pInicio': true,
-                                       'Numerooficio': 0,
-                                       //********** PERSONA/  
-                                       'statusAnonimo': me.switch2,
-                                       'tipoPersona': me.radios,
-                                       'rfc': me.rfc,
-                                       'razonsocial': me.razonsocial,
-                                       'clasificacionpersona': me.clasificacionpersona,
-                                       'nombre': me.nombres,
-                                       'apellidoPaterno' : me.apaterno,
-                                       'apellidoMaterno' : me.amaterno,
-                                       'alias': me.alias,
-                                       'statusAlias': false,
-                                       'fechaNacimiento' : me.fnacimiento,
-                                       'entidadFederativa': me.abreviacion.text,
-                                       'docIdentificacion': me.docidentificacion,
-                                       'curp': me.curp,
-                                       'sexo' : me.sexo,
-                                       'estadoCivil': me.estadocivil,
-                                       'genero': me.genero,
-                                       'telefono1': me.telefono1,
-                                       'telefono2': me.telefono2,
-                                       'correo': me.correo,
-                                       'medioNotificacion': listaMediosNotificacion,
-                                       'nacionalidad': me.nacionalidad,
-                                       'ocupacion': me.ocupacion,
-                                       'nivelEstudio': me.nivelestudio,
-                                       'lengua': me.lengua,
-                                       'religion': me.religion,
-                                       'discapacidad': me.switch1,
-                                       'tipoDiscapacidad': me.discapacidad,
-                                       'DatosProtegidos': me.datosprotegidos,
-                                       'Relacion': me.relacion,
-                                       'Parentesco': me.relacionado,
-                                       'Edad': me.edadf,    
-                                       'DocPoderNotarial':me.documentoacredita,                         
-                                       //********** DIRECCION/
-                                       'calle': me.calle,
-                                       'noExt': me.noExt,
-                                       'noInt': me.noInt,
-                                       'entreCalle1': me.entreCalle1,
-                                       'entreCalle2': me.entreCalle2,
-                                       'referencia': me.referencia,
-                                       'pais': me.pais,
-                                       'estado': me.estado,
-                                       'municipio': me.municipio,
-                                       'localidad': me.localidad,
-                                       'cp': me.cp,
-                                       'lat': me.lat,
-                                       'lng': me.lng,
-                                       //************ */
-                                       'agencia': me.u_agencia,
-                                       'usuario':me.u_nombre,
-                                       'puesto':me.u_puesto,
-                                       'modulo':me.u_modulo
-                                   //************ */
-                                   
-                               },configuracion).then(function(response){   
-                                   
-                                   me.$notify('La información se guardo correctamente !!!','success')
-
-                                  
-                                   axios.post('api/DocumentosPesonas/Crear',{  
-
-                                       'PersonaId': response.data.personaid,
-                                       'tipoDocumento': me.docidentificacion,
-                                       'nombreDocumento':me.GUID,
-                                       'descripcion': "",
-                                       'ruta': me.ruta,
-                                       'distrito':me.u_distrito,
-                                       'dirSubProc':me.u_dirSubPro,    
-                                       'Agencia':me.u_agencia,
-                                       'Usuario': me.u_nombre,
-                                       'Puesto': me.u_puesto,
-                                       
-                                   },configuracion).then(function(response){  
-                                       me.$notify('La información se guardo correctamente !!!','success')   
-                                   }).catch(err => {
-                                       if (err.response.status==400){
-                                           me.$notify("No es un usuario válido", 'error')
-                                       } else if (err.response.status==401){
-                                           me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                                           me.e401 = true,
-                                           me.showpage= false
-                                       } else if (err.response.status==403){
-                                           me.$notify("No esta autorizado para ver esta pagina", 'error')
-                                           me.e403= true
-                                           me.showpage= false
-                                       } else if (err.response.status==404){
-                                           me.$notify("El recuso no ha sido encontrado", 'error')
-                                       }else{
-                                           me.$notify('Error al intentar crear el  registro!!!','error')  
-                                       }
-                                   });
-                                   
-
-                                   
-                                   if(me.datosprotegidos){           
-
-                                       axios.post('api/DatosProtegido/Crear',{
-
-                                           'RAPId': response.data.idrap,
-                                           'Nombre': nombre,
-                                           'APaterno': apaterno,
-                                           'AMaterno': amaterno,
-                                           'FechaNacimiento': fnacimiento,
-                                           'CURP':curp,
-                                           'RFC': rfc,
-                                           'Rutadocumento':rutadocumento,
-                                           'UDistrito':me.u_distrito,
-                                           'USubproc': me.u_dirSubPro,
-                                           'UAgencia': me.u_agencia,
-                                           'Usuario': me.u_nombre,
-                                           'UPuesto': me.u_puesto,
-                                           'UModulo': me.u_modulo,
-
-                                       },configuracion).then(function(response){  
-                                           me.$notify('La información se guardo correctamente !!!','success')   
-                                       }).catch(err => {
-                                           if (err.response.status==400){
-                                               me.$notify("No es un usuario válido", 'error')
-                                           } else if (err.response.status==401){
-                                               me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                                               me.e401 = true,
-                                               me.showpage= false
-                                           } else if (err.response.status==403){
-                                               me.$notify("No esta autorizado para ver esta pagina", 'error')
-                                               me.e403= true
-                                               me.showpage= false
-                                           } else if (err.response.status==404){
-                                               me.$notify("El recuso no ha sido encontrado", 'error')
-                                           }else{
-                                               me.$notify('Error al intentar crear el  registro!!!','error')  
-                                           }
-                                       });
-                                   }
-
-
-                                   me.limpiar();
-                                   me.$store.state.ratencionid = response.data.idatencion;
-                                   me.$router.push('./entrevista')
-                                   
-                               }).catch(err => {
-                                   if (err.response.status==400){
-                                       me.$notify("No es un usuario válido", 'error')
-                                   } else if (err.response.status==401){
-                                       me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                                       me.e401 = true,
-                                       me.showpage= false
-                                   } else if (err.response.status==403){
-                                       me.$notify("No esta autorizado para ver esta pagina", 'error')
-                                       me.e403= true
-                                       me.showpage= false
-                                   } else if (err.response.status==404){
-                                       me.$notify("El recuso no ha sido encontrado", 'error')
-                                   }else{
-                                       me.$notify('Error al intentar crear el  registro!!!','error')  
-                                   }
-                               });
-
-                               })
-                                   .catch(function(){
-                                   console.log('FAILURE2!!');
-                               });
-                       }else{
-
-                           if(me.cp =='')
-                           me.cp = 0
-                           if(me.curp == '')
-                           me.curp =0
-                           if(me.lat =='')
-                           me.lat =0
-                           if(me.lng == '')
-                           me.lng=0
-                           if(me.noInt == '')
-                           me.noInt = 0
-                           if(me.telefono1 == '')
-                           me.telefono1 = 0
-                           if(me.telefono2 == '')
-                           me.telefono2 = 0
-
-                           var nombre = ''
-                           var apaterno =      ''
-                           var amaterno =  ''
-                           var fnacimiento =  ''
-                           var rfc =  ''
-                           var curp =  ''
-                           var rutadocumento =  ''
-
-                           if(me.datosprotegidos){
-                               nombre = me.nombres;
-                               apaterno = me.apaterno;
-                               amaterno = me.amaterno;
-                               fnacimiento = me.fnacimiento;
-                               rfc = me.rfc;
-                               curp = me.curp;
-                               rutadocumento = me.ruta;
-
-                               me.nombres = me.alias;
-                               me.apaterno ="";
-                               me.amaterno = "";
-                               me.fnacimiento = "";
-                               me.rfc = "";
-                               me.curp = "";
-                               me.ruta ="";
-                           }
-
-                           axios.post('api/RAtencions/CrearSinTurno',{  
-                           //********** REGISTRO DE ATENCION/                                   
-                               'distritoInicial': me.u_distrito,  
-                               'agenciaInicial': me.u_agencia,
-                               'dirSubProcuInicial': me.u_dirSubPro,
-                               'agenciaId': me.u_idagencia,
-                               'racId':me.racid,
-                               'pInicio': true,
-                               'Numerooficio': 0,
-                               //********** PERSONA/  
-                               'statusAnonimo': me.switch2,
-                               'tipoPersona': me.radios,
-                               'rfc': me.rfc,
-                               'razonsocial': me.razonsocial,
-                               'clasificacionpersona': me.clasificacionpersona,
-                               'nombre': me.nombres,
-                               'apellidoPaterno' : me.apaterno,
-                               'apellidoMaterno' : me.amaterno,
-                               'alias': me.alias,
-                               'statusAlias': false,
-                               'fechaNacimiento' : me.fnacimiento,
-                               'entidadFederativa': me.abreviacion.text,
-                               'docIdentificacion': me.docidentificacion,
-                               'curp': me.curp,
-                               'sexo' : me.sexo,
-                               'estadoCivil': me.estadocivil,
-                               'genero': me.genero,
-                               'telefono1': me.telefono1,
-                               'telefono2': me.telefono2,
-                               'correo': me.correo,
-                               'medioNotificacion': listaMediosNotificacion,
-                               'nacionalidad': me.nacionalidad,
-                               'ocupacion': me.ocupacion,
-                               'nivelEstudio': me.nivelestudio,
-                               'lengua': me.lengua,
-                               'religion': me.religion,
-                               'discapacidad': me.switch1,
-                               'tipoDiscapacidad': me.discapacidad,
-                               'DatosProtegidos': me.datosprotegidos,
-                               'Relacion': me.relacion,
-                               'Parentesco': me.relacionado,
-                               'Edad': me.edadf,         
-                               'DocPoderNotarial':me.documentoacredita,                   
-                               //********** DIRECCION/
-                               'calle': me.calle,
-                               'noExt': me.noExt,
-                               'noInt': me.noInt,
-                               'entreCalle1': me.entreCalle1,
-                               'entreCalle2': me.entreCalle2,
-                               'referencia': me.referencia,
-                               'pais': me.pais,
-                               'estado': me.estado,
-                               'municipio': me.municipio,
-                               'localidad': me.localidad,
-                               'cp': me.cp,
-                               'lat': me.lat,
-                               'lng': me.lng,
-                               //************ */
-                               'agencia': me.u_agencia,
-                               'usuario': me.u_nombre,
-                               'puesto': me.u_puesto,
-                               'modulo': me.u_modulo
-                           //************ */
-                           
-                       },configuracion).then(function(response){   
-                           
-                           me.$notify('La información se guardo correctamente !!!','success')
-
-                           if(me.datosprotegidos){           
-
-                               axios.post('api/DatosProtegido/Crear',{
-
-                                   'RAPId': response.data.idrap,
-                                   'Nombre': nombre,
-                                   'APaterno': apaterno,
-                                   'AMaterno': amaterno,
-                                   'FechaNacimiento': fnacimiento,
-                                   'CURP':curp,
-                                   'RFC': rfc,
-                                   'Rutadocumento':"",
-                                   'UDistrito':me.u_distrito,
-                                   'USubproc': me.u_dirSubPro,
-                                   'UAgencia': me.u_agencia,
-                                   'Usuario': me.u_nombre,
-                                   'UPuesto': me.u_puesto,
-                                   'UModulo': me.u_modulo,
-
-                               },configuracion).then(function(response){  
-                                   me.$notify('La información se guardo correctamente !!!','success')   
-                               }).catch(err => {
-                                   if (err.response.status==400){
-                                       me.$notify("No es un usuario válido", 'error')
-                                   } else if (err.response.status==401){
-                                       me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                                       me.e401 = true,
-                                       me.showpage= false
-                                   } else if (err.response.status==403){
-                                       me.$notify("No esta autorizado para ver esta pagina", 'error')
-                                       me.e403= true
-                                       me.showpage= false
-                                   } else if (err.response.status==404){
-                                       me.$notify("El recuso no ha sido encontrado", 'error')
-                                   }else{
-                                       me.$notify('Error al intentar crear el  registro!!!','error')  
-                                   }
-                               });
-                           }
-                               me.limpiar();
-                               me.$store.state.ratencionid = response.data.idatencion;
-                               me.$router.push('./entrevista')
-                                   
-                           }).catch(err => {
-                               if (err.response.status==400){
-                                   me.$notify("No es un usuario válido", 'error')
-                               } else if (err.response.status==401){
-                                   me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                                   me.e401 = true,
-                                   me.showpage= false
-                               } else if (err.response.status==403){
-                                   me.$notify("No esta autorizado para ver esta pagina", 'error')
-                                   me.e403= true
-                                   me.showpage= false
-                               } else if (err.response.status==404){
-                                   me.$notify("El recuso no ha sido encontrado", 'error')
-                               }else{
-                                   me.$notify('Error al intentar crear el  registro!!!','error')  
-                               }
-                           });
-
-                       }
-                       
-                       
-                       
-                   }
-
-               
-           }).catch(err => {
-               if (err.response.status==400){
-                   me.$notify("No es un usuario válido", 'error')
-               } else if (err.response.status==401){
-                   me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
-                   me.e401 = true,
-                   me.showpage= false
-               } else if (err.response.status==403){
-                   me.$notify("No esta autorizado para ver esta pagina", 'error')
-                   me.e403= true
-                   me.showpage= false
-               } else if (err.response.status==404){
-                   me.$notify("El recuso no ha sido encontrado", 'error')
-               }else{
-                   me.$notify('Error al intentar crear el  registro!!!','error')  
-               }
-           });  
-      }
-   })
-   //************************** */
-
-}
 
   //Función para enviar el formulario
   enviar(e) {
@@ -743,8 +160,9 @@ export default class Contact extends Component {
 
     const parametros={
       swAnonimo: this.inputSwAnonimo.value,
-      raFisica: this.inputRaFisica.value,
-      raMoral: this.inputRaMoral.value,
+      raPersona: this.inputRaPersona.value,
+      txtRFC: this.inputTxtRFC.value,
+      txtRazonSocial: this.inputTxtRazonSocial.value,
       selClasPersona: this.inputSelClasPersona.value,
       txtNombre: this.inputTxtNombre.value,
       txtApPaterno: this.inputTxtApPaterno.value,
@@ -790,9 +208,10 @@ export default class Contact extends Component {
 
     console.log(parametros)
 
+    
+
     if(parametros.swAnonimo &&
-      parametros.raFisica &&
-      parametros.raMoral &&
+      parametros.raPersona &&
       parametros.selClasPersona &&
       parametros.txtNombre &&
       parametros.txtApPaterno &&
@@ -856,6 +275,7 @@ export default class Contact extends Component {
 
   render () {
 
+    console.log(this.state.swAnonimo)
 
     return (
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
@@ -869,19 +289,19 @@ export default class Contact extends Component {
                     {/* Lado izquierdo Azul */}
                       <div className="form-group mb-3">
                         <label>
-                          <input onChange={this.handlerOnChange} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
+                          <input onChange={this.checkAnonimo.bind(this)} checked={this.state.swAnonimo === true} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
                           <span>&nbsp;¿Su denuncia es anonima?</span>
                         </label>
                       </div>
                       
                       <div className="form-group mb-3">
                         <label>
-                          <input onChange={this.checkF.bind(this)} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
+                          <input onChange={this.checkF.bind(this)} disabled= {this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
                           checked={this.state.raPersona === "Fisica" ? true : false}/>
                           <span>Fisica &nbsp; &nbsp;</span>
                         </label>
                         <label>
-                          <input onChange={this.checkM.bind(this)} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona}
+                          <input onChange={this.checkM.bind(this)} disabled={this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona}
                           checked={this.state.raPersona === "Moral" ? true : false}/>
                           <span>Moral</span>
                         </label>
@@ -897,46 +317,46 @@ export default class Contact extends Component {
                           <option value="Victima Directa">Victima Directa</option>
                           <option value="Victima Indirecta">Victima Indirecta</option>
                         </select>
-                      </div>
-
-                      <div className="form-group mb-3">
-                        {/* <span>Nombre</span> */}
-                        <input onChange={this.handlerOnChange} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
-                      </div>
+                      </div>                      
 
                       <div className="form-group mb-3">
                         {/* <span>RFC</span> */}
-                        <input onChange={this.handlerOnChange} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
                       </div>
 
                       <div className="form-group mb-3">
                         {/* <span>Razon Social</span> */}
-                        <input onChange={this.handlerOnChange} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
+                      </div>
+
+                      <div className="form-group mb-3">
+                        {/* <span>Nombre</span> */}
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
                       </div>
 
                       <div className="form-group mb-3">
                         {/* <span>Apellido Paterno</span> */}
-                        <input onChange={this.handlerOnChange} id="txtApPaterno" type="text" className="form-control"  placeholder="Apellido Paterno" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control"  placeholder="Apellido Paterno" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
                       </div>
                       
                       <div className="form-group mb-3">
                         {/* <span>Apellido Materno</span> */}
-                        <input onChange={this.handlerOnChange} id="txtApMaterno" type="text" className="form-control" placeholder="Apellido Materno" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" placeholder="Apellido Materno" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
                       </div>
 
                       <div className="form-group mb-3">
                         {/* <span>Alias</span> */}
-                        <input onChange={this.handlerOnChange} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                       </div>
 
                       <div className="form-group mb-3">
                         <label className="form-label">Fecha de nacimiento:</label>
-                        <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
                       </div>
 
                       <div className="form-group mb-3">
                         {/* Select Sexo*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
+                        <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
                           <option value="defaultSexo" >Sexo</option>
                           <option value="Masculino">Masculino</option>
                           <option value="Femenino">Femenino</option>
@@ -946,7 +366,7 @@ export default class Contact extends Component {
                 <div className="col-md-6">
                   {/* Lado derecho Azul */}
                       <div className="form-group mb-3">
-                        <select onChange={this.handlerOnChange} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
+                        <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
                           <option value="defaultEntidadFederativa" >Entidad Federativa de Nacimiento</option>
                           <option value="Aguascalientes">Aguascalientes</option>
                           <option value="Baja California">Baja California</option>
@@ -985,7 +405,7 @@ export default class Contact extends Component {
 
                       <div className="form-group mb-3">
                         {/* Select Documento de Identificacion*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
+                        <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
                           <option value="defaultDocumentoIdentificacion" >Documento de Identificación</option>
                           <option value="INE">INE</option>
                           <option value="LicenciaConducir">Licencia de Conducir</option>
@@ -1000,14 +420,14 @@ export default class Contact extends Component {
                       </div>
                       
                       <div className="input-group mb-3">
-                        <input type="file" className="form-control" id="inputGroupFile02"/>
+                        <input type="file" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
                         <label className="input-group-text" htmlFor="inputGroupFile02">Cargar</label>
                       </div>                     
 
                       <div className="form-group mb-3">
                         <div className="mb-3 w-100">
                           {/* <span>CURP</span> */}
-                          <input onChange={this.handlerOnChange} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
+                          <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                         </div>
                       </div>
                       
@@ -1034,17 +454,17 @@ export default class Contact extends Component {
                     <select onChange={this.handlerOnChange} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
                       <option value="defaultMedioNotificacion" >Medio de notificacion</option>
                       <option value="Correo Electronico">Correo Electronico</option>
-                      <option value="Domicilio">Domicilio</option>
-                      <option value="Telefono">Telefono</option>
+                      <option value="Domicilio" disabled={this.state.swAnonimo === true}>Domicilio</option>
+                      <option value="Telefono" disabled={this.state.swAnonimo === true}>Telefono</option>
                     </select>
                   </div>
 
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="txtnumTel1" type="text" data-length="10" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
+                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-control" id="txtnumTel1" type="text" data-length="10" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
                   </div>
 
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="txtnumTel2" type="text" data-length="10" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
+                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-control" id="txtnumTel2" type="text" data-length="10" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
                   </div>
                   
                   <div className="form-group mb-3">
@@ -1053,12 +473,12 @@ export default class Contact extends Component {
                   </div>
 
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="txtNacionalidad" type="text" placeholder="Nacionalidad" name="txtNacionalidad" value={this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
+                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-control" id="txtNacionalidad" type="text" placeholder="Nacionalidad" name="txtNacionalidad" value={this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
                   </div>
 
                   <div className="form-group mb-3">
                     {/* Select Estado Civil*/}
-                    <select onChange={this.handlerOnChange} className="form-select" id="selEstadoCivil" name="selEstadoCivil" value={this.state.selEstadoCivil} ref={selEstadoCivil=>this.inputSelEstadoCivil = selEstadoCivil}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selEstadoCivil" name="selEstadoCivil" value={this.state.selEstadoCivil} ref={selEstadoCivil=>this.inputSelEstadoCivil = selEstadoCivil}>
                       <option value="deafultEstadoCivil" >Estado Civil</option>
                       <option value="Soltero">Soltero(a)</option>
                       <option value="Casado(a)">Casado(a)</option>
@@ -1074,7 +494,7 @@ export default class Contact extends Component {
                 <div className="col-md-6">
                   <div className="form-group mb-3">
                     {/* Select Ocupacion*/}
-                    <select onChange={this.handlerOnChange} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="DefaultOcupacion" >Ocupacion</option>
                       <option value="Abogado">Abogado</option>
                       <option value="Actor, Actriz, Director de Espectáculos">Actor, Actriz, Director de Espectáculos</option>
@@ -1198,7 +618,7 @@ export default class Contact extends Component {
 
                   <div className="form-group mb-3">
                     {/* Select Nivel de Estudios*/}
-                    <select onChange={this.handlerOnChange} className="form-select" id="selNivelEstudios" name="selNivelEstudios" value={this.state.selNivelEstudios} ref={selNivelEstudios=>this.inputSelNivelEstudios = selNivelEstudios}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNivelEstudios" name="selNivelEstudios" value={this.state.selNivelEstudios} ref={selNivelEstudios=>this.inputSelNivelEstudios = selNivelEstudios}>
                       <option value="defaultNivelEstudios" >Nivel de estudios</option>
                       <option value="Preescolar Incompleta">Preescolar Incompleta</option>
                       <option value="Preescolar">Preescolar</option>
@@ -1226,7 +646,7 @@ export default class Contact extends Component {
 
                   <div className="form-group mb-3">
                     {/* Select Lengua*/}
-                    <select onChange={this.handlerOnChange} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
                       <option value="defaultLengua" >Lengua</option>
                       <option value="Akateko">Akateko</option>
                       <option value="Amuzgo">Amuzgo</option>
@@ -1301,7 +721,7 @@ export default class Contact extends Component {
 
                   <div className="form-group mb-3">
                     {/* Select Religion*/}
-                    <select onChange={this.handlerOnChange} className="form-select" id="selReligion" name="selReligion" value={this.state.selReligion} ref={selReligion=>this.inputSelReligion = selReligion}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selReligion" name="selReligion" value={this.state.selReligion} ref={selReligion=>this.inputSelReligion = selReligion}>
                       <option value="defaultReligion" >Religión</option>
                       <option value="Cristianismo">Cristianismo</option>
                       <option value="Catolicismo">Catolicismo</option>
@@ -1326,13 +746,13 @@ export default class Contact extends Component {
                   <div className="form-group mb-3">
                     <div className="form-group mb-3">
                       <label>
-                        <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
+                        <input onChange={this.checkLGBT.bind(this)} checked={this.state.swLGBT === true} type="checkbox" id="swLGBT" disabled={this.state.swAnonimo === true} name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
                         <span>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</span>
                       </label>
                     </div>
                     <div className="form-group mb-3">
                       {/* Select LGBT*/}
-                      <select onChange={this.handlerOnChange} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
+                      <select onChange={this.handlerOnChange} disabled={this.state.swLGBT === false} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
                         <option value="defaultLGBT" >Seleccione...</option>
                         <option value="Lesbiana">Lesbiana</option>
                         <option value="Gay">Gay</option>
@@ -1353,13 +773,13 @@ export default class Contact extends Component {
                   <div className="form-group mb-3">
                     <div className="form-group mb-3">
                       <label>
-                        <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
+                        <input onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} type="checkbox" disabled={this.state.swAnonimo === true} id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
                         <span>&nbsp;¿Tiene alguna discapacidad?</span>
                       </label>
                     </div>
                     <div className="form-group mb-3">
                       {/* Select Discapacidad*/}
-                      <select onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
+                      <select onChange={this.handlerOnChange} disabled={this.state.swDiscapacidad === false} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
                         <option value="defaultDiscapacidad" >Seleccione...</option>
                         <option value="Autismo">Autismo</option>
                         <option value="Deficiencia Visual">Deficiencia Visual</option>
