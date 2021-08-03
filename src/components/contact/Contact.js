@@ -370,52 +370,52 @@ export default class Contact extends Component {
             }
             
             {(this.state.step === 2 || this.state.step === 4) &&
-            <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
-              <div className="row mb-5">
-                {/* Lado izquiero */}
-                <div className="col-md-6">
-                  <div className="form-group mb-3">
-                    <select onChange={this.handlerOnChange} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
-                      <option value="defaultMedioNotificacion" >Medio de notificacion</option>
-                      <option value="Correo Electronico">Correo Electronico</option>
-                      <option value="Domicilio">Domicilio</option>
-                      <option value="Telefono">Telefono</option>
-                    </select>
-                  </div>
+              <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
+                <div className="row mb-5">
+                  {/* Lado izquiero */}
+                  <div className="col-md-6">
+                    <div className="form-group mb-3">
+                      <select onChange={this.handlerOnChange} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
+                        <option value="defaultMedioNotificacion" >Medio de notificacion</option>
+                        <option value="Correo Electronico">Correo Electronico</option>
+                        <option value="Domicilio">Domicilio</option>
+                        <option value="Telefono">Telefono</option>
+                      </select>
+                    </div>
 
-                  <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="txtnumTel1" type="text" data-length="10" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
-                  </div>
+                    <div className="form-group mb-3">
+                      <input onChange={this.handlerOnChange} className="form-control" id="txtnumTel1" type="text" data-length="10" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
+                    </div>
 
-                  <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="txtnumTel2" type="text" data-length="10" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
-                  </div>
-                  
-                  <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="email" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
-                    <span className="helper-text" data-error="wrong" data-success="right"></span>
-                  </div>
+                    <div className="form-group mb-3">
+                      <input onChange={this.handlerOnChange} className="form-control" id="txtnumTel2" type="text" data-length="10" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
+                    </div>
+                    
+                    <div className="form-group mb-3">
+                      <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="email" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
+                      <span className="helper-text" data-error="wrong" data-success="right"></span>
+                    </div>
 
-                  <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="txtNacionalidad" type="text" placeholder="Nacionalidad" name="txtNacionalidad" value={this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
-                  </div>
+                    <div className="form-group mb-3">
+                      <input onChange={this.handlerOnChange} className="form-control" id="txtNacionalidad" type="text" placeholder="Nacionalidad" name="txtNacionalidad" value={this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
+                    </div>
 
-                  <div className="form-group mb-3">
-                    {/* Select Estado Civil*/}
-                    <select onChange={this.handlerOnChange} className="form-select" id="selEstadoCivil" name="selEstadoCivil" value={this.state.selEstadoCivil} ref={selEstadoCivil=>this.inputSelEstadoCivil = selEstadoCivil}>
-                      <option value="deafultEstadoCivil" >Estado Civil</option>
-                      <option value="Soltero">Soltero(a)</option>
-                      <option value="Casado(a)">Casado(a)</option>
-                      <option value="Divorciado(a)">Divorciado(a)</option>
-                      <option value="Separación en Proceso Judicial">Separación en Proceso Judicial</option>
-                      <option value="Viudo(a)">Viudo(a)</option>
-                      <option value="Concubinato">Concubinato</option>
-                    </select>
+                    <div className="form-group mb-3">
+                      {/* Select Estado Civil*/}
+                      <select onChange={this.handlerOnChange} className="form-select" id="selEstadoCivil" name="selEstadoCivil" value={this.state.selEstadoCivil} ref={selEstadoCivil=>this.inputSelEstadoCivil = selEstadoCivil}>
+                        <option value="deafultEstadoCivil" >Estado Civil</option>
+                        <option value="Soltero">Soltero(a)</option>
+                        <option value="Casado(a)">Casado(a)</option>
+                        <option value="Divorciado(a)">Divorciado(a)</option>
+                        <option value="Separación en Proceso Judicial">Separación en Proceso Judicial</option>
+                        <option value="Viudo(a)">Viudo(a)</option>
+                        <option value="Concubinato">Concubinato</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
                 
-                {/* Lado derecho */}
-                <div className="col-md-6">
+                  {/* Lado derecho */}
+                  <div className="col-md-6">
                   <div className="form-group mb-3">
                     {/* Select Ocupacion*/}
                     <select onChange={this.handlerOnChange} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
@@ -721,21 +721,22 @@ export default class Contact extends Component {
                     </div>
                   </div>
                 </div>
-              {/* </div>
-              <div style={{ height: "150px"}}>
-                <br></br>
-              </div> */}
-              <div className="row mb-3">
-                <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                  <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}}>SIGUIENTE</button>
+                </div>
+                {/*  
+                  <div style={{ height: "150px"}}>
+                    <br></br>
+                  </div> 
+                */}
+                <div className="row mb-3">
+                  <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
+                    <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
+                    <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}}>SIGUIENTE</button>
+                  </div>
                 </div>
               </div>
-            </div>
             }
 
-            {
-              (this.state.step === 3 || this.state.step === 4) &&
+            {(this.state.step === 3 || this.state.step === 4) &&
                 <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
                   <div className="row">
                     {/* Lado izquierdo */}
@@ -1295,7 +1296,7 @@ export default class Contact extends Component {
                     </div>
                   </div>
                 </div>
-            }
+            } 
         </form>
       </div>
     )
