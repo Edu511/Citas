@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import firebase from '../../firebase/firebaseConfig'
+import axios from 'axios';
 
 export default class Contact extends Component {
   
@@ -84,6 +85,655 @@ export default class Contact extends Component {
     })    
   }
 
+  guardar(){
+    //************************** */
+   let me=this;
+   let header={"Authorization" : "Bearer " + this.$store.state.token};
+   let configuracion= {headers : header};
+// ---------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
+   var listaMediosNotificacion='';
+   if(me.medionotificacion.length<=0)
+   {
+       listaMediosNotificacion='';
+   }
+   else
+   {
+       me.medionotificacion.forEach(function(notificacion)
+       {
+           listaMediosNotificacion+=notificacion.text+',';                                     
+       });
+       listaMediosNotificacion = listaMediosNotificacion.slice(0, -1);
+   }    
+
+// ---------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
+
+   this.$validator.validate().then(result => {
+       if (result) {
+           if(me.fnacimiento != "")
+               me.edadf = me.generaredad();
+           else    
+               me.edadf = 999
+
+           if(me.edadf <18)
+               me.datosprotegidos = true;
+                  
+           if (me.swAnonimo==true){  
+               
+               me.radios= 'Anonimo'
+               me.rfc= 'Anonimo'
+               me.razonsocial='Anonimo'
+               me.clasificacionpersona='Anonimo'
+               me.nombres='Anonimo'
+               me.apaterno='Anonimo'
+               me.amaterno='Anonimo'
+               me.alias="Anonimo"
+               me.fnacimiento='01/01/0001'
+               me.abreviacion= 'Anonimo'
+               me.docidentificacion = ''
+               me.curp='XXXX010101XXXXXXX1'
+               me.sexo='Anonimo'
+               me.estadocivil='Anonimo'
+               me.genero='Anonimo'
+               me.telefono1='Anonimo'
+               me.telefono2='Anonimo'
+               me.correo='Anonimo'
+               me.medionotificacion='Anonimo'
+               me.nacionalidad='Anonimo'
+               me.ocupacion='Anonimo'
+               me.nivelestudio='Anonimo'
+               me.lengua='Anonimo'
+               me.religion='Anonimo'
+               me.switch1= false
+               me.discapacidad='Anonimo'
+               me.calle='Anonimo'
+               me.noExt='Anonimo'
+               me.noInt='Anonimo'
+               me.entreCalle1='Anonimo'
+               me.entreCalle2='Anonimo'
+               me.referencia='Anonimo'
+               me.pais='Anonimo'
+               me.estado='Anonimo'
+               me.municipio='Anonimo'
+               me.localidad='Anonimo'
+               me.cp= 0
+           }
+           
+           axios.post('api/Racs/GenerarRac',{
+               'distritoId': me.u_iddistrito,
+               'agenciaId': me.u_idagencia,
+           },configuracion).then(function(response){
+               me.rac = response.data.rac;
+               me.racid =  response.data.idrac;
+               if (me.statusActualizar==true)
+                   {
+                       if(me.lat =='')
+                       me.lat = 0;
+                       if(me.lng =='')
+                       me.lng = 0;
+
+                       axios.post('api/RAPs/CrearRAP',{
+                           'distritoInicial': me.u_distrito,  
+                           'dirSubProcuInicial': me.u_dirSubPro,
+                           'agenciaInicial': me.u_agencia,
+                           'agenciaId': me.u_idagencia,
+                           'racId':me.racid,  
+                           'personaId': me.idPersona,
+                           'clasificacionpersona': me.clasificacionpersona,
+                           'pInicio': true,
+                           'modulo':me.u_modulo,
+                       },configuracion).then(function(response){
+                         
+                           var rac = "RAC: " +   me.rac
+                           var fechahora = response.data.fh
+                           var notu = "A-" + response.data.notu
+
+                           axios.put('api/Personas/Actualizar',{
+                               'personaId': me.idPersona,
+                               'statusAnonimo': me.switch2,
+                               'tipoPersona': me.radios,
+                               'rfc': me.rfc,
+                               'razonsocial': me.razonsocial,  
+                               'nombre': me.nombres,
+                               'apellidoPaterno' : me.apaterno,
+                               'apellidoMaterno' : me.amaterno,
+                               'alias': me.alias,
+                               'statusAlias': false,
+                               'fechaNacimiento' : me.fnacimiento,
+                               'entidadFederativa': me.abreviacion.text,
+                               'docIdentificacion': me.docidentificacion,
+                               'curp': me.curp,
+
+                               'sexo' : me.sexo,
+                               'estadoCivil': me.estadocivil,
+                               'genero': me.genero,
+                               'telefono1': me.telefono1,
+                               'telefono2': me.telefono2,
+                               'correo': me.correo,
+                               'medioNotificacion': listaMediosNotificacion,
+                               'nacionalidad': me.nacionalidad,
+                               'ocupacion': me.ocupacion,
+                               'nivelEstudio': me.nivelestudio,
+                               'lengua': me.lengua,
+                               'religion': me.religion,
+                               'discapacidad': me.switch1,
+                               'tipoDiscapacidad': me.discapacidad,
+                               'Relacion': me.relacion,
+                               'Parentesco': me.relacionado,
+                               'Edad': me.edadf,
+                               'DocPoderNotarial':me.documentoacredita,
+                               
+                               //Direccion personal
+                               'calle': me.calle,
+                               'noExt': me.noExt,
+                               'noInt': me.noInt,
+                               'entreCalle1': me.entreCalle1,
+                               'entreCalle2': me.entreCalle2,
+                               'referencia': me.referencia,
+                               'pais': me.pais,
+                               'estado': me.estado,
+                               'municipio': me.municipio,
+                               'localidad': me.localidad,
+                               'cp': me.cp,
+                               'lat': me.lat,
+                               'lng':me.lng,
+                           },configuracion).then(function(response){
+                               me.$notify('La información se guardo correctamente !!!','success')
+                               //this.ticketModal=1;
+                           
+                               var doc = new jsPDF('p', 'mm', [200,200]);
+                               doc.setFontStyle("bold");
+                               doc.setFontSize(16);
+                               doc.text(40, 5, 'Bienvenido','center');
+                               doc.setFontStyle("normal");
+                               doc.setFontSize(12);
+                               doc.text(fechahora, 40, 15,'center');
+                               doc.setFontSize(10);
+                               doc.text(40, 25, rac, 'center');
+                               doc.text('Usted sera atendido con el turno:', 40, 35,'center');
+                               doc.setFontSize(35);
+                               doc.text(notu, 40, 50,'center');
+                               doc.setFontStyle("normal");
+                               doc.setFontSize(10);
+                               doc.text(40, 60, 'Hidalgo crece contigo', 'center');
+                               doc.autoPrint();
+                               var iframe = document.getElementById('iframepdf');
+                               iframe.src = doc.output('bloburl');
+                               //window.open(doc.output('bloburl'), '_blank');  
+                           
+                               me.limpiar();
+                                           
+                           }).catch(err => {
+                               if (err.response.status==400){
+                                   me.$notify("No es un usuario válido", 'error')
+                               } else if (err.response.status==401){
+                                   me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                                   me.e401 = true,
+                                   me.showpage= false
+                               } else if (err.response.status==403){
+                                   me.$notify("No esta autorizado para ver esta pagina", 'error')
+                                   me.e403= true
+                                   me.showpage= false
+                               } else if (err.response.status==404){
+                                   me.$notify("El recuso no ha sido encontrado", 'error')
+                               }else{
+                                   me.$notify('Error al intentar actualizar el registro!!!','error')   
+                               }
+                           });
+
+                       }).catch(err => {
+                           if (err.response.status==400){
+                               me.$notify("No es un usuario válido", 'error')
+                           } else if (err.response.status==401){
+                               me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                               me.e401 = true,
+                               me.showpage= false
+                           } else if (err.response.status==403){
+                               me.$notify("No esta autorizado para ver esta pagina", 'error')
+                               me.e403= true
+                               me.showpage= false
+                           } else if (err.response.status==404){
+                               me.$notify("El recuso no ha sido encontrado", 'error')
+                           }else{
+                               me.$notify('Error al intentar crear el  registro!!!','error')  
+                           }
+                       });
+                       
+                   }
+                   else
+                   {
+                       if (me.imageFile){
+                           let formData = new FormData();  
+                           formData.append('file', me.imageFile );
+                           var nombreCarpeta = me.rac;
+                           me.GUID = me.generateUUID();
+
+                           axios.post('api/RAtencions/Post/'+nombreCarpeta+'/'+me.GUID,
+                               formData,
+                               {
+                               headers: {
+                                           'Content-Type': 'multipart/form-data'
+                                       }
+                               }  
+                                   
+                               ).then(function(response){
+                                   console.log('SUCCESS!!');
+                                   me.ruta = response.data.ruta
+
+                                   if(me.cp =='')
+                                   me.cp = 0
+                                   if(me.curp == '')
+                                   me.curp =0
+                                   if(me.lat =='')
+                                   me.lat =0
+                                   if(me.lng == '')
+                                   me.lng=0
+                                   if(me.noInt == '')
+                                   me.noInt = 0
+                                   if(me.telefono1 == '')
+                                   me.telefono1 = 0
+                                   if(me.telefono2 == '')
+                                   me.telefono2 = 0
+
+                                   var nombre = ''
+                                   var apaterno =      ''
+                                   var amaterno =  ''
+                                   var fnacimiento =  ''
+                                   var rfc =  ''
+                                   var curp =  ''
+                                   var rutadocumento =  ''
+
+                                   if(me.datosprotegidos){
+                                       nombre = me.nombres;
+                                       apaterno = me.apaterno;
+                                       amaterno = me.amaterno;
+                                       fnacimiento = me.fnacimiento;
+                                       rfc = me.rfc;
+                                       curp = me.curp;
+                                       rutadocumento = me.ruta;
+
+                                       me.nombres = me.alias;
+                                       me.apaterno ="";
+                                       me.amaterno = "";
+                                       me.fnacimiento = "";
+                                       me.rfc = "";
+                                       me.curp = "";
+                                       me.ruta ="";
+                                   }
+
+                                   axios.post('api/RAtencions/CrearSinTurno',{  
+                                   //********** REGISTRO DE ATENCION/                                   
+                                       'distritoInicial': me.u_distrito,  
+                                       'agenciaInicial': me.u_agencia,
+                                       'dirSubProcuInicial': me.u_dirSubPro,
+                                       'agenciaId': me.u_idagencia,
+                                       'racId':me.racid,
+                                       'pInicio': true,
+                                       'Numerooficio': 0,
+                                       //********** PERSONA/  
+                                       'statusAnonimo': me.switch2,
+                                       'tipoPersona': me.radios,
+                                       'rfc': me.rfc,
+                                       'razonsocial': me.razonsocial,
+                                       'clasificacionpersona': me.clasificacionpersona,
+                                       'nombre': me.nombres,
+                                       'apellidoPaterno' : me.apaterno,
+                                       'apellidoMaterno' : me.amaterno,
+                                       'alias': me.alias,
+                                       'statusAlias': false,
+                                       'fechaNacimiento' : me.fnacimiento,
+                                       'entidadFederativa': me.abreviacion.text,
+                                       'docIdentificacion': me.docidentificacion,
+                                       'curp': me.curp,
+                                       'sexo' : me.sexo,
+                                       'estadoCivil': me.estadocivil,
+                                       'genero': me.genero,
+                                       'telefono1': me.telefono1,
+                                       'telefono2': me.telefono2,
+                                       'correo': me.correo,
+                                       'medioNotificacion': listaMediosNotificacion,
+                                       'nacionalidad': me.nacionalidad,
+                                       'ocupacion': me.ocupacion,
+                                       'nivelEstudio': me.nivelestudio,
+                                       'lengua': me.lengua,
+                                       'religion': me.religion,
+                                       'discapacidad': me.switch1,
+                                       'tipoDiscapacidad': me.discapacidad,
+                                       'DatosProtegidos': me.datosprotegidos,
+                                       'Relacion': me.relacion,
+                                       'Parentesco': me.relacionado,
+                                       'Edad': me.edadf,    
+                                       'DocPoderNotarial':me.documentoacredita,                         
+                                       //********** DIRECCION/
+                                       'calle': me.calle,
+                                       'noExt': me.noExt,
+                                       'noInt': me.noInt,
+                                       'entreCalle1': me.entreCalle1,
+                                       'entreCalle2': me.entreCalle2,
+                                       'referencia': me.referencia,
+                                       'pais': me.pais,
+                                       'estado': me.estado,
+                                       'municipio': me.municipio,
+                                       'localidad': me.localidad,
+                                       'cp': me.cp,
+                                       'lat': me.lat,
+                                       'lng': me.lng,
+                                       //************ */
+                                       'agencia': me.u_agencia,
+                                       'usuario':me.u_nombre,
+                                       'puesto':me.u_puesto,
+                                       'modulo':me.u_modulo
+                                   //************ */
+                                   
+                               },configuracion).then(function(response){   
+                                   
+                                   me.$notify('La información se guardo correctamente !!!','success')
+
+                                  
+                                   axios.post('api/DocumentosPesonas/Crear',{  
+
+                                       'PersonaId': response.data.personaid,
+                                       'tipoDocumento': me.docidentificacion,
+                                       'nombreDocumento':me.GUID,
+                                       'descripcion': "",
+                                       'ruta': me.ruta,
+                                       'distrito':me.u_distrito,
+                                       'dirSubProc':me.u_dirSubPro,    
+                                       'Agencia':me.u_agencia,
+                                       'Usuario': me.u_nombre,
+                                       'Puesto': me.u_puesto,
+                                       
+                                   },configuracion).then(function(response){  
+                                       me.$notify('La información se guardo correctamente !!!','success')   
+                                   }).catch(err => {
+                                       if (err.response.status==400){
+                                           me.$notify("No es un usuario válido", 'error')
+                                       } else if (err.response.status==401){
+                                           me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                                           me.e401 = true,
+                                           me.showpage= false
+                                       } else if (err.response.status==403){
+                                           me.$notify("No esta autorizado para ver esta pagina", 'error')
+                                           me.e403= true
+                                           me.showpage= false
+                                       } else if (err.response.status==404){
+                                           me.$notify("El recuso no ha sido encontrado", 'error')
+                                       }else{
+                                           me.$notify('Error al intentar crear el  registro!!!','error')  
+                                       }
+                                   });
+                                   
+
+                                   
+                                   if(me.datosprotegidos){           
+
+                                       axios.post('api/DatosProtegido/Crear',{
+
+                                           'RAPId': response.data.idrap,
+                                           'Nombre': nombre,
+                                           'APaterno': apaterno,
+                                           'AMaterno': amaterno,
+                                           'FechaNacimiento': fnacimiento,
+                                           'CURP':curp,
+                                           'RFC': rfc,
+                                           'Rutadocumento':rutadocumento,
+                                           'UDistrito':me.u_distrito,
+                                           'USubproc': me.u_dirSubPro,
+                                           'UAgencia': me.u_agencia,
+                                           'Usuario': me.u_nombre,
+                                           'UPuesto': me.u_puesto,
+                                           'UModulo': me.u_modulo,
+
+                                       },configuracion).then(function(response){  
+                                           me.$notify('La información se guardo correctamente !!!','success')   
+                                       }).catch(err => {
+                                           if (err.response.status==400){
+                                               me.$notify("No es un usuario válido", 'error')
+                                           } else if (err.response.status==401){
+                                               me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                                               me.e401 = true,
+                                               me.showpage= false
+                                           } else if (err.response.status==403){
+                                               me.$notify("No esta autorizado para ver esta pagina", 'error')
+                                               me.e403= true
+                                               me.showpage= false
+                                           } else if (err.response.status==404){
+                                               me.$notify("El recuso no ha sido encontrado", 'error')
+                                           }else{
+                                               me.$notify('Error al intentar crear el  registro!!!','error')  
+                                           }
+                                       });
+                                   }
+
+
+                                   me.limpiar();
+                                   me.$store.state.ratencionid = response.data.idatencion;
+                                   me.$router.push('./entrevista')
+                                   
+                               }).catch(err => {
+                                   if (err.response.status==400){
+                                       me.$notify("No es un usuario válido", 'error')
+                                   } else if (err.response.status==401){
+                                       me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                                       me.e401 = true,
+                                       me.showpage= false
+                                   } else if (err.response.status==403){
+                                       me.$notify("No esta autorizado para ver esta pagina", 'error')
+                                       me.e403= true
+                                       me.showpage= false
+                                   } else if (err.response.status==404){
+                                       me.$notify("El recuso no ha sido encontrado", 'error')
+                                   }else{
+                                       me.$notify('Error al intentar crear el  registro!!!','error')  
+                                   }
+                               });
+
+                               })
+                                   .catch(function(){
+                                   console.log('FAILURE2!!');
+                               });
+                       }else{
+
+                           if(me.cp =='')
+                           me.cp = 0
+                           if(me.curp == '')
+                           me.curp =0
+                           if(me.lat =='')
+                           me.lat =0
+                           if(me.lng == '')
+                           me.lng=0
+                           if(me.noInt == '')
+                           me.noInt = 0
+                           if(me.telefono1 == '')
+                           me.telefono1 = 0
+                           if(me.telefono2 == '')
+                           me.telefono2 = 0
+
+                           var nombre = ''
+                           var apaterno =      ''
+                           var amaterno =  ''
+                           var fnacimiento =  ''
+                           var rfc =  ''
+                           var curp =  ''
+                           var rutadocumento =  ''
+
+                           if(me.datosprotegidos){
+                               nombre = me.nombres;
+                               apaterno = me.apaterno;
+                               amaterno = me.amaterno;
+                               fnacimiento = me.fnacimiento;
+                               rfc = me.rfc;
+                               curp = me.curp;
+                               rutadocumento = me.ruta;
+
+                               me.nombres = me.alias;
+                               me.apaterno ="";
+                               me.amaterno = "";
+                               me.fnacimiento = "";
+                               me.rfc = "";
+                               me.curp = "";
+                               me.ruta ="";
+                           }
+
+                           axios.post('api/RAtencions/CrearSinTurno',{  
+                           //********** REGISTRO DE ATENCION/                                   
+                               'distritoInicial': me.u_distrito,  
+                               'agenciaInicial': me.u_agencia,
+                               'dirSubProcuInicial': me.u_dirSubPro,
+                               'agenciaId': me.u_idagencia,
+                               'racId':me.racid,
+                               'pInicio': true,
+                               'Numerooficio': 0,
+                               //********** PERSONA/  
+                               'statusAnonimo': me.switch2,
+                               'tipoPersona': me.radios,
+                               'rfc': me.rfc,
+                               'razonsocial': me.razonsocial,
+                               'clasificacionpersona': me.clasificacionpersona,
+                               'nombre': me.nombres,
+                               'apellidoPaterno' : me.apaterno,
+                               'apellidoMaterno' : me.amaterno,
+                               'alias': me.alias,
+                               'statusAlias': false,
+                               'fechaNacimiento' : me.fnacimiento,
+                               'entidadFederativa': me.abreviacion.text,
+                               'docIdentificacion': me.docidentificacion,
+                               'curp': me.curp,
+                               'sexo' : me.sexo,
+                               'estadoCivil': me.estadocivil,
+                               'genero': me.genero,
+                               'telefono1': me.telefono1,
+                               'telefono2': me.telefono2,
+                               'correo': me.correo,
+                               'medioNotificacion': listaMediosNotificacion,
+                               'nacionalidad': me.nacionalidad,
+                               'ocupacion': me.ocupacion,
+                               'nivelEstudio': me.nivelestudio,
+                               'lengua': me.lengua,
+                               'religion': me.religion,
+                               'discapacidad': me.switch1,
+                               'tipoDiscapacidad': me.discapacidad,
+                               'DatosProtegidos': me.datosprotegidos,
+                               'Relacion': me.relacion,
+                               'Parentesco': me.relacionado,
+                               'Edad': me.edadf,         
+                               'DocPoderNotarial':me.documentoacredita,                   
+                               //********** DIRECCION/
+                               'calle': me.calle,
+                               'noExt': me.noExt,
+                               'noInt': me.noInt,
+                               'entreCalle1': me.entreCalle1,
+                               'entreCalle2': me.entreCalle2,
+                               'referencia': me.referencia,
+                               'pais': me.pais,
+                               'estado': me.estado,
+                               'municipio': me.municipio,
+                               'localidad': me.localidad,
+                               'cp': me.cp,
+                               'lat': me.lat,
+                               'lng': me.lng,
+                               //************ */
+                               'agencia': me.u_agencia,
+                               'usuario': me.u_nombre,
+                               'puesto': me.u_puesto,
+                               'modulo': me.u_modulo
+                           //************ */
+                           
+                       },configuracion).then(function(response){   
+                           
+                           me.$notify('La información se guardo correctamente !!!','success')
+
+                           if(me.datosprotegidos){           
+
+                               axios.post('api/DatosProtegido/Crear',{
+
+                                   'RAPId': response.data.idrap,
+                                   'Nombre': nombre,
+                                   'APaterno': apaterno,
+                                   'AMaterno': amaterno,
+                                   'FechaNacimiento': fnacimiento,
+                                   'CURP':curp,
+                                   'RFC': rfc,
+                                   'Rutadocumento':"",
+                                   'UDistrito':me.u_distrito,
+                                   'USubproc': me.u_dirSubPro,
+                                   'UAgencia': me.u_agencia,
+                                   'Usuario': me.u_nombre,
+                                   'UPuesto': me.u_puesto,
+                                   'UModulo': me.u_modulo,
+
+                               },configuracion).then(function(response){  
+                                   me.$notify('La información se guardo correctamente !!!','success')   
+                               }).catch(err => {
+                                   if (err.response.status==400){
+                                       me.$notify("No es un usuario válido", 'error')
+                                   } else if (err.response.status==401){
+                                       me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                                       me.e401 = true,
+                                       me.showpage= false
+                                   } else if (err.response.status==403){
+                                       me.$notify("No esta autorizado para ver esta pagina", 'error')
+                                       me.e403= true
+                                       me.showpage= false
+                                   } else if (err.response.status==404){
+                                       me.$notify("El recuso no ha sido encontrado", 'error')
+                                   }else{
+                                       me.$notify('Error al intentar crear el  registro!!!','error')  
+                                   }
+                               });
+                           }
+                               me.limpiar();
+                               me.$store.state.ratencionid = response.data.idatencion;
+                               me.$router.push('./entrevista')
+                                   
+                           }).catch(err => {
+                               if (err.response.status==400){
+                                   me.$notify("No es un usuario válido", 'error')
+                               } else if (err.response.status==401){
+                                   me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                                   me.e401 = true,
+                                   me.showpage= false
+                               } else if (err.response.status==403){
+                                   me.$notify("No esta autorizado para ver esta pagina", 'error')
+                                   me.e403= true
+                                   me.showpage= false
+                               } else if (err.response.status==404){
+                                   me.$notify("El recuso no ha sido encontrado", 'error')
+                               }else{
+                                   me.$notify('Error al intentar crear el  registro!!!','error')  
+                               }
+                           });
+
+                       }
+                       
+                       
+                       
+                   }
+
+               
+           }).catch(err => {
+               if (err.response.status==400){
+                   me.$notify("No es un usuario válido", 'error')
+               } else if (err.response.status==401){
+                   me.$notify("Por favor inicie sesion para poder navegar en la aplicacion", 'error')
+                   me.e401 = true,
+                   me.showpage= false
+               } else if (err.response.status==403){
+                   me.$notify("No esta autorizado para ver esta pagina", 'error')
+                   me.e403= true
+                   me.showpage= false
+               } else if (err.response.status==404){
+                   me.$notify("El recuso no ha sido encontrado", 'error')
+               }else{
+                   me.$notify('Error al intentar crear el  registro!!!','error')  
+               }
+           });  
+      }
+   })
+   //************************** */
+
+}
 
   //Función para enviar el formulario
   enviar(e) {
@@ -263,6 +913,16 @@ export default class Contact extends Component {
                       <div className="form-group mb-3">
                         {/* <span>Nombre</span> */}
                         <input onChange={this.handlerOnChange} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
+                      </div>
+
+                      <div className="form-group mb-3">
+                        {/* <span>RFC</span> */}
+                        <input onChange={this.handlerOnChange} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                      </div>
+
+                      <div className="form-group mb-3">
+                        {/* <span>Razon Social</span> */}
+                        <input onChange={this.handlerOnChange} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
                       </div>
 
                       <div className="form-group mb-3">
