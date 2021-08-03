@@ -281,8 +281,14 @@ export default class Contact extends Component {
                       </div>
 
                       <div className="form-group mb-3">
-                        <label className="form-label">Fecha de nacimiento:</label>
-                        <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                        <div className="row mb-3 w-100">
+                          <div className="col">
+                            <label className="form-label" for="dateFNacimiento">Fecha de nacimiento:</label>
+                          </div>
+                          <div className="col">
+                            <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                          </div>
+                        </div>
                       </div>
 
                       <div className="form-group mb-3">
@@ -351,7 +357,7 @@ export default class Contact extends Component {
                       </div>
 
                       <div className="form-group mb-3">
-                        <div className="mb-3">
+                        <div className="mb-3 w-100">
                           {/* <span>CURP</span> */}
                           <input onChange={this.handlerOnChange} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                         </div>
@@ -670,14 +676,14 @@ export default class Contact extends Component {
                   </div>
 
                   <div className="form-group mb-3">
-                    <div className="form-group mb-3" style={{width: "50%"}}>
-                      <label>
+                    <div className="row mb-3 w-100">
+                      <div className="col">
                         <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
-                        <span>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</span>
-                      </label>
+                        <label className="form-label" for="swLGBT">¿Pertenece a la comunidad LGBTTTQA?</label>
+                      </div>
                     </div>
-                    <div className="form-group mb-3" style={{width: "50%", marginLeft: "10px"}}>
-                      {/* Select LGBT*/}
+                    {/* Select LGBT*/}
+                    <div className="col">
                       <select onChange={this.handlerOnChange} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
                         <option value="defaultLGBT" >Seleccione...</option>
                         <option value="Lesbiana">Lesbiana</option>
@@ -697,32 +703,29 @@ export default class Contact extends Component {
                   </div>
 
                   <div className="form-group mb-3">
-                    <div className="form-group mb-3" style={{width: "50%"}}>
-                      
-                    </div>
                     <div className="row mb-3 w-100">
                       <div className="col">
                         <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
                         <label className="form-label" for="swDiscapacidad">¿Tiene alguna discapacidad?</label>
                       </div>
                       {/* Select Discapacidad*/}
-                        <div className="col">
-                          <select onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
-                            <option value="defaultDiscapacidad" >Seleccione...</option>
-                            <option value="Autismo">Autismo</option>
-                            <option value="Deficiencia Visual">Deficiencia Visual</option>
-                            <option value="Discapacidad Fisica">Discapacidad Fisica</option>
-                            <option value="Enfermedades Mentales">Enfermedades Mentales</option>
-                            <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
-                            <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
-                            <option value="Enfermedad Cronica">Enfermedad Cronica</option>
-                            <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
-                            <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
-                            <option value="Perdida de Memoria">Perdida de Memoria</option>
-                            <option value="Otra">Otra</option>
-                            <option value="Ninguna">Ninguna</option>
-                          </select>
-                        </div>
+                      <div className="col">
+                        <select onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
+                          <option value="defaultDiscapacidad" >Seleccione...</option>
+                          <option value="Autismo">Autismo</option>
+                          <option value="Deficiencia Visual">Deficiencia Visual</option>
+                          <option value="Discapacidad Fisica">Discapacidad Fisica</option>
+                          <option value="Enfermedades Mentales">Enfermedades Mentales</option>
+                          <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
+                          <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
+                          <option value="Enfermedad Cronica">Enfermedad Cronica</option>
+                          <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
+                          <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
+                          <option value="Perdida de Memoria">Perdida de Memoria</option>
+                          <option value="Otra">Otra</option>
+                          <option value="Ninguna">Ninguna</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
