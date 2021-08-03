@@ -703,7 +703,7 @@ export default class Contact extends Component {
                     <div className="row mb-3 w-100">
                       <div className="col">
                         <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
-                        <label className="form-label" for="swDiscapacidad">¿Tiene alguna discapacidad?</label>
+                        <label className="form-label" >¿Tiene alguna discapacidad?</label>
                       </div>
                       {/* Select Discapacidad*/}
                         <div className="col">
