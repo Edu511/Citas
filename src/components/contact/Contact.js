@@ -90,8 +90,8 @@ export default class Contact extends Component {
    let me=this;
    let header={"Authorization" : "Bearer " + this.$store.state.token};
    let configuracion= {headers : header};
-// ---------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------
+// /---------------------------------------------------------------------------------------------------------/
+// /---------------------------------------------------------------------------------------------------------/
    var listaMediosNotificacion='';
    if(me.medionotificacion.length<=0)
    {
@@ -106,8 +106,8 @@ export default class Contact extends Component {
        listaMediosNotificacion = listaMediosNotificacion.slice(0, -1);
    }    
 
-// ---------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------
+// /---------------------------------------------------------------------------------------------------------/
+// /---------------------------------------------------------------------------------------------------------/
 
    this.$validator.validate().then(result => {
        if (result) {
@@ -119,7 +119,7 @@ export default class Contact extends Component {
            if(me.edadf <18)
                me.datosprotegidos = true;
                   
-           if (me.swAnonimo==true){  
+           if (me.switch2==true){  
                
                me.radios= 'Anonimo'
                me.rfc= 'Anonimo'
@@ -855,18 +855,7 @@ export default class Contact extends Component {
 
 
   render () {
-    
-    // if () {
-      
-    // }else{
 
-    // }
-
-    // {condicion && resultado}
-
-    // {condicion ? resultado : else}
-
-    console.log(this.state.raPersona)
 
     return (
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
@@ -1009,9 +998,14 @@ export default class Contact extends Component {
                           <option value="CredencialDerechohab">CURP</option>
                         </select>
                       </div>
+                      
+                      <div className="input-group mb-3">
+                        <input type="file" className="form-control" id="inputGroupFile02"/>
+                        <label className="input-group-text" htmlFor="inputGroupFile02">Cargar</label>
+                      </div>                     
 
                       <div className="form-group mb-3">
-                        <div className="mb-3">
+                        <div className="mb-3 w-100">
                           {/* <span>CURP</span> */}
                           <input onChange={this.handlerOnChange} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                         </div>
