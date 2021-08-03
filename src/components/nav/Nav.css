@@ -1,0 +1,20 @@
+.navbar {
+  background: #092432;
+  height: 65px;
+  left: 0;
+	position: fixed;
+	top: 0;
+  width: 100%;
+  z-index: 4;
+}
+.navbar-navigation {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: center;
+  padding: 0 1rem;
+}
+.logo {
+  height: 67px;
+  width: 250px;
+}

@@ -1,0 +1,158 @@
+.cent-compro {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  min-height: 100vh;
+  background: #f4f4f4;
+}
+.App {
+  padding: 30px;
+  width: 85%;
+}
+.title {
+  font-family: Arial;
+  margin-left: 50px;
+}
+.nolink {
+  text-decoration: none;
+}
+.row-a {
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  width: 100%;
+}
+.col-a {
+  display: flex;
+  margin: 50px;
+}
+.row-aa {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: 15px;
+  font-family: arial;
+}
+.a-row-t {
+  width: 20%;
+  font-size: 17px;
+  text-align: left;
+  font-weight: bold;
+  color: black;
+  padding: 6px;
+}
+.a-row {
+  padding: 6px;
+  width: 20%;
+  font-size: 15px;
+  text-align: left;
+  color: black;
+}
+.vista {
+  display:flex;
+  justify-content:center ;
+  flex-direction:row;
+}
+.products-al {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  color: grey;
+  padding: 6px;
+}
+.products-al2 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  color: grey;
+  border-top: 1px solid grey;
+  padding: 6px;
+}
+.table-cont {
+  background: white;
+  border-radius: 4px;
+}
+/*EditarComprometidos*/
+.container-edit {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.comp-container {
+  width: 90%;
+}
+.edit-com-comp {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 40px 40px 40px;
+}
+.edit-row {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+}
+.edit-tab-row-t {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 20px 2px;
+  background: #092432;
+  border-top: 4px solid #dc5f70;
+}
+.tabla-edit-c {
+  width: 14.5%;
+  text-align: left;
+  color: #000;
+}
+.tabla-edit-l {
+  width: 14.5%;
+  text-align: center;
+  color: #000;
+}
+.container-e {
+  margin-top: 100px;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.table-ed-2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+.edit-tab-row-2 {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 5px 0px 0px 0px;
+}
+.input-edi {
+  width: 99%;
+}
+.row-cit {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.p-f-s {
+  font-size: 20px;
+}
+.btn {
+  font-size: 30px;
+  margin-top: 50px;
+  padding-left: 15px;
+}
+.form-group {
+  display: flex;
+}
+.ca {
+  font-size: 20px;
+  width: 100px;
+  margin-top: 8px;
+}
+.form-control {
+  width: 250px;
+  margin-top: 8px;
+}
