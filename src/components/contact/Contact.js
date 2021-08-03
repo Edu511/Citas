@@ -668,13 +668,13 @@ export default class Contact extends Component {
                   </div>
 
                   <div className="form-group mb-3">
-                    <div className="form-group mb-3">
+                    <div className="form-group mb-3" style={{width: "50%"}}>
                       <label>
                         <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
                         <span>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</span>
                       </label>
                     </div>
-                    <div className="form-group mb-3">
+                    <div className="form-group mb-3" style={{width: "50%", marginLeft: "10px"}}>
                       {/* Select LGBT*/}
                       <select onChange={this.handlerOnChange} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
                         <option value="defaultLGBT" >Seleccione...</option>
@@ -695,13 +695,13 @@ export default class Contact extends Component {
                   </div>
 
                   <div className="form-group mb-3">
-                    <div className="form-group mb-3">
+                    <div className="form-group mb-3" style={{width: "50%"}}>
                       <label>
                         <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
                         <span>&nbsp;¿Tiene alguna discapacidad?</span>
                       </label>
                     </div>
-                    <div className="form-group mb-3">
+                    <div className="form-group mb-3" style={{width: "50%"}}>
                       {/* Select Discapacidad*/}
                       <select onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
                         <option value="defaultDiscapacidad" >Seleccione...</option>
