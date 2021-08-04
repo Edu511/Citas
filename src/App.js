@@ -8,10 +8,15 @@ import Edit from './components/citas/Edit'
 import Contact from './components/contact/Contact'
 import Msg from './components/contact/Msg'
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import { useForm } from "react-hook-form";
 
 
 function App (props) {
   const { isAuthenticated, isVerifying } = props
+  // react hooks form    
+  // const { register, handleSubmit } = useForm();
+  // const onSubmit = data => console.log(data);
+
   return (
     <Switch>
       <ProtectedRoute

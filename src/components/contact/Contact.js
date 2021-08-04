@@ -1,116 +1,68 @@
 import React, { Component } from 'react'
 import firebase from '../../firebase/firebaseConfig'
+// import { Input } from 'reactstrap';
+// import { register } from '../../serviceWorker';
 export default class Contact extends Component {
   
   constructor(props){
+
     super(props)
     this.state = {
       step: 1,
       swAnonimo: false,
-      raPersona: "Fisica",
-      txtRFC: "",
-      txtRazonSocial: "",
-      selClasPersona: "",
-      txtNombre: "",
-      txtApPaterno: "",
-      txtApMaterno: "",
-      txtAlias: "",
-      dateFNacimiento: "",
-      selSexo: "",
-      selEntidadFederativa: "",
-      selIdentificacion: "",
-      fileDocumento: "",
-      txtCurp: "",
-      selNotificacion: "",
-      txtnumTel1: "",
-      txtnumTel2: "",
-      emailCorreo: "",
-      txtNacionalidad: "",
-      selEstadoCivil: "",
-      selOcupacion: "",
-      selNivelEstudios: "",
-      selLengua: "",
-      selReligion: "",
+      raPersona: 'Fisica',
+      txtRFC: '',
+      txtRazonSocial: '',
+      selClasPersona: '',
+      txtNombre: '',
+      txtApPaterno: '',
+      txtApMaterno: '',
+      txtAlias: '',
+      txtNumEdad: '',
+      selSexo: '',
+      selEntidadFederativa: '',
+      selIdentificacion: '',
+      fileDocumento: '',
+      txtCurp: '',
+      selNotificacion: '',
+      txtnumTel1: '',
+      txtnumTel2: '',
+      emailCorreo: '',
+      txtNacionalidad: '',
+      selEstadoCivil: '',
+      selOcupacion: '',
+      selNivelEstudios: '',
+      selLengua: '',
+      selReligion: '',
       swLGBT: false,
-      selLGBT: "",
+      selLGBT: '',
       swDiscapacidad: false,
-      selDiscapacidad: "",
-      selTipoDelito: "",
-      timeHoraSuceso: "",
-      dateFSuceso: "",
-      txtCalle: "",
-      txtNumInt: "",
-      txtNumExt: "",
-      txtEntCalle1: "",
-      txtEntCalle2: "",
-      txtReferencias: "",
-      selPais: "",
-      selEstado: "",
-      selMunicipio: "",
-      selLocalidad: "",
-      txtCodPostal: "",
-      txtLatitud: "",
-      txtLongitud: ""
-      
+      selDiscapacidad: '',
+      selTipoDelito: '',
+      timeHoraSuceso: '',
+      dateFSuceso: '',
+      txtCalle: '',
+      txtNumInt: '',
+      txtNumExt: '',
+      txtEntCalle1: '',
+      txtEntCalle2: '',
+      txtReferencias: '',
+      selPais: '',
+      selEstado: '',
+      selMunicipio: '',
+      selLocalidad: '',
+      txtCodPostal: '',
+      txtLatitud: '',
+      txtLongitud: ''
     }
-    if (this.swAnonimo) {
-      this.state = {
-        raPersona: "Anonimo",
-        txtRFC: "Anonimo",
-        txtRazonSocial: "Anonimo",
-        selClasPersona: "Anonimo",
-        txtNombre: "Anonimo",
-        txtApPaterno: "Anonimo",
-        txtApMaterno: "Anonimo",
-        txtAlias: "Anonimo",
-        dateFNacimiento: "01/01/0001",
-        selSexo: "Anonimo",
-        selEntidadFederativa: "Anonimo",
-        selIdentificacion: "Anonimo",
-        fileDocumento: " ",
-        txtCurp: "XXXX010101XXXXXXX1",
-        selNotificacion: "",
-        txtnumTel1: "Anonimo",
-        txtnumTel2: "Anonimo",
-        emailCorreo: "",
-        txtNacionalidad: "Anonimo",
-        selEstadoCivil: "Anonimo",
-        selOcupacion: "Anonimo",
-        selNivelEstudios: "Anonimo",
-        selLengua: "Anonimo",
-        selReligion: "Anonimo",
-        swLGBT: false,
-        selLGBT: "Anonimo",
-        swDiscapacidad: false,
-        selDiscapacidad: "Anonimo",
-        selTipoDelito: "",
-        timeHoraSuceso: "",
-        dateFSuceso: "",
-        txtCalle: "",
-        txtNumInt: "",
-        txtNumExt: "",
-        txtEntCalle1: "",
-        txtEntCalle2: "",
-        txtReferencias: "",
-        selPais: "",
-        selEstado: "",
-        selMunicipio: "",
-        selLocalidad: "",
-        txtCodPostal: "",
-        txtLatitud: "",
-        txtLongitud: ""
-      }
-    }
-
   }
 
   checkAnonimo(){
     this.setState({
       swAnonimo: !this.state.swAnonimo
     })
-
   }
-
+  
 //  Cambia el valor de persona fisica y moral
   checkF(){
     this.setState({
@@ -135,7 +87,6 @@ export default class Contact extends Component {
     this.setState({
       swDiscapacidad: !this.state.swDiscapacidad
     })
-
   }
 
   //Se ocupa de cambiar de seccion
@@ -151,118 +102,382 @@ export default class Contact extends Component {
   }
 
 
-
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault()
 
-    console.log("Estoy dentro")
-
-    const parametros={
-      swAnonimo: this.inputSwAnonimo.value,
-      raPersona: this.inputRaPersona.value,
-      txtRFC: this.inputTxtRFC.value,
-      txtRazonSocial: this.inputTxtRazonSocial.value,
-      selClasPersona: this.inputSelClasPersona.value,
-      txtNombre: this.inputTxtNombre.value,
-      txtApPaterno: this.inputTxtApPaterno.value,
-      txtApMaterno: this.inputTxtApMaterno.value,
-      txtAlias: this.inputTxtAlias.value,
-      dateFNacimiento: this.inputDateFNacimiento.value,
-      selSexo: this.inputSelSexo.value,
-      selEntidadFederativa: this.inputSelEntidadFederativa.value,
-      selIdentificacion: this.inputSelClasPersona.value,
-      //fileDocumento: this.inputFileDocumento.value,
-      txtCurp: this.inputTxtCurp.value,
-      selNotificacion: this.inputSelNotificacion.value,
-      txtnumTel1: this.inputTxtnumTel1.value,
-      txtnumTel2: this.inputTxtnumTel2.value,
-      emailCorreo: this.inputEmailCorreo.value,
-      txtNacionalidad: this.inputTxtNacionalidad.value,
-      selEstadoCivil: this.inputSelEstadoCivil.value,
-      selOcupacion: this.inputSelOcupacion.value,
-      selNivelEstudios: this.inputSelNivelEstudios.value,
-      selLengua: this.inputSelLengua.value,
-      selReligion: this.inputSelReligion.value,
-      swLGBT: this.inputSwLGBT.value,
-      selLGBT: this.inputSelLGBT.value,
-      swDiscapacidad: this.inputSwDiscapacidad.value,
-      selDiscapacidad: this.inputSelDiscapacidad.value,
-      selTipoDelito: this.inputSelTipoDelito.value,
-      timeHoraSuceso: this.inputTimeHoraSuceso.value,
-      dateFSuceso: this.inputDateFSuceso.value,
-      txtCalle: this.inputTxtCalle.value,
-      txtNumInt: this.inputTxtNumInt.value,
-      txtNumExt: this.inputTxtNumExt.value,
-      txtEntCalle1: this.inputTxtEntCalle1.value,
-      txtEntCalle2: this.inputTxtEntCalle2.value,
-      txtReferencias: this.inputTxtReferencias.value,
-      selPais: this.inputSelPais.value,
-      selEstado: this.inputSelEstado.value,
-      selMunicipio: this.inputSelMunicipio.value,
-      selLocalidad: this.inputSelLocalidad.value,
-      txtCodPostal: this.inputTxtCodPostal.value,
-      txtLatitud: this.inputTxtLatitud.value,
-      txtLongitud: this.inputTxtLongitud.value,
-    }
-
-    console.log(parametros)
-
+    console.log("Datos enviados correctamente")
     
+    if(this.state.swAnonimo){
+      const parametrosAnonimo = {
+        swAnonimo: true,
+        raPersona: 'Anonimo',
+        selClasPersona: this.inputSelClasPersona.value,
+        txtRFC: 'Anonimo',
+        txtRazonSocial: 'Anonimo',          
+        txtNombre : 'Anonimo',
+        txtApPaterno : 'Anonimo',
+        txtApMaterno : 'Anonimo',
+        txtAlias : 'Anonimo',
+        txtNumEdad : this.inputTxttxtNumEdad.value,
+        selSexo : this.inputSelSexo.value,
+        selEntidadFederativa : 'Anonimo',
+        selIdentificacion: 'Anonimo',
+        txtCurp: 'XXXX010101XXXXXXX1',
+        selNotificacion: this.inputSelNotificacion.value,
+        txtnumTel1 : 'Anonimo',
+        txtnumTel2 : 'Anonimo',
+        emailCorreo: this.inputEmailCorreo.value,
+        txtNacionalidad : 'Anonimo',
+        selEstadoCivil : 'Anonimo',
+        selOcupacion : 'Anonimo',
+        selNivelEstudios : 'Anonimo',
+        selLengua : 'Anonimo',
+        selReligion : 'Anonimo',
+        swLGBT : false,
+        selLGBT : 'Anonimo',
+        swDiscapacidad : false,
+        selDiscapacidad : 'Anonimo',
+        selTipoDelito : this.inputSelTipoDelito.value,
+        timeHoraSuceso : this.inputTimeHoraSuceso.value,
+        dateFSuceso : this.inputDateFSuceso.value,
+        txtCalle : this.inputTxtCalle.value,
+        txtNumInt : this.inputTxtNumInt.value,
+        txtNumExt : this.inputTxtNumExt.value,
+        txtEntCalle1 : this.inputTxtEntCalle1.value,
+        txtEntCalle2 : this.inputTxtEntCalle2.value,
+        txtReferencias : this.inputTxtReferencias.value,
+        selPais : this.inputSelPais.value,
+        selEstado : this.inputSelEstado.value,
+        selMunicipio : this.inputSelMunicipio.value,
+        selLocalidad : this.inputSelLocalidad.value,
+        txtCodPostal : this.inputTxtCodPostal.value,
+        txtLatitud : this.inputTxtLatitud.value,
+        txtLongitud : this.inputTxtLongitud.value
+      }
 
-    if(parametros.swAnonimo &&
-      parametros.raPersona &&
-      parametros.selClasPersona &&
-      parametros.txtNombre &&
-      parametros.txtApPaterno &&
-      parametros.txtApMaterno &&
-      parametros.txtAlias &&
-      parametros.dateFNacimiento &&
-      parametros.selSexo &&
-      parametros.selEntidadFederativa &&
-      parametros.selIdentificacion &&
-      parametros.txtCurp &&
-      parametros.selNotificacion &&
-      parametros.txtnumTel1 &&
-      parametros.txtnumTel2 &&
-      parametros.emailCorreo &&
-      parametros.txtNacionalidad &&
-      parametros.selEstadoCivil &&
-      parametros.selOcupacion &&
-      parametros.selNivelEstudios &&
-      parametros.selLengua &&
-      parametros.selReligion &&
-      parametros.swLGBT &&
-      parametros.selLGBT &&
-      parametros.swDiscapacidad &&
-      parametros.selDiscapacidad &&
-      parametros.selTipoDelito &&
-      parametros.timeHoraSuceso &&
-      parametros.dateFSuceso &&
-      parametros.txtCalle &&
-      parametros.txtNumInt &&
-      parametros.txtNumExt &&
-      parametros.txtEntCalle1 &&
-      parametros.txtEntCalle2 &&
-      parametros.txtReferencias &&
-      parametros.selPais &&
-      parametros.selEstado &&
-      parametros.selMunicipio &&
-      parametros.selLocalidad &&
-      parametros.txtCodPostal &&
-      parametros.txtLatitud &&
-      parametros.txtLongitud){
-        firebase.database().ref("pruebaCentenario").push(parametros).then(()=>
-        {
-          alert("Sus datos han sido enviados correctamente")
-        }).catch(()=>
-        {
-          alert("Faltan campos por llenar")
-        })
-    }else{
-      alert("Por favor llene su formulario")
-    }
+      console.log(parametrosAnonimo)
   
+      if(parametrosAnonimo.swAnonimo &&
+        parametrosAnonimo.selClasPersona &&
+        parametrosAnonimo.txtNumEdad &&
+        parametrosAnonimo.selSexo &&
+        parametrosAnonimo.selNotificacion &&
+        parametrosAnonimo.emailCorreo &&
+        parametrosAnonimo.selTipoDelito &&
+        parametrosAnonimo.timeHoraSuceso &&
+        parametrosAnonimo.dateFSuceso &&
+        parametrosAnonimo.txtCalle &&
+        parametrosAnonimo.txtNumInt &&
+        parametrosAnonimo.txtNumExt &&
+        parametrosAnonimo.txtEntCalle1 &&
+        parametrosAnonimo.txtEntCalle2 &&
+        parametrosAnonimo.txtReferencias &&
+        parametrosAnonimo.selPais &&
+        parametrosAnonimo.selEstado &&
+        parametrosAnonimo.selMunicipio &&
+        parametrosAnonimo.selLocalidad &&
+        parametrosAnonimo.txtCodPostal &&
+        parametrosAnonimo.txtLatitud &&
+        parametrosAnonimo.txtLongitud)
+        {
+          firebase.database().ref("pruebaCentenario").push(parametrosAnonimo).then(()=>
+          {
+            alert("Sus datos han sido enviados correctamente")
+          }).catch((e)=>
+          {
+            console.log(e);
+            alert("Faltan campos por llenar")
+          })
+        }else{
+          alert("Por favor llene su formulario")
+          console.log(parametrosAnonimo + "Parametros Anonimos")
+        }
+      
+    }
+
+    if(this.state.txtNumEdad < 18 && this.state.raPersona === "Fisica"){
+      const parametrosProtegidos = {
+        swAnonimo: true,
+        raPersona: 'Anonimo',
+        selClasPersona: this.inputSelClasPersona.value,
+        txtRFC: 'Anonimo',
+        txtRazonSocial: 'Anonimo',          
+        txtNombre : 'Anonimo',
+        txtApPaterno : 'Anonimo',
+        txtApMaterno : 'Anonimo',
+        txtAlias : 'Anonimo',
+        txtNumEdad : "Anonimo",
+        selSexo : this.inputSelSexo.value,
+        selEntidadFederativa : 'Anonimo',
+        selIdentificacion: 'Anonimo',
+        txtCurp: 'XXXX010101XXXXXXX1',
+        selNotificacion: this.inputSelNotificacion.value,
+        txtnumTel1 : 'Anonimo',
+        txtnumTel2 : 'Anonimo',
+        emailCorreo: this.inputEmailCorreo.value,
+        txtNacionalidad : 'Anonimo',
+        selEstadoCivil : 'Anonimo',
+        selOcupacion : 'Anonimo',
+        selNivelEstudios : 'Anonimo',
+        selLengua : 'Anonimo',
+        selReligion : 'Anonimo',
+        swLGBT : false,
+        selLGBT : 'Anonimo',
+        swDiscapacidad : false,
+        selDiscapacidad : 'Anonimo',
+        selTipoDelito : this.inputSelTipoDelito.value,
+        timeHoraSuceso : this.inputTimeHoraSuceso.value,
+        dateFSuceso : this.inputDateFSuceso.value,
+        txtCalle : this.inputTxtCalle.value,
+        txtNumInt : this.inputTxtNumInt.value,
+        txtNumExt : this.inputTxtNumExt.value,
+        txtEntCalle1 : this.inputTxtEntCalle1.value,
+        txtEntCalle2 : this.inputTxtEntCalle2.value,
+        txtReferencias : this.inputTxtReferencias.value,
+        selPais : this.inputSelPais.value,
+        selEstado : this.inputSelEstado.value,
+        selMunicipio : this.inputSelMunicipio.value,
+        selLocalidad : this.inputSelLocalidad.value,
+        txtCodPostal : this.inputTxtCodPostal.value,
+        txtLatitud : this.inputTxtLatitud.value,
+        txtLongitud : this.inputTxtLongitud.value
+      }
+
+      console.log(parametrosProtegidos)
+  
+      if(parametrosProtegidos.swAnonimo &&
+        parametrosProtegidos.selClasPersona &&
+        parametrosProtegidos.txtNumEdad &&
+        parametrosProtegidos.selSexo &&
+        parametrosProtegidos.selNotificacion &&
+        parametrosProtegidos.emailCorreo &&
+        parametrosProtegidos.selTipoDelito &&
+        parametrosProtegidos.timeHoraSuceso &&
+        parametrosProtegidos.dateFSuceso &&
+        parametrosProtegidos.txtCalle &&
+        parametrosProtegidos.txtNumInt &&
+        parametrosProtegidos.txtNumExt &&
+        parametrosProtegidos.txtEntCalle1 &&
+        parametrosProtegidos.txtEntCalle2 &&
+        parametrosProtegidos.txtReferencias &&
+        parametrosProtegidos.selPais &&
+        parametrosProtegidos.selEstado &&
+        parametrosProtegidos.selMunicipio &&
+        parametrosProtegidos.selLocalidad &&
+        parametrosProtegidos.txtCodPostal &&
+        parametrosProtegidos.txtLatitud &&
+        parametrosProtegidos.txtLongitud)
+        {
+          firebase.database().ref("pruebaCentenario").push(parametrosProtegidos).then(()=>
+          {
+            alert("Sus datos han sido enviados correctamente")
+          }).catch((e)=>
+          {
+            console.log(e);
+            alert("Faltan campos por llenar")
+          })
+        }else{
+          alert("Por favor llene su formulario")
+          console.log(parametrosProtegidos + "Parametros Protegidos")
+        }
+      
+    }
+
+    if (this.state.raPersona === 'Fisica' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18) {
+      const parametrosFisica = {
+        swAnonimo: this.inputSwAnonimo.value,
+        raPersona: this.inputRaPersona.value,
+        txtRFC: ' ',
+        txtRazonSocial: ' ',
+        selClasPersona: this.inputSelClasPersona.value,
+        txtNombre: this.inputTxtNombre.value,
+        txtApPaterno: this.inputTxtApPaterno.value,
+        txtApMaterno: this.inputTxtApMaterno.value,
+        txtAlias: this.inputTxtAlias.value,
+        txtNumEdad: this.inputTxttxtNumEdad.value,
+        selSexo: this.inputSelSexo.value,
+        selEntidadFederativa: this.inputSelEntidadFederativa.value,
+        selIdentificacion: this.inputSelClasPersona.value,
+        //fileDocumento: this.inputFileDocumento.value,
+        txtCurp: this.inputTxtCurp.value,
+        selNotificacion: this.inputSelNotificacion.value,
+        txtnumTel1: this.inputTxtnumTel1.value,
+        txtnumTel2: this.inputTxtnumTel2.value,
+        emailCorreo: this.inputEmailCorreo.value,
+        txtNacionalidad: this.inputTxtNacionalidad.value,
+        selEstadoCivil: this.inputSelEstadoCivil.value,
+        selOcupacion: this.inputSelOcupacion.value,
+        selNivelEstudios: this.inputSelNivelEstudios.value,
+        selLengua: this.inputSelLengua.value,
+        selReligion: this.inputSelReligion.value,
+        swLGBT: this.inputSwLGBT.value,
+        selLGBT: this.inputSelLGBT.value,
+        swDiscapacidad: this.inputSwDiscapacidad.value,
+        selDiscapacidad: this.inputSelDiscapacidad.value,
+        selTipoDelito: this.inputSelTipoDelito.value,
+        timeHoraSuceso: this.inputTimeHoraSuceso.value,
+        dateFSuceso: this.inputDateFSuceso.value,
+        txtCalle: this.inputTxtCalle.value,
+        txtNumInt: this.inputTxtNumInt.value,
+        txtNumExt: this.inputTxtNumExt.value,
+        txtEntCalle1: this.inputTxtEntCalle1.value,
+        txtEntCalle2: this.inputTxtEntCalle2.value,
+        txtReferencias: this.inputTxtReferencias.value,
+        selPais: this.inputSelPais.value,
+        selEstado: this.inputSelEstado.value,
+        selMunicipio: this.inputSelMunicipio.value,
+        selLocalidad: this.inputSelLocalidad.value,
+        txtCodPostal: this.inputTxtCodPostal.value,
+        txtLatitud: this.inputTxtLatitud.value,
+        txtLongitud: this.inputTxtLongitud.value,
+      }
+  
+      if(parametrosFisica.swAnonimo &&
+        parametrosFisica.raPersona &&
+        parametrosFisica.selClasPersona &&
+        parametrosFisica.txtNombre &&
+        parametrosFisica.txtApPaterno &&
+        parametrosFisica.txtApMaterno &&
+        parametrosFisica.txtAlias &&
+        parametrosFisica.txtNumEdad &&
+        parametrosFisica.selSexo &&
+        parametrosFisica.selEntidadFederativa &&
+        parametrosFisica.selIdentificacion &&
+        parametrosFisica.txtCurp &&
+        //parametrosFisica.fileDocumento &&
+        parametrosFisica.selNotificacion &&
+        parametrosFisica.txtnumTel1 &&
+        parametrosFisica.txtnumTel2 &&
+        parametrosFisica.emailCorreo &&
+        parametrosFisica.txtNacionalidad &&
+        parametrosFisica.selEstadoCivil &&
+        parametrosFisica.selOcupacion &&
+        parametrosFisica.selNivelEstudios &&
+        parametrosFisica.selLengua &&
+        parametrosFisica.selReligion &&
+        parametrosFisica.swLGBT &&
+        parametrosFisica.selLGBT &&
+        parametrosFisica.swDiscapacidad &&
+        parametrosFisica.selDiscapacidad &&
+        parametrosFisica.selTipoDelito &&
+        parametrosFisica.timeHoraSuceso &&
+        parametrosFisica.dateFSuceso &&
+        parametrosFisica.txtCalle &&
+        parametrosFisica.txtNumInt &&
+        parametrosFisica.txtNumExt &&
+        parametrosFisica.txtEntCalle1 &&
+        parametrosFisica.txtEntCalle2 &&
+        parametrosFisica.txtReferencias &&
+        parametrosFisica.selPais &&
+        parametrosFisica.selEstado &&
+        parametrosFisica.selMunicipio &&
+        parametrosFisica.selLocalidad &&
+        parametrosFisica.txtCodPostal &&
+        parametrosFisica.txtLatitud &&
+        parametrosFisica.txtLongitud)
+        {
+          firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
+          {
+            alert("Sus datos han sido enviados correctamente")
+          }).catch((e)=>
+          {
+            console.log(e);
+            alert("Faltan campos por llenar")
+          })
+        }else{
+          alert("Por favor llene su formulario")
+          console.log(parametrosFisica + "Parametros Fisica")
+        }
+    } 
+    
+    if (this.state.raPersona === 'Moral' && this.state.swAnonimo === false){
+      const parametrosMoral = {
+        swAnonimo: this.inputSwAnonimo.value,
+        raPersona: this.inputRaPersona.value,
+        txtRFC: this.inputTxtRFC.value,
+        txtRazonSocial: this.inputTxtRazonSocial.value,
+        selClasPersona: this.inputSelClasPersona.value,
+        txtNombre: ' ',
+        txtApPaterno: ' ',
+        txtApMaterno: ' ',
+        txtAlias: ' ',
+        txtNumEdad: ' ',
+        selSexo: ' ',
+        selEntidadFederativa: ' ',
+        selIdentificacion: ' ',
+        //fileDocumento: this.inputFileDocumento.value,
+        txtCurp: ' ',
+        selNotificacion: this.inputSelNotificacion.value,
+        txtnumTel1: this.inputTxtnumTel1.value,
+        txtnumTel2: this.inputTxtnumTel2.value,
+        emailCorreo: this.inputEmailCorreo.value,
+        txtNacionalidad: ' ',
+        selEstadoCivil: ' ',
+        selOcupacion: ' ',
+        selNivelEstudios: ' ',
+        selLengua: ' ',
+        selReligion: ' ',
+        swLGBT: ' ',
+        selLGBT: ' ',
+        swDiscapacidad: ' ',
+        selDiscapacidad: ' ',
+        selTipoDelito: this.inputSelTipoDelito.value,
+        timeHoraSuceso: this.inputTimeHoraSuceso.value,
+        dateFSuceso: this.inputDateFSuceso.value,
+        txtCalle: this.inputTxtCalle.value,
+        txtNumInt: this.inputTxtNumInt.value,
+        txtNumExt: this.inputTxtNumExt.value,
+        txtEntCalle1: this.inputTxtEntCalle1.value,
+        txtEntCalle2: this.inputTxtEntCalle2.value,
+        txtReferencias: this.inputTxtReferencias.value,
+        selPais: this.inputSelPais.value,
+        selEstado: this.inputSelEstado.value,
+        selMunicipio: this.inputSelMunicipio.value,
+        selLocalidad: this.inputSelLocalidad.value,
+        txtCodPostal: this.inputTxtCodPostal.value,
+        txtLatitud: this.inputTxtLatitud.value,
+        txtLongitud: this.inputTxtLongitud.value,
+      }
+
+      if(parametrosMoral.swAnonimo &&
+        parametrosMoral.raPersona &&
+        parametrosMoral.selClasPersona &&
+        //parametrosMoral.fileDocumento &&
+        parametrosMoral.selNotificacion &&
+        parametrosMoral.txtnumTel1 &&
+        parametrosMoral.txtnumTel2 &&
+        parametrosMoral.emailCorreo &&
+        parametrosMoral.selTipoDelito &&
+        parametrosMoral.timeHoraSuceso &&
+        parametrosMoral.dateFSuceso &&
+        parametrosMoral.txtCalle &&
+        parametrosMoral.txtNumInt &&
+        parametrosMoral.txtNumExt &&
+        parametrosMoral.txtEntCalle1 &&
+        parametrosMoral.txtEntCalle2 &&
+        parametrosMoral.txtReferencias &&
+        parametrosMoral.selPais &&
+        parametrosMoral.selEstado &&
+        parametrosMoral.selMunicipio &&
+        parametrosMoral.selLocalidad &&
+        parametrosMoral.txtCodPostal &&
+        parametrosMoral.txtLatitud &&
+        parametrosMoral.txtLongitud)
+        {
+          firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
+          {
+            alert("Sus datos han sido enviados correctamente")
+          }).catch((e)=>
+          {
+            console.log(e);
+            alert("Faltan campos por llenar")
+          })
+        }else{
+          alert("Por favor llene su formulario")
+          console.log(parametrosMoral + "Parametros Moral")
+        }
+    }
   }
 
   handlerOnChange=(e)=>{
@@ -272,15 +487,24 @@ export default class Contact extends Component {
     
   }
 
+  //Limitar la longitud de caracteres
+  maxLengthCheck = (object) => {
+    if (object.target.value.length > object.target.maxLength) {
+     object.target.value = object.target.value.slice(0, object.target.maxLength)
+      }
+    }
+
 
   render () {
-
-    console.log(this.state.swAnonimo)
 
     return (
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
 
         <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", marginTop: "70px"}}>
+        {/* <form onSubmit={handleSubmit(onSubmit)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", marginTop: "70px"}}> */}
+
+          {/* <Input label="Nombre" register={register}/> */}
+          
               
             {(this.state.step === 1 || this.state.step === 4)  &&
               <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
@@ -350,8 +574,7 @@ export default class Contact extends Component {
                       </div>
 
                       <div className="form-group mb-3">
-                        <label className="form-label">Fecha de nacimiento:</label>
-                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                        <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxttxtNumEdad = txtNumEdad} />
                       </div>
 
                       <div className="form-group mb-3">
@@ -408,21 +631,21 @@ export default class Contact extends Component {
                         <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
                           <option value="defaultDocumentoIdentificacion" >Documento de Identificación</option>
                           <option value="INE">INE</option>
-                          <option value="LicenciaConducir">Licencia de Conducir</option>
+                          <option value="Licencia de Conducir">Licencia de Conducir</option>
                           <option value="Pasaporte">Pasaporte</option>
-                          <option value="CedulaProfesional">Cédula Profesional</option>
-                          <option value="CartillaMilitar">Cartilla del Servicio Militar Nacional</option>
-                          <option value="CredencialLaboral">Credencial de Identificacion Laboral</option>
-                          <option value="CredencialDerechohab">Credencial de Derechohabiente</option>
-                          <option value="CredencialDerechohab">Acta de Nacimiento</option>
-                          <option value="CredencialDerechohab">CURP</option>
+                          <option value="Cedula Profesional">Cédula Profesional</option>
+                          <option value="Cartilla Militar">Cartilla del Servicio Militar Nacional</option>
+                          <option value="Credencial Laboral">Credencial de Identificacion Laboral</option>
+                          <option value="Credencial de Derechohabiente">Credencial de Derechohabiente</option>
+                          <option value="Acta de Nacimiento">Acta de Nacimiento</option>
+                          <option value="CURP">CURP</option>
                         </select>
                       </div>
                       
-                      <div className="input-group mb-3">
+                      {/* <div className="input-group mb-3">
                         <input type="file" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
                         <label className="input-group-text" htmlFor="inputGroupFile02">Cargar</label>
-                      </div>                     
+                      </div>                      */}
 
                       <div className="form-group mb-3">
                         <div className="mb-3 w-100">
@@ -460,11 +683,11 @@ export default class Contact extends Component {
                   </div>
 
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-control" id="txtnumTel1" type="text" data-length="10" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel1" type="number" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
                   </div>
 
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-control" id="txtnumTel2" type="text" data-length="10" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel2" type="number" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
                   </div>
                   
                   <div className="form-group mb-3">
@@ -1035,11 +1258,11 @@ export default class Contact extends Component {
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="text" className="form-control" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
+                        <input onChange={this.handlerOnChange} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" className="form-control" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} type="text" className="form-control" placeholder="Numero exterior" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
+                        <input onChange={this.handlerOnChange} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} type="number" className="form-control" placeholder="Numero exterior" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
                       </div>
                       
                       <div className="form-group mb-3">
@@ -1368,6 +1591,16 @@ export default class Contact extends Component {
                     <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
                       <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
                       <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}} type="submit">FINALIZAR</button>
+                    </div>
+                  </div>
+                </div>
+            }
+
+            {
+              (this.state.step === 4 || this.state.step === 4) &&
+                <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
+                  <div className="row">
+                    <div className="col-md-6">
                     </div>
                   </div>
                 </div>
