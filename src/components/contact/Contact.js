@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import firebase from '../../firebase/firebaseConfig'
+//import { useForm } from 'react-hook-form'
 
 export default class Contact extends Component {
   
@@ -49,15 +50,11 @@ export default class Contact extends Component {
       selLocalidad: "",
       txtCodPostal: "",
       txtLatitud: "",
-      txtLongitud: ""
-      
+      txtLongitud: "",
     }
-
   }
 
-
-
-//  Cambia el valor de persona fisica y moral
+  //  Cambia el valor de persona fisica y moral
   checkF(){
     this.setState({
       raPersona: "Fisica"
@@ -84,7 +81,6 @@ export default class Contact extends Component {
     })    
   }
 
-
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault()
@@ -93,8 +89,7 @@ export default class Contact extends Component {
 
     const parametros={
       swAnonimo: this.inputSwAnonimo.value,
-      raFisica: this.inputRaFisica.value,
-      raMoral: this.inputRaMoral.value,
+      raPersona: this.inputRaPersona.value,
       selClasPersona: this.inputSelClasPersona.value,
       txtNombre: this.inputTxtNombre.value,
       txtApPaterno: this.inputTxtApPaterno.value,
@@ -202,23 +197,13 @@ export default class Contact extends Component {
     this.setState({state})
     
   }
-
-
+  
   render () {
-    
-    // if () {
-      
-    // }else{
-
-    // }
-
-    // {condicion && resultado}
-
-    // {condicion ? resultado : else}
 
     console.log(this.state.raPersona)
 
     return (
+
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
 
         <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%"}}>
@@ -237,8 +222,7 @@ export default class Contact extends Component {
                       
                       <div className="form-group mb-3">
                         <label>
-                          <input onChange={this.checkF.bind(this)} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
-                          checked={this.state.raPersona === "Fisica" ? true : false}/>
+                          <input onChange={this.checkF.bind(this)} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} checked={this.state.raPersona === "Fisica" ? true : false}/>
                           <span>Fisica &nbsp; &nbsp;</span>
                         </label>
                         <label>
@@ -262,7 +246,7 @@ export default class Contact extends Component {
 
                       <div className="form-group mb-3">
                         {/* <span>Nombre</span> */}
-                        <input onChange={this.handlerOnChange} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
+                        <input onChange={this.handlerOnChange} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre}/>
                       </div>
 
                       <div className="form-group mb-3">
@@ -397,8 +381,7 @@ export default class Contact extends Component {
                   </div>
                   
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="email" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
-                    <span className="helper-text" data-error="wrong" data-success="right"></span>
+                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>
 
                   <div className="form-group mb-3">
