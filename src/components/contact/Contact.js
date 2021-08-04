@@ -587,7 +587,7 @@ export default class Contact extends Component {
                       </div>
                 </div>
                 <div className="col-md-6">
-                  {/* Lado derecho Azul */}
+                  {/* Lado derecho Azull */}
                       <div className="form-group mb-3">
                         <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
                           <option value="defaultEntidadFederativa" >Entidad Federativa de Nacimiento</option>
