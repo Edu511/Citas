@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import firebase from '../../firebase/firebaseConfig'
 //import { useForm } from 'react-hook-form'
 
@@ -54,8 +54,9 @@ export default class Contact extends Component {
       txtCodPostal: '',
       txtLatitud: '',
       txtLongitud: '',
-      files: []
+      file: []
     }
+    this.reader = new FileReader();
   }
 
   checkAnonimo(){
@@ -102,14 +103,11 @@ export default class Contact extends Component {
   }
 
   onFileChange = (event) => {
-    
     // cambia el estado de la variable
     this.setState({ fileDocumento: event.target.files[0] }, () => {
       // manda a consola detalles del archivo
       console.log(this.state.fileDocumento);
     });
-
-    // this.setState({ files: event.target.files }, () => console.log(this.state.files));
 
   }
 
@@ -128,12 +126,28 @@ export default class Contact extends Component {
       }
     }
 
-  // enviarDocId = () => {
-  //   if(this.state.fileDocumento){
-  //     //create a storage reference
-  //     var storage = firebase.storage().ref(files[i].name);
-  //   }
-  // }
+  cargarDocumento = (event) => {
+    var archivo = event.target.files[0];
+    var almacenamiento = firebase.storage().ref('documentos_identificacion/' + archivo.name);
+    var task = almacenamiento.put(archivo);
+    task.on('state_changed', (snapshot) => {
+      let carga = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      this.setState({
+        img: carga
+      })
+    }, error => {
+      console.log(error.message);
+    }, () => {
+      almacenamiento.getDownloadURL().then(url => {
+        this.setState({
+          file: [...this.state.file, { url: url, nombre: archivo.name }],
+          fileDocumento: url
+        }, () => {
+          console.log(this.state.fileDocumento);
+        });
+      });
+    });
+  }
 
   //Función para enviar el formulario
   enviar(e) {
@@ -144,49 +158,49 @@ export default class Contact extends Component {
     if(this.state.swAnonimo){
       const parametrosAnonimo = {
         swAnonimo: true,
-        raPersona: 'Anonimo',
-        selClasPersona: this.inputSelClasPersona.value,
-        txtRFC: 'Anonimo',
-        txtRazonSocial: 'Anonimo',          
-        txtNombre : 'Anonimo',
-        txtApPaterno : 'Anonimo',
-        txtApMaterno : 'Anonimo',
-        txtAlias : 'Anonimo',
-        txtNumEdad : this.inputTxtNumEdad.value,
-        selSexo : this.inputSelSexo.value,
-        selEntidadFederativa : 'Anonimo',
-        selIdentificacion: 'Anonimo',
+        raPersona: ' ',
+        selClasPersona: this.selClasPersona,
+        txtRFC: ' ',
+        txtRazonSocial: ' ',          
+        txtNombre : ' ',
+        txtApPaterno : ' ',
+        txtApMaterno : ' ',
+        txtAlias : ' ',
+        txtNumEdad : this.txtNumEdad,
+        selSexo : this.selSexo,
+        selEntidadFederativa : ' ',
+        selIdentificacion: ' ',
         txtCurp: 'XXXX010101XXXXXXX1',
         selNotificacion: 'Correo Electronico',
-        txtnumTel1 : 'Anonimo',
-        txtnumTel2 : 'Anonimo',
-        emailCorreo: this.inputEmailCorreo.value,
-        txtNacionalidad : 'Anonimo',
-        selEstadoCivil : 'Anonimo',
-        selOcupacion : 'Anonimo',
-        selNivelEstudios : 'Anonimo',
-        selLengua : 'Anonimo',
-        selReligion : 'Anonimo',
+        txtnumTel1 : ' ',
+        txtnumTel2 : ' ',
+        emailCorreo: this.emailCorreo,
+        txtNacionalidad : ' ',
+        selEstadoCivil : ' ',
+        selOcupacion : ' ',
+        selNivelEstudios : ' ',
+        selLengua : ' ',
+        selReligion : ' ',
         swLGBT : false,
-        selLGBT : 'Anonimo',
+        selLGBT : ' ',
         swDiscapacidad : false,
-        selDiscapacidad : 'Anonimo',
-        selTipoDelito : this.inputSelTipoDelito.value,
-        timeHoraSuceso : this.inputTimeHoraSuceso.value,
-        dateFSuceso : this.inputDateFSuceso.value,
-        txtCalle : this.inputTxtCalle.value,
-        txtNumInt : this.inputTxtNumInt.value,
-        txtNumExt : this.inputTxtNumExt.value,
-        txtEntCalle1 : this.inputTxtEntCalle1.value,
-        txtEntCalle2 : this.inputTxtEntCalle2.value,
-        txtReferencias : this.inputTxtReferencias.value,
-        selPais : this.inputSelPais.value,
-        selEstado : this.inputSelEstado.value,
-        selMunicipio : this.inputSelMunicipio.value,
-        selLocalidad : this.inputSelLocalidad.value,
-        txtCodPostal : this.inputTxtCodPostal.value,
-        // txtLatitud : this.inputTxtLatitud.value,
-        // txtLongitud : this.inputTxtLongitud.value
+        selDiscapacidad : ' ',
+        selTipoDelito : this.selTipoDelito,
+        timeHoraSuceso : this.timeHoraSuceso,
+        dateFSuceso : this.dateFSuceso,
+        txtCalle : this.txtCalle,
+        txtNumInt : this.txtNumInt,
+        txtNumExt : this.txtNumExt,
+        txtEntCalle1 : this.txtEntCalle1,
+        txtEntCalle2 : this.txtEntCalle2,
+        txtReferencias : this.txtReferencias,
+        selPais : this.selPais,
+        selEstado : this.selEstado,
+        selMunicipio : this.selMunicipio,
+        selLocalidad : this.selLocalidad,
+        txtCodPostal : this.txtCodPostal,
+        // txtLatitud : this.inputTxtLatitud,
+        // txtLongitud : this.inputTxtLongitud
       }
 
       console.log(parametrosAnonimo)
@@ -218,9 +232,9 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosAnonimo).then(()=>
           {
             alert("Sus datos han sido enviados correctamente");
-            this.setState({
-              step: 4,
-            });
+            // this.setState({
+            //   step: 4,
+            // });
           }).catch((e)=>
           {
             console.log(e);
@@ -313,9 +327,9 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosProtegidos).then(()=>
           {
             alert("Sus datos han sido enviados correctamente");
-            this.setState({
-              step: 4,
-            });
+            // this.setState({
+            //   step: 4,
+            // });
 
           }).catch((e)=>
           {
@@ -335,49 +349,49 @@ export default class Contact extends Component {
     if (this.state.raPersona === 'Fisica' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18) {
       
       const parametrosFisica = {
-        swAnonimo: this.inputSwAnonimo.value,
-        raPersona: this.inputRaPersona.value,
+        swAnonimo: false,
+        raPersona: this.raPersona,
         txtRFC: ' ',
         txtRazonSocial: ' ',
-        selClasPersona: this.inputSelClasPersona.value,
-        txtNombre: this.inputTxtNombre.value,
-        txtApPaterno: this.inputTxtApPaterno.value,
-        txtApMaterno: this.inputTxtApMaterno.value,
-        txtAlias: this.inputTxtAlias.value,
-        txtNumEdad: this.inputTxtNumEdad.value,
-        selSexo: this.inputSelSexo.value,
-        selEntidadFederativa: this.inputSelEntidadFederativa.value,
-        selIdentificacion: this.inputSelClasPersona.value,
-        // fileDocumento: this.inputFileDocumento.value,
-        txtCurp: this.inputTxtCurp.value,
-        selNotificacion: this.inputSelNotificacion.value,
-        txtnumTel1: this.inputTxtnumTel1.value,
-        txtnumTel2: this.inputTxtnumTel2.value,
-        emailCorreo: this.inputEmailCorreo.value,
-        txtNacionalidad: this.inputTxtNacionalidad.value,
-        selEstadoCivil: this.inputSelEstadoCivil.value,
-        selOcupacion: this.inputSelOcupacion.value,
-        selNivelEstudios: this.inputSelNivelEstudios.value,
-        selLengua: this.inputSelLengua.value,
-        selReligion: this.inputSelReligion.value,
-        swLGBT: this.inputSwLGBT.value,
-        selLGBT: this.inputSelLGBT.value,
-        swDiscapacidad: this.inputSwDiscapacidad.value,
-        selDiscapacidad: this.inputSelDiscapacidad.value,
-        selTipoDelito: this.inputSelTipoDelito.value,
-        timeHoraSuceso: this.inputTimeHoraSuceso.value,
-        dateFSuceso: this.inputDateFSuceso.value,
-        txtCalle: this.inputTxtCalle.value,
-        txtNumInt: this.inputTxtNumInt.value,
-        txtNumExt: this.inputTxtNumExt.value,
-        txtEntCalle1: this.inputTxtEntCalle1.value,
-        txtEntCalle2: this.inputTxtEntCalle2.value,
-        txtReferencias: this.inputTxtReferencias.value,
-        selPais: this.inputSelPais.value,
-        selEstado: this.inputSelEstado.value,
-        selMunicipio: this.inputSelMunicipio.value,
-        selLocalidad: this.inputSelLocalidad.value,
-        txtCodPostal: this.inputTxtCodPostal.value,
+        selClasPersona: this.selClasPersona,
+        txtNombre: this.txtNombre,
+        txtApPaterno: this.txtApPaterno,
+        txtApMaterno: this.txtApMaterno,
+        txtAlias: this.txtAlias,
+        txtNumEdad: this.txtNumEdad,
+        selSexo: this.selSexo,
+        selEntidadFederativa: this.selEntidadFederativa,
+        selIdentificacion: this.selIdentificacion,
+        fileDocumento: this.fileDocumento,
+        txtCurp: this.txtCurp,
+        selNotificacion: this.selNotificacion,
+        txtnumTel1: this.txtnumTel1,
+        txtnumTel2: this.txtnumTel2,
+        emailCorreo: this.emailCorreo,
+        txtNacionalidad: this.txtNacionalidad,
+        selEstadoCivil: this.selEstadoCivil,
+        selOcupacion: this.selOcupacion,
+        selNivelEstudios: this.selNivelEstudios,
+        selLengua: this.selLengua,
+        selReligion: this.selReligion,
+        swLGBT: this.swLGBT,
+        selLGBT: this.selLGBT,
+        swDiscapacidad: this.swDiscapacidad,
+        selDiscapacidad: this.selDiscapacidad,
+        selTipoDelito: this.selTipoDelito,
+        timeHoraSuceso: this.TimeHoraSuceso,
+        dateFSuceso: this.dateFSuceso,
+        txtCalle: this.txtCalle,
+        txtNumInt: this.txtNumInt,
+        txtNumExt: this.txtNumExt,
+        txtEntCalle1: this.txtEntCalle1,
+        txtEntCalle2: this.txtEntCalle2,
+        txtReferencias: this.txtReferencias,
+        selPais: this.selPais,
+        selEstado: this.selEstado,
+        selMunicipio: this.selMunicipio,
+        selLocalidad: this.selLocalidad,
+        txtCodPostal: this.txtCodPostal,
         // txtLatitud: this.inputTxtLatitud.value,
         // txtLongitud: this.inputTxtLongitud.value,
       }
@@ -394,7 +408,7 @@ export default class Contact extends Component {
         parametrosFisica.selEntidadFederativa &&
         parametrosFisica.selIdentificacion &&
         parametrosFisica.txtCurp &&
-        // parametrosFisica.fileDocumento &&
+        parametrosFisica.fileDocumento &&
         parametrosFisica.selNotificacion &&
         parametrosFisica.txtnumTel1 &&
         parametrosFisica.txtnumTel2 &&
@@ -430,9 +444,9 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
             alert("Sus datos han sido enviados correctamente");
-            this.setState({
-              step: 4,
-            });
+            // this.setState({
+            //   step: 4,
+            // });
           }).catch((e)=>
           {
             console.log(e);
@@ -463,7 +477,7 @@ export default class Contact extends Component {
         selSexo: ' ',
         selEntidadFederativa: ' ',
         selIdentificacion: ' ',
-        // fileDocumento: this.inputFileDocumento.value,
+        fileDocumento: this.inputFileDocumento.value,
         txtCurp: ' ',
         selNotificacion: this.inputSelNotificacion.value,
         txtnumTel1: this.inputTxtnumTel1.value,
@@ -500,7 +514,7 @@ export default class Contact extends Component {
       if(parametrosMoral.swAnonimo &&
         parametrosMoral.raPersona &&
         parametrosMoral.selClasPersona &&
-        // parametrosMoral.fileDocumento &&
+        parametrosMoral.fileDocumento &&
         parametrosMoral.selNotificacion &&
         parametrosMoral.txtnumTel1 &&
         parametrosMoral.txtnumTel2 &&
@@ -526,9 +540,9 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
           {
             alert("Sus datos han sido enviados correctamente");
-            this.setState({
-              step: 4,
-            });
+            // this.setState({
+            //   step: 4,
+            // });
           }).catch((e)=>
           {
             console.log(e);
@@ -544,11 +558,13 @@ export default class Contact extends Component {
     }
   }
 
-  // Información del archiv subido cuando es cargado
+  // Información del archivo subido cuando es cargado
   handlerOnChange = (e) => {
     const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState({ state });
+
+    console.log(this.state)
     
   };
 
@@ -708,8 +724,8 @@ export default class Contact extends Component {
                     </div>
                     
                     <div className="form-group mb-3">
-                      <input type="file" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
-                    </div>                     
+                      <input type="file" accept="image/*" onChange={this.cargarDocumento.bind(this)} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
+                    </div>
 
                     <div className="form-group mb-3">
                       <div className="mb-3 w-100">
@@ -729,7 +745,7 @@ export default class Contact extends Component {
             </div>
           }
           {/* pantalla 2 - datos del denunciante*/}
-          {(this.state.step === 2 ) && 
+          {(this.state.step === 2) && 
             <div className="container-fluid h-100 pt-5 px-3" style={{ backgroundColor: "#f4f4f4" }} >
               <div className="row mb-5">
                 {/* Lado izquiero */}
@@ -1251,7 +1267,7 @@ export default class Contact extends Component {
           }
 
           {/* pantalla 3 - datos de la denuncia*/}
-          {(this.state.step === 3 ) && 
+          {(this.state.step === 3) && 
             <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
               <div className="row">
                 {/* Lado izquierdo */}
@@ -1869,8 +1885,7 @@ export default class Contact extends Component {
               <div className="row">
                 <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                   <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
-                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}} >A la Página 4</button>
+                  <button className="btn btn-dark" style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
                 </div>
               </div>
             </div>
@@ -1887,9 +1902,9 @@ export default class Contact extends Component {
                           <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       <h5 className="card-title">Finalizado</h5>
-                      <h6 className="card-subtitle mb-2 text-muted">Se ha enviado el formulario con éxito</h6>
+                      <h6 className="card-subtitle mb-2 text-muted">Registro de denuncia exitoso</h6>
                       <p className="card-text">
-                        En la brevedad, recibirá un correo electrónico con su numero de cita y formato de solicitud de denuncia
+                        En la brevedad, recibirá una notificación por el medio seleccionado con su numero de cita y formato de solicitud de denuncia
                       </p>
                       <a className="btn btn-dark" onClick={this.recargar.bind(this)}>Registrar nueva denuncia</a>
                     </div>
