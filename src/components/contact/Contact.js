@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import firebase from '../../firebase/firebaseConfig'
 //import { useForm } from 'react-hook-form'
 
@@ -66,16 +66,14 @@ export default class Contact extends Component {
 //  Cambia el valor de persona fisica y moral
   checkF(){
     this.setState({
-      raPersona: "Fisica"
-    })
-
+      raPersona: "Fisica",
+    });
   }
-  
-  checkM(){
-     this.setState({
-       raPersona: "Moral"
-     })
 
+  checkM() {
+    this.setState({
+      raPersona: "Moral",
+    });
   }
   checkLGBT(){
     this.setState({
@@ -90,22 +88,23 @@ export default class Contact extends Component {
   }
 
   //Se ocupa de cambiar de seccion
-  siguiente=()=>{
+  siguiente = () => {
     this.setState({
-      step: parseInt(this.state.step) +1
-    })    
-  }
-  anterior(){
+      step: parseInt(this.state.step) + 1,
+    });
+  };
+
+  anterior() {
     this.setState({
-      step: parseInt(this.state.step) -1
-    })    
+      step: parseInt(this.state.step) - 1,
+    });
   }
 
   //Función para enviar el formulario
   enviar(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    console.log("Datos enviados correctamente")
+    // console.log("Datos enviados correctamente")
     
     if(this.state.swAnonimo){
       const parametrosAnonimo = {
@@ -151,8 +150,8 @@ export default class Contact extends Component {
         selMunicipio : this.inputSelMunicipio.value,
         selLocalidad : this.inputSelLocalidad.value,
         txtCodPostal : this.inputTxtCodPostal.value,
-        txtLatitud : this.inputTxtLatitud.value,
-        txtLongitud : this.inputTxtLongitud.value
+        // txtLatitud : this.inputTxtLatitud.value,
+        // txtLongitud : this.inputTxtLongitud.value
       }
 
       console.log(parametrosAnonimo)
@@ -176,9 +175,10 @@ export default class Contact extends Component {
         parametrosAnonimo.selEstado &&
         parametrosAnonimo.selMunicipio &&
         parametrosAnonimo.selLocalidad &&
-        parametrosAnonimo.txtCodPostal &&
-        parametrosAnonimo.txtLatitud &&
-        parametrosAnonimo.txtLongitud)
+        parametrosAnonimo.txtCodPostal 
+        // parametrosAnonimo.txtLatitud &&
+        // parametrosAnonimo.txtLongitud
+        )
         {
           firebase.database().ref("pruebaCentenario").push(parametrosAnonimo).then(()=>
           {
@@ -239,8 +239,8 @@ export default class Contact extends Component {
         selMunicipio : this.inputSelMunicipio.value,
         selLocalidad : this.inputSelLocalidad.value,
         txtCodPostal : this.inputTxtCodPostal.value,
-        txtLatitud : this.inputTxtLatitud.value,
-        txtLongitud : this.inputTxtLongitud.value
+        // txtLatitud : this.inputTxtLatitud.value,
+        // txtLongitud : this.inputTxtLongitud.value
       }
 
       console.log(parametrosProtegidos)
@@ -264,9 +264,10 @@ export default class Contact extends Component {
         parametrosProtegidos.selEstado &&
         parametrosProtegidos.selMunicipio &&
         parametrosProtegidos.selLocalidad &&
-        parametrosProtegidos.txtCodPostal &&
-        parametrosProtegidos.txtLatitud &&
-        parametrosProtegidos.txtLongitud)
+        parametrosProtegidos.txtCodPostal
+        // parametrosProtegidos.txtLatitud &&
+        // parametrosProtegidos.txtLongitud
+        )
         {
           firebase.database().ref("pruebaCentenario").push(parametrosProtegidos).then(()=>
           {
@@ -284,6 +285,7 @@ export default class Contact extends Component {
     }
 
     if (this.state.raPersona === 'Fisica' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18) {
+      
       const parametrosFisica = {
         swAnonimo: this.inputSwAnonimo.value,
         raPersona: this.inputRaPersona.value,
@@ -298,7 +300,7 @@ export default class Contact extends Component {
         selSexo: this.inputSelSexo.value,
         selEntidadFederativa: this.inputSelEntidadFederativa.value,
         selIdentificacion: this.inputSelClasPersona.value,
-        //fileDocumento: this.inputFileDocumento.value,
+        // fileDocumento: this.inputFileDocumento.value,
         txtCurp: this.inputTxtCurp.value,
         selNotificacion: this.inputSelNotificacion.value,
         txtnumTel1: this.inputTxtnumTel1.value,
@@ -328,8 +330,8 @@ export default class Contact extends Component {
         selMunicipio: this.inputSelMunicipio.value,
         selLocalidad: this.inputSelLocalidad.value,
         txtCodPostal: this.inputTxtCodPostal.value,
-        txtLatitud: this.inputTxtLatitud.value,
-        txtLongitud: this.inputTxtLongitud.value,
+        // txtLatitud: this.inputTxtLatitud.value,
+        // txtLongitud: this.inputTxtLongitud.value,
       }
   
       if(parametrosFisica.swAnonimo &&
@@ -344,7 +346,7 @@ export default class Contact extends Component {
         parametrosFisica.selEntidadFederativa &&
         parametrosFisica.selIdentificacion &&
         parametrosFisica.txtCurp &&
-        //parametrosFisica.fileDocumento &&
+        // parametrosFisica.fileDocumento &&
         parametrosFisica.selNotificacion &&
         parametrosFisica.txtnumTel1 &&
         parametrosFisica.txtnumTel2 &&
@@ -372,9 +374,10 @@ export default class Contact extends Component {
         parametrosFisica.selEstado &&
         parametrosFisica.selMunicipio &&
         parametrosFisica.selLocalidad &&
-        parametrosFisica.txtCodPostal &&
-        parametrosFisica.txtLatitud &&
-        parametrosFisica.txtLongitud)
+        parametrosFisica.txtCodPostal 
+        // parametrosFisica.txtLatitud &&
+        // parametrosFisica.txtLongitud
+        )
         {
           firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
@@ -391,6 +394,7 @@ export default class Contact extends Component {
     } 
     
     if (this.state.raPersona === 'Moral' && this.state.swAnonimo === false){
+     
       const parametrosMoral = {
         swAnonimo: this.inputSwAnonimo.value,
         raPersona: this.inputRaPersona.value,
@@ -405,7 +409,7 @@ export default class Contact extends Component {
         selSexo: ' ',
         selEntidadFederativa: ' ',
         selIdentificacion: ' ',
-        //fileDocumento: this.inputFileDocumento.value,
+        // fileDocumento: this.inputFileDocumento.value,
         txtCurp: ' ',
         selNotificacion: this.inputSelNotificacion.value,
         txtnumTel1: this.inputTxtnumTel1.value,
@@ -435,14 +439,14 @@ export default class Contact extends Component {
         selMunicipio: this.inputSelMunicipio.value,
         selLocalidad: this.inputSelLocalidad.value,
         txtCodPostal: this.inputTxtCodPostal.value,
-        txtLatitud: this.inputTxtLatitud.value,
-        txtLongitud: this.inputTxtLongitud.value,
+        // txtLatitud: this.inputTxtLatitud.value,
+        // txtLongitud: this.inputTxtLongitud.value,
       }
 
       if(parametrosMoral.swAnonimo &&
         parametrosMoral.raPersona &&
         parametrosMoral.selClasPersona &&
-        //parametrosMoral.fileDocumento &&
+        // parametrosMoral.fileDocumento &&
         parametrosMoral.selNotificacion &&
         parametrosMoral.txtnumTel1 &&
         parametrosMoral.txtnumTel2 &&
@@ -460,9 +464,10 @@ export default class Contact extends Component {
         parametrosMoral.selEstado &&
         parametrosMoral.selMunicipio &&
         parametrosMoral.selLocalidad &&
-        parametrosMoral.txtCodPostal &&
-        parametrosMoral.txtLatitud &&
-        parametrosMoral.txtLongitud)
+        parametrosMoral.txtCodPostal 
+        // parametrosMoral.txtLatitud &&
+        // parametrosMoral.txtLongitud
+        )
         {
           firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
           {
@@ -479,11 +484,15 @@ export default class Contact extends Component {
     }
   }
 
-  handlerOnChange=(e)=>{
-    const state = this.state
-    state[e.target.name] = e.target.value
-    this.setState({state})
+  onFileChange = (event) => {
     
+    // cambia el estado de la variable
+    this.setState({ fileDocumento: event.target.files[0] }, () => {
+      // manda a consola detalles del archivo
+      console.log(this.state.fileDocumento);
+    });
+
+  
   }
 
   //Limitar la longitud de caracteres
@@ -494,15 +503,23 @@ export default class Contact extends Component {
     }
 
 
-  render () {
+  // Información del archiv subido cuando es cargado
 
+  handlerOnChange = (e) => {
+    const state = this.state;
+    state[e.target.name] = e.target.value;
+    this.setState({ state });
+    
+  };
+
+  render() {
     return (
 
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
 
         <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%"}}>
               
-            {(this.state.step === 1 || this.state.step === 4)  &&
+            {(this.state.step === 1 || this.state.step === 4)  && 
               <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
                 <div className="row">
                   <div className="col-md-6">
@@ -572,7 +589,8 @@ export default class Contact extends Component {
                       <div className="form-group mb-3">
                         <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxttxtNumEdad = txtNumEdad} />
                       </div>
-                      {/* <div className="form-group mb-3 w-100"> */}
+
+                      {/* <div className="form-group mb-3 w-100">
                         <div className="row mb-3 align-items-center">
                           <div className="col">
                             <small>Fecha de nacimiento:</small>
@@ -581,7 +599,7 @@ export default class Contact extends Component {
                             <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
                           </div>
                         </div>
-                      {/* </div> */}
+                      </div> */}
 
                       <div className="form-group mb-3">
                         {/* Select Sexo*/}
@@ -648,15 +666,14 @@ export default class Contact extends Component {
                         </select>
                       </div>
                       
-                      {/* <div className="input-group mb-3">
+                      <div className="form-group mb-3">
                         <input type="file" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
-                        <label className="input-group-text" htmlFor="inputGroupFile02">Cargar</label>
-                      </div>                      */}
+                      </div>                     
 
                       <div className="form-group mb-3">
                         <div className="mb-3 w-100">
                           {/* <span>CURP</span> */}
-                          <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
+                          <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                         </div>
                       </div>
                       
@@ -670,9 +687,12 @@ export default class Contact extends Component {
                 </div> 
               </div>
             }
-            
-            {(this.state.step === 2 || this.state.step === 4) &&
-            <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
+
+          {(this.state.step === 2 || this.state.step === 4) && 
+            <div
+              className="container-fluid h-100 pt-5 px-3"
+              style={{ backgroundColor: "#f4f4f4" }}
+            >
               <div className="row mb-5">
                 {/* Lado izquiero */}
                 <div className="col-md-6">
@@ -692,7 +712,7 @@ export default class Contact extends Component {
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel2" type="number" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
                   </div>
-                  
+
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>
@@ -708,13 +728,15 @@ export default class Contact extends Component {
                       <option value="Soltero">Soltero(a)</option>
                       <option value="Casado(a)">Casado(a)</option>
                       <option value="Divorciado(a)">Divorciado(a)</option>
-                      <option value="Separación en Proceso Judicial">Separación en Proceso Judicial</option>
+                      <option value="Separación en Proceso Judicial">
+                        Separación en Proceso Judicial
+                      </option>
                       <option value="Viudo(a)">Viudo(a)</option>
                       <option value="Concubinato">Concubinato</option>
                     </select>
                   </div>
                 </div>
-                
+
                 {/* Lado derecho */}
                 <div className="col-md-6">
                   <div className="form-group mb-3">
@@ -722,33 +744,63 @@ export default class Contact extends Component {
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="DefaultOcupacion" >Ocupacion</option>
                       <option value="Abogado">Abogado</option>
-                      <option value="Actor, Actriz, Director de Espectáculos">Actor, Actriz, Director de Espectáculos</option>
+                      <option value="Actor, Actriz, Director de Espectáculos">
+                        Actor, Actriz, Director de Espectáculos
+                      </option>
                       <option value="Actuario">Actuario</option>
                       <option value="Administrador">Administrador</option>
-                      <option value="Aduanero/Agente de Aduanas/Inspector de Frontera">Aduanero/Agente de Aduanas/Inspector de Frontera</option>
+                      <option value="Aduanero/Agente de Aduanas/Inspector de Frontera">
+                        Aduanero/Agente de Aduanas/Inspector de Frontera
+                      </option>
                       <option value="Aeromozo/Azafata">Aeromozo/Azafata</option>
-                      <option value="Agente/Intermediario/Corredor Inmobiliario">Agente/Intermediario/Corredor Inmobiliario</option>
+                      <option value="Agente/Intermediario/Corredor Inmobiliario">
+                        Agente/Intermediario/Corredor Inmobiliario
+                      </option>
                       <option value="Agente de Bolsa">Agente de Bolsa</option>
-                      <option value="Agente de Inmigración/Migración">Agente de Inmigración/Migración</option>
-                      <option value="Agente de Turismo/Viajes">Agente de Turismo/Viajes</option>
-                      <option value="Agente/Intemediario/Corredor de Seguros">Agente/Intemediario/Corredor de Seguros</option>
-                      <option value="Agricultor, Agrónomo, Agrologo, Arboricultor">Agricultor, Agrónomo, Agrologo, Arboricultor</option>
-                      <option value="Albañil, Obrero de Construcción">Albañil, Obrero de Construcción</option>
+                      <option value="Agente de Inmigración/Migración">
+                        Agente de Inmigración/Migración
+                      </option>
+                      <option value="Agente de Turismo/Viajes">
+                        Agente de Turismo/Viajes
+                      </option>
+                      <option value="Agente/Intemediario/Corredor de Seguros">
+                        Agente/Intemediario/Corredor de Seguros
+                      </option>
+                      <option value="Agricultor, Agrónomo, Agrologo, Arboricultor">
+                        Agricultor, Agrónomo, Agrologo, Arboricultor
+                      </option>
+                      <option value="Albañil, Obrero de Construcción">
+                        Albañil, Obrero de Construcción
+                      </option>
                       <option value="Ama de Casa">Ama de Casa</option>
-                      <option value="Analista de Sistemas y Computacion">Analista de Sistemas y Computacion</option>
-                      <option value="Antropólogo, Arqueologo, Etnólogo">Antropólogo, Arqueologo, Etnólogo</option>
+                      <option value="Analista de Sistemas y Computacion">
+                        Analista de Sistemas y Computacion
+                      </option>
+                      <option value="Antropólogo, Arqueologo, Etnólogo">
+                        Antropólogo, Arqueologo, Etnólogo
+                      </option>
                       <option value="Archivero">Archivero</option>
                       <option value="Armador de Barco">Armador de Barco</option>
                       <option value="Arquitecto">Arquitecto</option>
                       <option value="Artesano">Artesano</option>
                       <option value="Asistente Social">Asistente Social</option>
-                      <option value="Autor Literario, Escritor, Critico">Autor Literario, Escritor, Critico</option>
+                      <option value="Autor Literario, Escritor, Critico">
+                        Autor Literario, Escritor, Critico
+                      </option>
                       <option value="Avicultor">Avicultor</option>
-                      <option value="Bacteriólogo, Farmacólogo, Biólogo, Cientifico">Bacteriólogo, Farmacólogo, Biólogo, Cientifico</option>
-                      <option value="Basurero/Barrendero">Basurero/Barrendero</option>
+                      <option value="Bacteriólogo, Farmacólogo, Biólogo, Cientifico">
+                        Bacteriólogo, Farmacólogo, Biólogo, Cientifico
+                      </option>
+                      <option value="Basurero/Barrendero">
+                        Basurero/Barrendero
+                      </option>
                       <option value="Cajero">Cajero</option>
-                      <option value="Camarero/Barman/Mesero/Chef">Camarero/Barman/Mesero/Chef</option>
-                      <option value="Cambista, Compra/Venta de Moneda">Cambista, Compra/Venta de Moneda</option>
+                      <option value="Camarero/Barman/Mesero/Chef">
+                        Camarero/Barman/Mesero/Chef
+                      </option>
+                      <option value="Cambista, Compra/Venta de Moneda">
+                        Cambista, Compra/Venta de Moneda
+                      </option>
                       <option value="Campesino">Campesino</option>
                       <option value="Capataz">Capataz</option>
                       <option value="Cargador">Cargador</option>
@@ -756,84 +808,164 @@ export default class Contact extends Component {
                       <option value="Cartero">Cartero</option>
                       <option value="Cerrajero">Cerrajero</option>
                       <option value="Cobrador">Cobrador</option>
-                      <option value="Comerciante/Vendedor">Comerciante/Vendedor</option>
-                      <option value="Conductor, Chofer/Taxista">Conductor, Chofer/Taxista</option>
-                      <option value="Conserje/Portero/Guardián/Vigilante">Conserje/Portero/Guardián/Vigilante</option>
+                      <option value="Comerciante/Vendedor">
+                        Comerciante/Vendedor
+                      </option>
+                      <option value="Conductor, Chofer/Taxista">
+                        Conductor, Chofer/Taxista
+                      </option>
+                      <option value="Conserje/Portero/Guardián/Vigilante">
+                        Conserje/Portero/Guardián/Vigilante
+                      </option>
                       <option value="Constructor">Constructor</option>
                       <option value="Contador">Contador</option>
                       <option value="Contratista">Contratista</option>
-                      <option value="Corte y Confección de Ropa/Fabricante de Prendas">Corte y Confección de Ropa/Fabricante de Prendas</option>
-                      <option value="Cosmetólogo, Peluquero y Barbero">Cosmetólogo, Peluquero y Barbero</option>
-                      <option value="Decorador, Dibujante, Publicista">Decorador, Dibujante, Publicista</option>
-                      <option value="Dentista / Odontólogo">Dentista / Odontólogo</option>
-                      <option value="Deportista Profesional, Atleta, Arbitro">Deportista Profesional, Atleta, Arbitro</option>
+                      <option value="Corte y Confección de Ropa/Fabricante de Prendas">
+                        Corte y Confección de Ropa/Fabricante de Prendas
+                      </option>
+                      <option value="Cosmetólogo, Peluquero y Barbero">
+                        Cosmetólogo, Peluquero y Barbero
+                      </option>
+                      <option value="Decorador, Dibujante, Publicista">
+                        Decorador, Dibujante, Publicista
+                      </option>
+                      <option value="Dentista / Odontólogo">
+                        Dentista / Odontólogo
+                      </option>
+                      <option value="Deportista Profesional, Atleta, Arbitro">
+                        Deportista Profesional, Atleta, Arbitro
+                      </option>
                       <option value="Distribuidor">Distribuidor</option>
                       <option value="Docente">Docente</option>
                       <option value="Economista">Economista</option>
                       <option value="Electricista">Electricista</option>
-                      <option value="Empleado(a)del hogar / Nana">Empleado(a)del hogar / Nana</option>
-                      <option value="Empresario Exportador/Empresario Importador">Empresario Exportador/Empresario Importador</option>
+                      <option value="Empleado(a)del hogar / Nana">
+                        Empleado(a)del hogar / Nana
+                      </option>
+                      <option value="Empresario Exportador/Empresario Importador">
+                        Empresario Exportador/Empresario Importador
+                      </option>
                       <option value="Enfermero">Enfermero</option>
                       <option value="Enbalsamador">Enbalsamador</option>
                       <option value="Escultor">Escultor</option>
                       <option value="Estudiante">Estudiante</option>
-                      <option value="Fotógrafo/Operadores de cámara, cine y TV, Locutor">Fotógrafo/Operadores de cámara, cine y TV, Locutor</option>
+                      <option value="Fotógrafo/Operadores de cámara, cine y TV, Locutor">
+                        Fotógrafo/Operadores de cámara, cine y TV, Locutor
+                      </option>
                       <option value="Ganadero">Ganadero</option>
                       <option value="Gasfitero">Gasfitero</option>
                       <option value="Historiador">Historiador</option>
                       <option value="Ingeniero">Ingeniero</option>
-                      <option value="Interprete, Traductor">Interprete, Traductor</option>
+                      <option value="Interprete, Traductor">
+                        Interprete, Traductor
+                      </option>
                       <option value="Jardinero">Jardinero</option>
                       <option value="Jockey">Jockey</option>
-                      <option value="Joyero y/o Platero / Orfebre">Joyero y/o Platero / Orfebre</option>
-                      <option value="Jubilado / Pensionista">Jubilado / Pensionista</option>
-                      <option value="Laboratorista (Técnico)">Laboratorista (Técnico)</option>
-                      <option value="Liquidador, Reclamaciones/Seguros">Liquidador, Reclamaciones/Seguros</option>
-                      <option value="Maquinista / Operador de maquinaria">Maquinista / Operador de maquinaria</option>
-                      <option value="Martillero / Subastador">Martillero / Subastador</option>
-                      <option value="Mayorista, comercio al por mayor">Mayorista, comercio al por mayor</option>
+                      <option value="Joyero y/o Platero / Orfebre">
+                        Joyero y/o Platero / Orfebre
+                      </option>
+                      <option value="Jubilado / Pensionista">
+                        Jubilado / Pensionista
+                      </option>
+                      <option value="Laboratorista (Técnico)">
+                        Laboratorista (Técnico)
+                      </option>
+                      <option value="Liquidador, Reclamaciones/Seguros">
+                        Liquidador, Reclamaciones/Seguros
+                      </option>
+                      <option value="Maquinista / Operador de maquinaria">
+                        Maquinista / Operador de maquinaria
+                      </option>
+                      <option value="Martillero / Subastador">
+                        Martillero / Subastador
+                      </option>
+                      <option value="Mayorista, comercio al por mayor">
+                        Mayorista, comercio al por mayor
+                      </option>
                       <option value="Mecánico">Mecánico</option>
-                      <option value="Medico / Cirujano">Medico / Cirujano</option>
+                      <option value="Medico / Cirujano">
+                        Medico / Cirujano
+                      </option>
                       <option value="Metalurgista">Metalurgista</option>
-                      <option value="Miembro de las Fuerzas Armadas">Miembro de las Fuerzas Armadas</option>
+                      <option value="Miembro de las Fuerzas Armadas">
+                        Miembro de las Fuerzas Armadas
+                      </option>
                       <option value="Nutricionista">Nutricionista</option>
-                      <option value="Obrero / Operador">Obrero / Operador</option>
+                      <option value="Obrero / Operador">
+                        Obrero / Operador
+                      </option>
                       <option value="Obstetriz">Obstetriz</option>
-                      <option value="Organizador de Eventos">Organizador de Eventos</option>
-                      <option value="Panadero / Pastelero">Panadero / Pastelero</option>
+                      <option value="Organizador de Eventos">
+                        Organizador de Eventos
+                      </option>
+                      <option value="Panadero / Pastelero">
+                        Panadero / Pastelero
+                      </option>
                       <option value="Paramédico">Paramédico</option>
                       <option value="Periodista">Periodista</option>
                       <option value="Perito">Perito</option>
                       <option value="Pescador">Pescador</option>
-                      <option value="Piloto">Piloto</option>                      
+                      <option value="Piloto">Piloto</option>
                       <option value="Pintor">Pintor</option>
-                      <option value="Policiá Municipal">Policiá Municipal</option>
+                      <option value="Policiá Municipal">
+                        Policiá Municipal
+                      </option>
                       <option value="Policiá PNP">Policiá PNP</option>
-                      <option value="Productor de Cine / Radio / televisión / Teatro">Productor de Cine / Radio / televisión / Teatro</option>
-                      <option value="Productor, Cultivos Extensivos">Productor, Cultivos Extensivos</option>
+                      <option value="Productor de Cine / Radio / televisión / Teatro">
+                        Productor de Cine / Radio / televisión / Teatro
+                      </option>
+                      <option value="Productor, Cultivos Extensivos">
+                        Productor, Cultivos Extensivos
+                      </option>
                       <option value="Programador">Programador</option>
-                      <option value="Psicólogo / Terapeuta">Psicólogo / Terapeuta</option>
-                      <option value="Quiropráctico/Kinesiterapeuta (Kinesiólogos)">Quiropráctico/Kinesiterapeuta (Kinesiólogos)</option>
-                      <option value="Relacionista Publico e Industrial">Relacionista Publico e Industrial</option>
+                      <option value="Psicólogo / Terapeuta">
+                        Psicólogo / Terapeuta
+                      </option>
+                      <option value="Quiropráctico/Kinesiterapeuta (Kinesiólogos)">
+                        Quiropráctico/Kinesiterapeuta (Kinesiólogos)
+                      </option>
+                      <option value="Relacionista Publico e Industrial">
+                        Relacionista Publico e Industrial
+                      </option>
                       <option value="Relojero">Relojero</option>
-                      <option value="Reparación de Automóviles, Pintor Retocador">Reparación de Automóviles, Pintor Retocador</option>
-                      <option value="Reparador de Aparatos Electrodomésticos">Reparador de Aparatos Electrodomésticos</option>
+                      <option value="Reparación de Automóviles, Pintor Retocador">
+                        Reparación de Automóviles, Pintor Retocador
+                      </option>
+                      <option value="Reparador de Aparatos Electrodomésticos">
+                        Reparador de Aparatos Electrodomésticos
+                      </option>
                       <option value="Repartidor">Repartidor</option>
                       <option value="Sacerdote/Monja">Sacerdote/Monja</option>
-                      <option value="Secretaria, Recepcionista, Telefonista">Secretaria, Recepcionista, Telefonista</option>
-                      <option value="Seguridad / Guardaespaldas / Guardia de Seguridad">Seguridad / Guardaespaldas / Guardia de Seguridad</option>
-                      <option value="Servicio de Almacenamiento / Almacenero">Servicio de Almacenamiento / Almacenero</option>
-                      <option value="Servicio de Alquiler de Vehículos">Servicio de Alquiler de Vehículos</option>
-                      <option value="Servicios de Alquiler de Videos, Equipos de Sonido">Servicios de Alquiler de Videos, Equipos de Sonido</option>
+                      <option value="Secretaria, Recepcionista, Telefonista">
+                        Secretaria, Recepcionista, Telefonista
+                      </option>
+                      <option value="Seguridad / Guardaespaldas / Guardia de Seguridad">
+                        Seguridad / Guardaespaldas / Guardia de Seguridad
+                      </option>
+                      <option value="Servicio de Almacenamiento / Almacenero">
+                        Servicio de Almacenamiento / Almacenero
+                      </option>
+                      <option value="Servicio de Alquiler de Vehículos">
+                        Servicio de Alquiler de Vehículos
+                      </option>
+                      <option value="Servicios de Alquiler de Videos, Equipos de Sonido">
+                        Servicios de Alquiler de Videos, Equipos de Sonido
+                      </option>
                       <option value="Sociólogo">Sociólogo</option>
                       <option value="Tasador">Tasador</option>
                       <option value="Técnico">Técnico</option>
                       <option value="Torero">Torero</option>
                       <option value="Tramitador">Tramitador</option>
-                      <option value="Transporte de Carga y/o Mudanza">Transporte de Carga y/o Mudanza</option>
+                      <option value="Transporte de Carga y/o Mudanza">
+                        Transporte de Carga y/o Mudanza
+                      </option>
                       <option value="Transportista">Transportista</option>
-                      <option value="Vendedor Ambulante">Vendedor Ambulante</option>
-                      <option value="Veterinario, Zoólogo, Zootécnico">Veterinario, Zoólogo, Zootécnico</option>
+                      <option value="Vendedor Ambulante">
+                        Vendedor Ambulante
+                      </option>
+                      <option value="Veterinario, Zoólogo, Zootécnico">
+                        Veterinario, Zoólogo, Zootécnico
+                      </option>
                       <option value="Visitador Medico">Visitador Medico</option>
                       <option value="Zapatero">Zapatero</option>
                       <option value="Otro">Otro</option>
@@ -847,23 +979,45 @@ export default class Contact extends Component {
                       <option value="defaultNivelEstudios" >Nivel de estudios</option>
                       <option value="Preescolar Incompleta">Preescolar Incompleta</option>
                       <option value="Preescolar">Preescolar</option>
-                      <option value="Primaria Incompleta">Primaria Incompleta</option>
+                      <option value="Primaria Incompleta">
+                        Primaria Incompleta
+                      </option>
                       <option value="Primaria">Primaria</option>
-                      <option value="Secundaria Incompleta">Secundaria Incompleta</option>
+                      <option value="Secundaria Incompleta">
+                        Secundaria Incompleta
+                      </option>
                       <option value="Secundaria">Secundaria</option>
-                      <option value="Bachillerato/Preparatoria Incompleta">Bachillerato/Preparatoria Incompleta</option>
-                      <option value="Bachillerato/Preparatoria">Bachillerato/Preparatoria</option>
-                      <option value="Técnica Incompleta">Técnica Incompleta</option>
+                      <option value="Bachillerato/Preparatoria Incompleta">
+                        Bachillerato/Preparatoria Incompleta
+                      </option>
+                      <option value="Bachillerato/Preparatoria">
+                        Bachillerato/Preparatoria
+                      </option>
+                      <option value="Técnica Incompleta">
+                        Técnica Incompleta
+                      </option>
                       <option value="Técnica">Técnica</option>
-                      <option value="Técnico Superior Universitario Incompleta">Técnico Superior Universitario Incompleta</option>
-                      <option value="Técnico Superior Universitario">Técnico Superior Universitario</option>
-                      <option value="Licenciatura Incompleta">Licenciatura Incompleta</option>
+                      <option value="Técnico Superior Universitario Incompleta">
+                        Técnico Superior Universitario Incompleta
+                      </option>
+                      <option value="Técnico Superior Universitario">
+                        Técnico Superior Universitario
+                      </option>
+                      <option value="Licenciatura Incompleta">
+                        Licenciatura Incompleta
+                      </option>
                       <option value="Licenciatura">Licenciatura</option>
-                      <option value="Especialidad Incompleta">Especialidad Incompleta</option>
+                      <option value="Especialidad Incompleta">
+                        Especialidad Incompleta
+                      </option>
                       <option value="Especialidad">Especialidad</option>
-                      <option value="Maestría Incompleta">Maestría Incompleta</option>
+                      <option value="Maestría Incompleta">
+                        Maestría Incompleta
+                      </option>
                       <option value="Maestría">Maestría</option>
-                      <option value="Doctorado Incompleto">Doctorado Incompleto</option>
+                      <option value="Doctorado Incompleto">
+                        Doctorado Incompleto
+                      </option>
                       <option value="Doctorado">Doctorado</option>
                       <option value="Sin estudios">Sin estudios</option>
                     </select>
@@ -884,8 +1038,12 @@ export default class Contact extends Component {
                       <option value="Chichimeco">Chichimeco</option>
                       <option value="Chinanteco">Chinanteco</option>
                       <option value="Chocholteco">Chocholteco</option>
-                      <option value="Chontal de Oaxaca">Chontal de Oaxaca</option>
-                      <option value="Chontal de Tabasco">Chontal de Tabasco</option>
+                      <option value="Chontal de Oaxaca">
+                        Chontal de Oaxaca
+                      </option>
+                      <option value="Chontal de Tabasco">
+                        Chontal de Tabasco
+                      </option>
                       <option value="Chuj">Chuj</option>
                       <option value="Ch'ol">Ch'ol</option>
                       <option value="Guarijío">Guarijío</option>
@@ -918,7 +1076,9 @@ export default class Contact extends Component {
                       <option value="Pápago">Pápago</option>
                       <option value="Pima">Pima</option>
                       <option value="Popoloca">Popoloca</option>
-                      <option value="Popoluca de la Sierra">Popoluca de la Sierra</option>
+                      <option value="Popoluca de la Sierra">
+                        Popoluca de la Sierra
+                      </option>
                       <option value="Qato'k">Qato'k</option>
                       <option value="Q'anjob'al">Q'anjob'al</option>
                       <option value="Q'eqchí'">Q'eqchí'</option>
@@ -928,8 +1088,12 @@ export default class Contact extends Component {
                       <option value="Tarasco">Tarasco</option>
                       <option value="Teko">Teko</option>
                       <option value="Tepehua">Tepehua</option>
-                      <option value="Tepehuano del norte">Tepehuano del norte</option>
-                      <option value="Tepehuano del sur">Tepehuano del sur</option>
+                      <option value="Tepehuano del norte">
+                        Tepehuano del norte
+                      </option>
+                      <option value="Tepehuano del sur">
+                        Tepehuano del sur
+                      </option>
                       <option value="Texistepequeño">Texistepequeño</option>
                       <option value="Tojolabal">Tojolabal</option>
                       <option value="Totonaco">Totonaco</option>
@@ -951,19 +1115,35 @@ export default class Contact extends Component {
                       <option value="Cristianismo">Cristianismo</option>
                       <option value="Catolicismo">Catolicismo</option>
                       <option value="Ortodoxos3">Ortodoxos</option>
-                      <option value="Protestantismo histórico o reformado">Protestantismo histórico o reformado</option>
+                      <option value="Protestantismo histórico o reformado">
+                        Protestantismo histórico o reformado
+                      </option>
                       <option value="Pentecostalismo">Pentecostalismo</option>
-                      <option value="Iglesias evangélicas">Iglesias evangélicas</option>
-                      <option value="Iglesias cristianas">Iglesias cristianas</option>
-                      <option value="Religiones bíblicas diferentes de evangélicas">Religiones bíblicas diferentes de evangélicas</option>
-                      <option value="Religiones de origen oriental">Religiones de origen oriental</option>
+                      <option value="Iglesias evangélicas">
+                        Iglesias evangélicas
+                      </option>
+                      <option value="Iglesias cristianas">
+                        Iglesias cristianas
+                      </option>
+                      <option value="Religiones bíblicas diferentes de evangélicas">
+                        Religiones bíblicas diferentes de evangélicas
+                      </option>
+                      <option value="Religiones de origen oriental">
+                        Religiones de origen oriental
+                      </option>
                       <option value="Judaísmo">Judaísmo</option>
                       <option value="New age">New age</option>
-                      <option value="Escuelas esotéricas">Escuelas esotéricas</option>
+                      <option value="Escuelas esotéricas">
+                        Escuelas esotéricas
+                      </option>
                       <option value="Raíces étnicas">Raíces étnicas</option>
                       <option value="Espiritualistas">Espiritualistas</option>
-                      <option value="Otros movimientos religiosos">Otros movimientos religiosos</option>
-                      <option value="Religión especifica">Religión especifica</option>
+                      <option value="Otros movimientos religiosos">
+                        Otros movimientos religiosos
+                      </option>
+                      <option value="Religión especifica">
+                        Religión especifica
+                      </option>
                       <option value="Sin religión">Sin religión</option>
                     </select>
                   </div>
@@ -971,7 +1151,7 @@ export default class Contact extends Component {
                   {/* <div className="form-group mb-3"> */}
                     <div className=" row mb-3 align-items-center">
                       <div className="col">
-                        <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true}  ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
+                        <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} onChange={this.checkLGBT.bind(this)} checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true}  ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
                         <label className="form-label">&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
                       </div>
                       {/* Select LGBT*/}
@@ -998,7 +1178,7 @@ export default class Contact extends Component {
                   {/* <div className="form-group mb-3"> */}
                     <div className="row mb-3 align-items-center">
                       <div className="col">
-                        <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} disabled={this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
+                        <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} disabled={this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
                         <label className="form-label">&nbsp;¿Tiene alguna discapacidad?</label>
                       </div>
                       {/* Select Discapacidad*/}
@@ -1030,10 +1210,10 @@ export default class Contact extends Component {
                 </div>
               </div>
             </div>
-            }
+          }
 
             {
-              (this.state.step === 3 || this.state.step === 4) &&
+              (this.state.step === 3 || this.state.step === 4) && 
                 <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
                   <div className="row">
                     {/* Lado izquierdo */}
@@ -1282,299 +1462,333 @@ export default class Contact extends Component {
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtEntCalle2" name="txtEntCalle2" value={this.state.txtEntCalle2} type="text" className="form-control" placeholder="Entre calle 2" ref={txtEntCalle2=>this.inputTxtEntCalle2 = txtEntCalle2} />
+                        <input onChange={this.handlerOnChange} id="txtEntCalle2" name="txtEntCalle2" value={this.state.txtEntCalle2} type="text" className="form-control" placeholder="Entre calle 2"  ref={(txtEntCalle2) => (this.inputTxtEntCalle2 = txtEntCalle2) }/>
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtReferencias" name="txtReferencias" value={this.state.txtReferencias} type="text" className="form-control" placeholder="Referencias" ref={txtReferencias=>this.inputTxtReferencias = txtReferencias} />
-                      </div>                   
+                        <input onChange={this.handlerOnChange} id="txtReferencias" name="txtReferencias" value={this.state.txtReferencias} type="text" className="form-control" placeholder="Referencias" ref={(txtReferencias) => (this.inputTxtReferencias = txtReferencias)} />
+                      </div>
                     </div>
 
                     {/* Lado derecho */}
                     <div className="col-md-6">
                       <div className="form-group mb-3">
                         {/* Select Pais*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selPais" name="selPais" value={this.state.selPais} ref={selPais=>this.inputSelPais = selPais} aria-label="pais">
-                            <option value="defaultPais" >Pais</option>
-                            <option value="AF">Afganistán</option>
-                            <option value="AL">Albania</option>
-                            <option value="DE">Alemania</option>
-                            <option value="AD">Andorra</option>
-                            <option value="AO">Angola</option>
-                            <option value="AI">Anguilla</option>
-                            <option value="AQ">Antártida</option>
-                            <option value="AG">Antigua y Barbuda</option>
-                            <option value="AN">Antillas Holandesas</option>
-                            <option value="SA">Arabia Saudí</option>
-                            <option value="DZ">Argelia</option>
-                            <option value="AR">Argentina</option>
-                            <option value="AM">Armenia</option>
-                            <option value="AW">Aruba</option>
-                            <option value="AU">Australia</option>
-                            <option value="AT">Austria</option>
-                            <option value="AZ">Azerbaiyán</option>
-                            <option value="BS">Bahamas</option>
-                            <option value="BH">Bahrein</option>
-                            <option value="BD">Bangladesh</option>
-                            <option value="BB">Barbados</option>
-                            <option value="BE">Bélgica</option>
-                            <option value="BZ">Belice</option>
-                            <option value="BJ">Benin</option>
-                            <option value="BM">Bermudas</option>
-                            <option value="BY">Bielorrusia</option>
-                            <option value="MM">Birmania</option>
-                            <option value="BO">Bolivia</option>
-                            <option value="BA">Bosnia y Herzegovina</option>
-                            <option value="BW">Botswana</option>
-                            <option value="BR">Brasil</option>
-                            <option value="BN">Brunei</option>
-                            <option value="BG">Bulgaria</option>
-                            <option value="BF">Burkina Faso</option>
-                            <option value="BI">Burundi</option>
-                            <option value="BT">Bután</option>
-                            <option value="CV">Cabo Verde</option>
-                            <option value="KH">Camboya</option>
-                            <option value="CM">Camerún</option>
-                            <option value="CA">Canadá</option>
-                            <option value="TD">Chad</option>
-                            <option value="CL">Chile</option>
-                            <option value="CN">China</option>
-                            <option value="CY">Chipre</option>
-                            <option value="VA">Ciudad del Vaticano (Santa Sede)</option>
-                            <option value="CO">Colombia</option>
-                            <option value="KM">Comores</option>
-                            <option value="CG">Congo</option>
-                            <option value="CD">Congo, República Democrática del</option>
-                            <option value="KR">Corea</option>
-                            <option value="KP">Corea del Norte</option>
-                            <option value="CI">Costa de Marfíl</option>
-                            <option value="CR">Costa Rica</option>
-                            <option value="HR">Croacia (Hrvatska)</option>
-                            <option value="CU">Cuba</option>
-                            <option value="DK">Dinamarca</option>
-                            <option value="DJ">Djibouti</option>
-                            <option value="DM">Dominica</option>
-                            <option value="EC">Ecuador</option>
-                            <option value="EG">Egipto</option>
-                            <option value="SV">El Salvador</option>
-                            <option value="AE">Emiratos Árabes Unidos</option>
-                            <option value="ER">Eritrea</option>
-                            <option value="SI">Eslovenia</option>
-                            <option value="ES">España</option>
-                            <option value="US">Estados Unidos</option>
-                            <option value="EE">Estonia</option>
-                            <option value="ET">Etiopía</option>
-                            <option value="FJ">Fiji</option>
-                            <option value="PH">Filipinas</option>
-                            <option value="FI">Finlandia</option>
-                            <option value="FR">Francia</option>
-                            <option value="GA">Gabón</option>
-                            <option value="GM">Gambia</option>
-                            <option value="GE">Georgia</option>
-                            <option value="GH">Ghana</option>
-                            <option value="GI">Gibraltar</option>
-                            <option value="GD">Granada</option>
-                            <option value="GR">Grecia</option>
-                            <option value="GL">Groenlandia</option>
-                            <option value="GP">Guadalupe</option>
-                            <option value="GU">Guam</option>
-                            <option value="GT">Guatemala</option>
-                            <option value="GY">Guayana</option>
-                            <option value="GF">Guayana Francesa</option>
-                            <option value="GN">Guinea</option>
-                            <option value="GQ">Guinea Ecuatorial</option>
-                            <option value="GW">Guinea-Bissau</option>
-                            <option value="HT">Haití</option>
-                            <option value="HN">Honduras</option>
-                            <option value="HU">Hungría</option>
-                            <option value="IN">India</option>
-                            <option value="ID">Indonesia</option>
-                            <option value="IQ">Irak</option>
-                            <option value="IR">Irán</option>
-                            <option value="IE">Irlanda</option>
-                            <option value="BV">Isla Bouvet</option>
-                            <option value="CX">Isla de Christmas</option>
-                            <option value="IS">Islandia</option>
-                            <option value="KY">Islas Caimán</option>
-                            <option value="CK">Islas Cook</option>
-                            <option value="CC">Islas de Cocos o Keeling</option>
-                            <option value="FO">Islas Faroe</option>
-                            <option value="HM">Islas Heard y McDonald</option>
-                            <option value="FK">Islas Malvinas</option>
-                            <option value="MP">Islas Marianas del Norte</option>
-                            <option value="MH">Islas Marshall</option>
-                            <option value="UM">Islas menores de Estados Unidos</option>
-                            <option value="PW">Islas Palau</option>
-                            <option value="SB">Islas Salomón</option>
-                            <option value="SJ">Islas Svalbard y Jan Mayen</option>
-                            <option value="TK">Islas Tokelau</option>
-                            <option value="TC">Islas Turks y Caicos</option>
-                            <option value="VI">Islas Vírgenes (EEUU)</option>
-                            <option value="VG">Islas Vírgenes (Reino Unido)</option>
-                            <option value="WF">Islas Wallis y Futuna</option>
-                            <option value="IL">Israel</option>
-                            <option value="IT">Italia</option>
-                            <option value="JM">Jamaica</option>
-                            <option value="JP">Japón</option>
-                            <option value="JO">Jordania</option>
-                            <option value="KZ">Kazajistán</option>
-                            <option value="KE">Kenia</option>
-                            <option value="KG">Kirguizistán</option>
-                            <option value="KI">Kiribati</option>
-                            <option value="KW">Kuwait</option>
-                            <option value="LA">Laos</option>
-                            <option value="LS">Lesotho</option>
-                            <option value="LV">Letonia</option>
-                            <option value="LB">Líbano</option>
-                            <option value="LR">Liberia</option>
-                            <option value="LY">Libia</option>
-                            <option value="LI">Liechtenstein</option>
-                            <option value="LT">Lituania</option>
-                            <option value="LU">Luxemburgo</option>
-                            <option value="MK">Macedonia, Ex-República Yugoslava de</option>
-                            <option value="MG">Madagascar</option>
-                            <option value="MY">Malasia</option>
-                            <option value="MW">Malawi</option>
-                            <option value="MV">Maldivas</option>
-                            <option value="ML">Malí</option>
-                            <option value="MT">Malta</option>
-                            <option value="MA">Marruecos</option>
-                            <option value="MQ">Martinica</option>
-                            <option value="MU">Mauricio</option>
-                            <option value="MR">Mauritania</option>
-                            <option value="YT">Mayotte</option>
-                            <option value="MX">México</option>
-                            <option value="FM">Micronesia</option>
-                            <option value="MD">Moldavia</option>
-                            <option value="MC">Mónaco</option>
-                            <option value="MN">Mongolia</option>
-                            <option value="MS">Montserrat</option>
-                            <option value="MZ">Mozambique</option>
-                            <option value="NA">Namibia</option>
-                            <option value="NR">Nauru</option>
-                            <option value="NP">Nepal</option>
-                            <option value="NI">Nicaragua</option>
-                            <option value="NE">Níger</option>
-                            <option value="NG">Nigeria</option>
-                            <option value="NU">Niue</option>
-                            <option value="NF">Norfolk</option>
-                            <option value="NO">Noruega</option>
-                            <option value="NC">Nueva Caledonia</option>
-                            <option value="NZ">Nueva Zelanda</option>
-                            <option value="OM">Omán</option>
-                            <option value="NL">Países Bajos</option>
-                            <option value="PA">Panamá</option>
-                            <option value="PG">Papúa Nueva Guinea</option>
-                            <option value="PK">Paquistán</option>
-                            <option value="PY">Paraguay</option>
-                            <option value="PE">Perú</option>
-                            <option value="PN">Pitcairn</option>
-                            <option value="PF">Polinesia Francesa</option>
-                            <option value="PL">Polonia</option>
-                            <option value="PT">Portugal</option>
-                            <option value="PR">Puerto Rico</option>
-                            <option value="QA">Qatar</option>
-                            <option value="UK">Reino Unido</option>
-                            <option value="CF">República Centroafricana</option>
-                            <option value="CZ">República Checa</option>
-                            <option value="ZA">República de Sudáfrica</option>
-                            <option value="DO">República Dominicana</option>
-                            <option value="SK">República Eslovaca</option>
-                            <option value="RE">Reunión</option>
-                            <option value="RW">Ruanda</option>
-                            <option value="RO">Rumania</option>
-                            <option value="RU">Rusia</option>
-                            <option value="EH">Sahara Occidental</option>
-                            <option value="KN">Saint Kitts y Nevis</option>
-                            <option value="WS">Samoa</option>
-                            <option value="AS">Samoa Americana</option>
-                            <option value="SM">San Marino</option>
-                            <option value="VC">San Vicente y Granadinas</option>
-                            <option value="SH">Santa Helena</option>
-                            <option value="LC">Santa Lucía</option>
-                            <option value="ST">Santo Tomé y Príncipe</option>
-                            <option value="SN">Senegal</option>
-                            <option value="SC">Seychelles</option>
-                            <option value="SL">Sierra Leona</option>
-                            <option value="SG">Singapur</option>
-                            <option value="SY">Siria</option>
-                            <option value="SO">Somalia</option>
-                            <option value="LK">Sri Lanka</option>
-                            <option value="PM">St Pierre y Miquelon</option>
-                            <option value="SZ">Suazilandia</option>
-                            <option value="SD">Sudán</option>
-                            <option value="SE">Suecia</option>
-                            <option value="CH">Suiza</option>
-                            <option value="SR">Surinam</option>
-                            <option value="TH">Tailandia</option>
-                            <option value="TW">Taiwán</option>
-                            <option value="TZ">Tanzania</option>
-                            <option value="TJ">Tayikistán</option>
-                            <option value="TF">Territorios franceses del Sur</option>
-                            <option value="TP">Timor Oriental</option>
-                            <option value="TG">Togo</option>
-                            <option value="TO">Tonga</option>
-                            <option value="TT">Trinidad y Tobago</option>
-                            <option value="TN">Túnez</option>
-                            <option value="TM">Turkmenistán</option>
-                            <option value="TR">Turquía</option>
-                            <option value="TV">Tuvalu</option>
-                            <option value="UA">Ucrania</option>
-                            <option value="UG">Uganda</option>
-                            <option value="UY">Uruguay</option>
-                            <option value="UZ">Uzbekistán</option>
-                            <option value="VU">Vanuatu</option>
-                            <option value="VE">Venezuela</option>
-                            <option value="VN">Vietnam</option>
-                            <option value="YE">Yemen</option>
-                            <option value="YU">Yugoslavia</option>
-                            <option value="ZM">Zambia</option>
-                            <option value="ZW">Zimbabue</option>
+                        <select
+                          onChange={this.handlerOnChange}
+                          className="form-select"
+                          id="selPais"
+                          name="selPais"
+                          value={this.state.selPais}
+                          ref={(selPais) => (this.inputSelPais = selPais)}
+                          aria-label="pais"
+                        >
+                          <option value="defaultPais">Pais</option>
+                          <option value="AF">Afganistán</option>
+                          <option value="AL">Albania</option>
+                          <option value="DE">Alemania</option>
+                          <option value="AD">Andorra</option>
+                          <option value="AO">Angola</option>
+                          <option value="AI">Anguilla</option>
+                          <option value="AQ">Antártida</option>
+                          <option value="AG">Antigua y Barbuda</option>
+                          <option value="AN">Antillas Holandesas</option>
+                          <option value="SA">Arabia Saudí</option>
+                          <option value="DZ">Argelia</option>
+                          <option value="AR">Argentina</option>
+                          <option value="AM">Armenia</option>
+                          <option value="AW">Aruba</option>
+                          <option value="AU">Australia</option>
+                          <option value="AT">Austria</option>
+                          <option value="AZ">Azerbaiyán</option>
+                          <option value="BS">Bahamas</option>
+                          <option value="BH">Bahrein</option>
+                          <option value="BD">Bangladesh</option>
+                          <option value="BB">Barbados</option>
+                          <option value="BE">Bélgica</option>
+                          <option value="BZ">Belice</option>
+                          <option value="BJ">Benin</option>
+                          <option value="BM">Bermudas</option>
+                          <option value="BY">Bielorrusia</option>
+                          <option value="MM">Birmania</option>
+                          <option value="BO">Bolivia</option>
+                          <option value="BA">Bosnia y Herzegovina</option>
+                          <option value="BW">Botswana</option>
+                          <option value="BR">Brasil</option>
+                          <option value="BN">Brunei</option>
+                          <option value="BG">Bulgaria</option>
+                          <option value="BF">Burkina Faso</option>
+                          <option value="BI">Burundi</option>
+                          <option value="BT">Bután</option>
+                          <option value="CV">Cabo Verde</option>
+                          <option value="KH">Camboya</option>
+                          <option value="CM">Camerún</option>
+                          <option value="CA">Canadá</option>
+                          <option value="TD">Chad</option>
+                          <option value="CL">Chile</option>
+                          <option value="CN">China</option>
+                          <option value="CY">Chipre</option>
+                          <option value="VA">
+                            Ciudad del Vaticano (Santa Sede)
+                          </option>
+                          <option value="CO">Colombia</option>
+                          <option value="KM">Comores</option>
+                          <option value="CG">Congo</option>
+                          <option value="CD">
+                            Congo, República Democrática del
+                          </option>
+                          <option value="KR">Corea</option>
+                          <option value="KP">Corea del Norte</option>
+                          <option value="CI">Costa de Marfíl</option>
+                          <option value="CR">Costa Rica</option>
+                          <option value="HR">Croacia (Hrvatska)</option>
+                          <option value="CU">Cuba</option>
+                          <option value="DK">Dinamarca</option>
+                          <option value="DJ">Djibouti</option>
+                          <option value="DM">Dominica</option>
+                          <option value="EC">Ecuador</option>
+                          <option value="EG">Egipto</option>
+                          <option value="SV">El Salvador</option>
+                          <option value="AE">Emiratos Árabes Unidos</option>
+                          <option value="ER">Eritrea</option>
+                          <option value="SI">Eslovenia</option>
+                          <option value="ES">España</option>
+                          <option value="US">Estados Unidos</option>
+                          <option value="EE">Estonia</option>
+                          <option value="ET">Etiopía</option>
+                          <option value="FJ">Fiji</option>
+                          <option value="PH">Filipinas</option>
+                          <option value="FI">Finlandia</option>
+                          <option value="FR">Francia</option>
+                          <option value="GA">Gabón</option>
+                          <option value="GM">Gambia</option>
+                          <option value="GE">Georgia</option>
+                          <option value="GH">Ghana</option>
+                          <option value="GI">Gibraltar</option>
+                          <option value="GD">Granada</option>
+                          <option value="GR">Grecia</option>
+                          <option value="GL">Groenlandia</option>
+                          <option value="GP">Guadalupe</option>
+                          <option value="GU">Guam</option>
+                          <option value="GT">Guatemala</option>
+                          <option value="GY">Guayana</option>
+                          <option value="GF">Guayana Francesa</option>
+                          <option value="GN">Guinea</option>
+                          <option value="GQ">Guinea Ecuatorial</option>
+                          <option value="GW">Guinea-Bissau</option>
+                          <option value="HT">Haití</option>
+                          <option value="HN">Honduras</option>
+                          <option value="HU">Hungría</option>
+                          <option value="IN">India</option>
+                          <option value="ID">Indonesia</option>
+                          <option value="IQ">Irak</option>
+                          <option value="IR">Irán</option>
+                          <option value="IE">Irlanda</option>
+                          <option value="BV">Isla Bouvet</option>
+                          <option value="CX">Isla de Christmas</option>
+                          <option value="IS">Islandia</option>
+                          <option value="KY">Islas Caimán</option>
+                          <option value="CK">Islas Cook</option>
+                          <option value="CC">Islas de Cocos o Keeling</option>
+                          <option value="FO">Islas Faroe</option>
+                          <option value="HM">Islas Heard y McDonald</option>
+                          <option value="FK">Islas Malvinas</option>
+                          <option value="MP">Islas Marianas del Norte</option>
+                          <option value="MH">Islas Marshall</option>
+                          <option value="UM">
+                            Islas menores de Estados Unidos
+                          </option>
+                          <option value="PW">Islas Palau</option>
+                          <option value="SB">Islas Salomón</option>
+                          <option value="SJ">Islas Svalbard y Jan Mayen</option>
+                          <option value="TK">Islas Tokelau</option>
+                          <option value="TC">Islas Turks y Caicos</option>
+                          <option value="VI">Islas Vírgenes (EEUU)</option>
+                          <option value="VG">Islas Vírgenes (Reino Unido)</option>
+                          <option value="WF">Islas Wallis y Futuna</option>
+                          <option value="IL">Israel</option>
+                          <option value="IT">Italia</option>
+                          <option value="JM">Jamaica</option>
+                          <option value="JP">Japón</option>
+                          <option value="JO">Jordania</option>
+                          <option value="KZ">Kazajistán</option>
+                          <option value="KE">Kenia</option>
+                          <option value="KG">Kirguizistán</option>
+                          <option value="KI">Kiribati</option>
+                          <option value="KW">Kuwait</option>
+                          <option value="LA">Laos</option>
+                          <option value="LS">Lesotho</option>
+                          <option value="LV">Letonia</option>
+                          <option value="LB">Líbano</option>
+                          <option value="LR">Liberia</option>
+                          <option value="LY">Libia</option>
+                          <option value="LI">Liechtenstein</option>
+                          <option value="LT">Lituania</option>
+                          <option value="LU">Luxemburgo</option>
+                          <option value="MK">
+                            Macedonia, Ex-República Yugoslava de
+                          </option>
+                          <option value="MG">Madagascar</option>
+                          <option value="MY">Malasia</option>
+                          <option value="MW">Malawi</option>
+                          <option value="MV">Maldivas</option>
+                          <option value="ML">Malí</option>
+                          <option value="MT">Malta</option>
+                          <option value="MA">Marruecos</option>
+                          <option value="MQ">Martinica</option>
+                          <option value="MU">Mauricio</option>
+                          <option value="MR">Mauritania</option>
+                          <option value="YT">Mayotte</option>
+                          <option value="MX">México</option>
+                          <option value="FM">Micronesia</option>
+                          <option value="MD">Moldavia</option>
+                          <option value="MC">Mónaco</option>
+                          <option value="MN">Mongolia</option>
+                          <option value="MS">Montserrat</option>
+                          <option value="MZ">Mozambique</option>
+                          <option value="NA">Namibia</option>
+                          <option value="NR">Nauru</option>
+                          <option value="NP">Nepal</option>
+                          <option value="NI">Nicaragua</option>
+                          <option value="NE">Níger</option>
+                          <option value="NG">Nigeria</option>
+                          <option value="NU">Niue</option>
+                          <option value="NF">Norfolk</option>
+                          <option value="NO">Noruega</option>
+                          <option value="NC">Nueva Caledonia</option>
+                          <option value="NZ">Nueva Zelanda</option>
+                          <option value="OM">Omán</option>
+                          <option value="NL">Países Bajos</option>
+                          <option value="PA">Panamá</option>
+                          <option value="PG">Papúa Nueva Guinea</option>
+                          <option value="PK">Paquistán</option>
+                          <option value="PY">Paraguay</option>
+                          <option value="PE">Perú</option>
+                          <option value="PN">Pitcairn</option>
+                          <option value="PF">Polinesia Francesa</option>
+                          <option value="PL">Polonia</option>
+                          <option value="PT">Portugal</option>
+                          <option value="PR">Puerto Rico</option>
+                          <option value="QA">Qatar</option>
+                          <option value="UK">Reino Unido</option>
+                          <option value="CF">República Centroafricana</option>
+                          <option value="CZ">República Checa</option>
+                          <option value="ZA">República de Sudáfrica</option>
+                          <option value="DO">República Dominicana</option>
+                          <option value="SK">República Eslovaca</option>
+                          <option value="RE">Reunión</option>
+                          <option value="RW">Ruanda</option>
+                          <option value="RO">Rumania</option>
+                          <option value="RU">Rusia</option>
+                          <option value="EH">Sahara Occidental</option>
+                          <option value="KN">Saint Kitts y Nevis</option>
+                          <option value="WS">Samoa</option>
+                          <option value="AS">Samoa Americana</option>
+                          <option value="SM">San Marino</option>
+                          <option value="VC">San Vicente y Granadinas</option>
+                          <option value="SH">Santa Helena</option>
+                          <option value="LC">Santa Lucía</option>
+                          <option value="ST">Santo Tomé y Príncipe</option>
+                          <option value="SN">Senegal</option>
+                          <option value="SC">Seychelles</option>
+                          <option value="SL">Sierra Leona</option>
+                          <option value="SG">Singapur</option>
+                          <option value="SY">Siria</option>
+                          <option value="SO">Somalia</option>
+                          <option value="LK">Sri Lanka</option>
+                          <option value="PM">St Pierre y Miquelon</option>
+                          <option value="SZ">Suazilandia</option>
+                          <option value="SD">Sudán</option>
+                          <option value="SE">Suecia</option>
+                          <option value="CH">Suiza</option>
+                          <option value="SR">Surinam</option>
+                          <option value="TH">Tailandia</option>
+                          <option value="TW">Taiwán</option>
+                          <option value="TZ">Tanzania</option>
+                          <option value="TJ">Tayikistán</option>
+                          <option value="TF">Territorios franceses del Sur</option>
+                          <option value="TP">Timor Oriental</option>
+                          <option value="TG">Togo</option>
+                          <option value="TO">Tonga</option>
+                          <option value="TT">Trinidad y Tobago</option>
+                          <option value="TN">Túnez</option>
+                          <option value="TM">Turkmenistán</option>
+                          <option value="TR">Turquía</option>
+                          <option value="TV">Tuvalu</option>
+                          <option value="UA">Ucrania</option>
+                          <option value="UG">Uganda</option>
+                          <option value="UY">Uruguay</option>
+                          <option value="UZ">Uzbekistán</option>
+                          <option value="VU">Vanuatu</option>
+                          <option value="VE">Venezuela</option>
+                          <option value="VN">Vietnam</option>
+                          <option value="YE">Yemen</option>
+                          <option value="YU">Yugoslavia</option>
+                          <option value="ZM">Zambia</option>
+                          <option value="ZW">Zimbabue</option>
                         </select>
                       </div>
 
                       <div className="form-group mb-3">
                         {/* Select Estado*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selEstado" name="selEstado" value={this.state.selEstado} ref={selEstado=>this.inputSelEstado = selEstado} aria-label="estado">
-                            <option value="defaultEstado">Estado</option>
-                            <option value="Aguascalientes">Aguascalientes</option>
-                            <option value="Baja California">Baja California</option>
-                            <option value="Baja California Sur">Baja California Sur</option>
-                            <option value="Campeche">Campeche</option>
-                            <option value="Chiapas">Chiapas</option>
-                            <option value="Chihuahua">Chihuahua</option>
-                            <option value="Ciudad de México">Ciudad de México</option>
-                            <option value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
-                            <option value="Colima">Colima</option>
-                            <option value="Durango">Durango</option>
-                            <option value="Estado de México">Estado de México</option>
-                            <option value="Guanajuato">Guanajuato</option>
-                            <option value="Guerrero">Guerrero</option>
-                            <option value="Hidalgo">Hidalgo</option>
-                            <option value="Jalisco">Jalisco</option>
-                            <option value="Michoacán">Michoacán</option>
-                            <option value="Morelos">Morelos</option>
-                            <option value="Nayarit">Nayarit</option>
-                            <option value="Nuevo León">Nuevo León</option>
-                            <option value="Oaxaca">Oaxaca</option>
-                            <option value="Puebla">Puebla</option>
-                            <option value="Querétaro">Querétaro</option>
-                            <option value="Quintana Roo">Quintana Roo</option>
-                            <option value="San Luis Potosí">San Luis Potosí</option>
-                            <option value="Sinaloa">Sinaloa</option>
-                            <option value="Sonora">Sonora</option>
-                            <option value="Tabasco">Tabasco</option>
-                            <option value="Tamaulipas">Tamaulipas</option>
-                            <option value="Tlaxcala">Tlaxcala</option>
-                            <option value="Veracruz">Veracruz</option>
-                            <option value="Yucatán">Yucatán</option>
-                            <option value="Zacatecas">Zacatecas</option>
+                        <select
+                          onChange={this.handlerOnChange}
+                          className="form-select"
+                          id="selEstado"
+                          name="selEstado"
+                          value={this.state.selEstado}
+                          ref={(selEstado) => (this.inputSelEstado = selEstado)}
+                          aria-label="estado"
+                        >
+                          <option value="defaultEstado">Estado</option>
+                          <option value="Aguascalientes">Aguascalientes</option>
+                          <option value="Baja California">Baja California</option>
+                          <option value="Baja California Sur">Baja California Sur</option>
+                          <option value="Campeche">Campeche</option>
+                          <option value="Chiapas">Chiapas</option>
+                          <option value="Chihuahua">Chihuahua</option>
+                          <option value="Ciudad de México">Ciudad de México</option>
+                          <option value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
+                          <option value="Colima">Colima</option>
+                          <option value="Durango">Durango</option>
+                          <option value="Estado de México">Estado de México</option>
+                          <option value="Guanajuato">Guanajuato</option>
+                          <option value="Guerrero">Guerrero</option>
+                          <option value="Hidalgo">Hidalgo</option>
+                          <option value="Jalisco">Jalisco</option>
+                          <option value="Michoacán">Michoacán</option>
+                          <option value="Morelos">Morelos</option>
+                          <option value="Nayarit">Nayarit</option>
+                          <option value="Nuevo León">Nuevo León</option>
+                          <option value="Oaxaca">Oaxaca</option>
+                          <option value="Puebla">Puebla</option>
+                          <option value="Querétaro">Querétaro</option>
+                          <option value="Quintana Roo">Quintana Roo</option>
+                          <option value="San Luis Potosí">San Luis Potosí</option>
+                          <option value="Sinaloa">Sinaloa</option>
+                          <option value="Sonora">Sonora</option>
+                          <option value="Tabasco">Tabasco</option>
+                          <option value="Tamaulipas">Tamaulipas</option>
+                          <option value="Tlaxcala">Tlaxcala</option>
+                          <option value="Veracruz">Veracruz</option>
+                          <option value="Yucatán">Yucatán</option>
+                          <option value="Zacatecas">Zacatecas</option>
                         </select>
                       </div>
 
                       <div className="form-group mb-3">
                         {/* Select Municipio*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selMunicipio" name="selMunicipio" value={this.state.selMunicipio} ref={selMunicipio=>this.inputSelMunicipio = selMunicipio} aria-label="municipio">
+                        <select
+                          onChange={this.handlerOnChange}
+                          className="form-select"
+                          id="selMunicipio"
+                          name="selMunicipio"
+                          value={this.state.selMunicipio}
+                          ref={(selMunicipio) =>
+                            (this.inputSelMunicipio = selMunicipio)
+                          }
+                          aria-label="municipio"
+                        >
                           <option value="defaultMunicipio">Municipio</option>
                           <option value="Opcion 1">Opcion 1</option>
                         </select>
@@ -1582,21 +1796,36 @@ export default class Contact extends Component {
 
                       <div className="form-group mb-3">
                         {/* Select Localidad*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selLocalidad" name="selLocalidad" value={this.state.selLocalidad} ref={selLocalidad=>this.inputSelLocalidad = selLocalidad} aria-label="municipio">
+                        <select
+                          onChange={this.handlerOnChange}
+                          className="form-select"
+                          id="selLocalidad"
+                          name="selLocalidad"
+                          value={this.state.selLocalidad}
+                          ref={(selLocalidad) =>
+                            (this.inputSelLocalidad = selLocalidad)
+                          }
+                          aria-label="municipio"
+                        >
                           <option value="defaultLocalidad">Localidad</option>
                           <option value="Opcion 1">Opcion 1</option>
                         </select>
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" placeholder="Codigo Postal" name="txtCodPostal" value={this.state.txtCodPostal} ref={txtCodPostal=>this.inputTxtCodPostal = txtCodPostal} />
-                      </div>
-
-                      <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} type="text" className="form-control" id="txtLatitud" name="txtLatitud" placeholder="Latitud" value={this.state.txtLatitud} ref={txtLatitud=>this.inputTxtLatitud = txtLatitud} />
-                        <input onChange={this.handlerOnChange} type="text" className="form-control" id="txtLongitud" name="txtLongitud" placeholder="Longitud" value={this.state.txtLongitud} ref={txtLongitud=>this.inputTxtLongitud = txtLongitud} />
-                      </div>
-
+                      <input
+                        onChange={this.handlerOnChange}
+                        id="txtCodPostal"
+                        type="text"
+                        className="form-control"
+                        placeholder="Codigo Postal"
+                        name="txtCodPostal"
+                        value={this.state.txtCodPostal}
+                        ref={(txtCodPostal) =>
+                          (this.inputTxtCodPostal = txtCodPostal)
+                        }
+                      />
+                    </div>
                     </div>
                   </div>
                   <div className="row">
@@ -1606,10 +1835,10 @@ export default class Contact extends Component {
                     </div>
                   </div>
                 </div>
-            }
+              }
 
             {
-              (this.state.step === 4 || this.state.step === 4) &&
+              (this.state.step === 4 || this.state.step === 4) && 
                 <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
                   <div className="row">
                     <div className="col-md-6">
