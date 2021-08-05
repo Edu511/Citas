@@ -7,8 +7,8 @@ import Citas from './components/citas/Citas'
 import Edit from './components/citas/Edit'
 import Contact from './components/contact/Contact'
 import Msg from './components/contact/Msg'
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import { useForm } from "react-hook-form";
+import 'bootstrap/dist/css/bootstrap.min.css'
+//import { useForm } from 'react-hook-form'
 
 
 function App (props) {

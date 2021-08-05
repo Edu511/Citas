@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import firebase from '../../firebase/firebaseConfig'
-// import { Input } from 'reactstrap';
-// import { register } from '../../serviceWorker';
+//import { useForm } from 'react-hook-form'
+
 export default class Contact extends Component {
   
   constructor(props){
@@ -100,7 +100,6 @@ export default class Contact extends Component {
       step: parseInt(this.state.step) -1
     })    
   }
-
 
   //Función para enviar el formulario
   enviar(e) {
@@ -498,13 +497,10 @@ export default class Contact extends Component {
   render () {
 
     return (
+
       <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
 
-        <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", marginTop: "70px"}}>
-        {/* <form onSubmit={handleSubmit(onSubmit)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", marginTop: "70px"}}> */}
-
-          {/* <Input label="Nombre" register={register}/> */}
-          
+        <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%"}}>
               
             {(this.state.step === 1 || this.state.step === 4)  &&
               <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
@@ -576,6 +572,16 @@ export default class Contact extends Component {
                       <div className="form-group mb-3">
                         <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxttxtNumEdad = txtNumEdad} />
                       </div>
+                      {/* <div className="form-group mb-3 w-100"> */}
+                        <div className="row mb-3 align-items-center">
+                          <div className="col">
+                            <small>Fecha de nacimiento:</small>
+                          </div>
+                          <div className="col">
+                            <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                          </div>
+                        </div>
+                      {/* </div> */}
 
                       <div className="form-group mb-3">
                         {/* Select Sexo*/}
@@ -657,13 +663,10 @@ export default class Contact extends Component {
                                            
                   </div>                
                 </div>
-                <div style={{ height: "150px"}}>
-                  <br></br>
-                </div>
-                <div className="row mb-3">
-                   <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                   <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}}>SIGUIENTE</button>
-                   </div>
+                <div className="row">
+                  <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                    <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
+                  </div>
                 </div> 
               </div>
             }
@@ -691,8 +694,7 @@ export default class Contact extends Component {
                   </div>
                   
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="email" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
-                    <span className="helper-text" data-error="wrong" data-success="right"></span>
+                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>
 
                   <div className="form-group mb-3">
@@ -966,68 +968,65 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
-                  <div className="form-group mb-3">
-                    <div className="form-group mb-3">
-                      <label>
-                        <input onChange={this.checkLGBT.bind(this)} checked={this.state.swLGBT === true} type="checkbox" id="swLGBT" disabled={this.state.swAnonimo === true} name="swLGBT" value={this.state.swLGBT} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
-                        <span>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</span>
-                      </label>
-                    </div>
-                    <div className="form-group mb-3">
+                  {/* <div className="form-group mb-3"> */}
+                    <div className=" row mb-3 align-items-center">
+                      <div className="col">
+                        <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true}  ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
+                        <label className="form-label">&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
+                      </div>
                       {/* Select LGBT*/}
-                      <select onChange={this.handlerOnChange} disabled={this.state.swLGBT === false} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
-                        <option value="defaultLGBT" >Seleccione...</option>
-                        <option value="Lesbiana">Lesbiana</option>
-                        <option value="Gay">Gay</option>
-                        <option value="Bisexual">Bisexual</option>
-                        <option value="Transgénero">Transgénero</option>
-                        <option value="Transexual">Transexual</option>
-                        <option value="Travesti">Travesti</option>
-                        <option value="Queer">Queer</option>
-                        <option value="Questioning">Questioning</option>
-                        <option value="Intersexual">Intersexual</option>
-                        <option value="Asexual">Asexual</option>
-                        <option value="Pansexual">Pansexual</option>
-                        <option value="Otro">Otro</option>
-                      </select>
+                      <div className="col">
+                        <select onChange={this.handlerOnChange} disabled={this.state.swLGBT === false} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
+                          <option value="defaultLGBT" >Seleccione...</option>
+                          <option value="Lesbiana">Lesbiana</option>
+                          <option value="Gay">Gay</option>
+                          <option value="Bisexual">Bisexual</option>
+                          <option value="Transgénero">Transgénero</option>
+                          <option value="Transexual">Transexual</option>
+                          <option value="Travesti">Travesti</option>
+                          <option value="Queer">Queer</option>
+                          <option value="Questioning">Questioning</option>
+                          <option value="Intersexual">Intersexual</option>
+                          <option value="Asexual">Asexual</option>
+                          <option value="Pansexual">Pansexual</option>
+                          <option value="Otro">Otro</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  {/* </div> */}
 
-                  <div className="form-group mb-3">
-                    <div className="form-group mb-3">
-                      <label>
-                        <input onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} type="checkbox" disabled={this.state.swAnonimo === true} id="swDiscapacidad" name="swDiscapacidad" value={this.state.swDiscapacidad} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
-                        <span>&nbsp;¿Tiene alguna discapacidad?</span>
-                      </label>
-                    </div>
-                    <div className="form-group mb-3">
+                  {/* <div className="form-group mb-3"> */}
+                    <div className="row mb-3 align-items-center">
+                      <div className="col">
+                        <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} disabled={this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
+                        <label className="form-label">&nbsp;¿Tiene alguna discapacidad?</label>
+                      </div>
                       {/* Select Discapacidad*/}
-                      <select onChange={this.handlerOnChange} disabled={this.state.swDiscapacidad === false} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
-                        <option value="defaultDiscapacidad" >Seleccione...</option>
-                        <option value="Autismo">Autismo</option>
-                        <option value="Deficiencia Visual">Deficiencia Visual</option>
-                        <option value="Discapacidad Fisica">Discapacidad Fisica</option>
-                        <option value="Enfermedades Mentales">Enfermedades Mentales</option>
-                        <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
-                        <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
-                        <option value="Enfermedad Cronica">Enfermedad Cronica</option>
-                        <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
-                        <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
-                        <option value="Perdida de Memoria">Perdida de Memoria</option>
-                        <option value="Otra">Otra</option>
-                        <option value="Ninguna">Ninguna</option>
-                      </select>
+                      <div className="col">
+                        <select onChange={this.handlerOnChange} disabled={this.state.swDiscapacidad === false} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
+                          <option value="defaultDiscapacidad" >Seleccione...</option>
+                          <option value="Autismo">Autismo</option>
+                          <option value="Deficiencia Visual">Deficiencia Visual</option>
+                          <option value="Discapacidad Fisica">Discapacidad Fisica</option>
+                          <option value="Enfermedades Mentales">Enfermedades Mentales</option>
+                          <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
+                          <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
+                          <option value="Enfermedad Cronica">Enfermedad Cronica</option>
+                          <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
+                          <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
+                          <option value="Perdida de Memoria">Perdida de Memoria</option>
+                          <option value="Otra">Otra</option>
+                          <option value="Ninguna">Ninguna</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  {/* </div> */}
                 </div>
               </div>
-              <div style={{ height: "150px"}}>
-                <br></br>
-              </div>
-              <div className="row mb-3">
-                <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                  <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}}>SIGUIENTE</button>
+              <div className="row">
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                  <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
+                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
                 </div>
               </div>
             </div>
@@ -1243,15 +1242,28 @@ export default class Contact extends Component {
                         
                         </select>
                       </div>
-                      <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} type="time" className="form-control" placeholder="Hora del suceso (24hrs)" id="timeHoraSuceso" name="timeHoraSuceso" value={this.state.timeHoraSuceso} ref={timeHoraSuceso=>this.inputTimeHoraSuceso = timeHoraSuceso}/> 
-                        
-                      </div>
 
-                      <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" placeholder="Fecha del suceso" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
-                        
-                      </div>
+                      {/* <div className="form-group mb-3"> */}
+                        <div className="row mb-3 align-items-center">
+                          <div className="col">
+                            <small>Hora del suceso:</small>
+                          </div>
+                          <div className="col">
+                            <input onChange={this.handlerOnChange} type="time" className="form-control" placeholder="Hora del suceso (24hrs)" id="timeHoraSuceso" name="timeHoraSuceso" value={this.state.timeHoraSuceso} ref={timeHoraSuceso=>this.inputTimeHoraSuceso = timeHoraSuceso}/>
+                          </div>
+                        </div>
+                      {/* </div> */}
+
+                      {/* <div className="form-group mb-3"> */}
+                        <div className="row mb-3 align-items-center">
+                          <div className="col">
+                            <small>Fecha del suceso:</small>
+                          </div>
+                          <div className="col">
+                            <input onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" placeholder="Fecha del suceso" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
+                          </div>
+                        </div>
+                      {/* </div> */}
                       
                       <div className="form-group mb-3">
                         <input onChange={this.handlerOnChange} id="txtCalle" name="txtCalle" value={this.state.txtCalle} type="text" className="form-control" placeholder="Calle" ref={txtCalle=>this.inputTxtCalle = txtCalle} />
@@ -1587,10 +1599,10 @@ export default class Contact extends Component {
 
                     </div>
                   </div>
-                  <div className="row mb-3">
-                    <div className="col-md-12" style={{display: "flex", justifyContent: "flex-end"}}>
-                      <button className="btn btn-outline-dark mr-3" onClick={this.anterior.bind(this)} style={{marginLeft: "10px"}}>ANTERIOR</button>
-                      <button className="btn btn-dark mr-3" onClick={this.siguiente.bind(this)} style={{marginLeft: "10px"}} type="submit">FINALIZAR</button>
+                  <div className="row">
+                    <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                      <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
+                      <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
                     </div>
                   </div>
                 </div>
