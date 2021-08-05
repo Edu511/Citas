@@ -201,7 +201,7 @@ export default class Contact extends Component {
         raPersona: 'Anonimo',
         selClasPersona: this.inputSelClasPersona.value,
         txtRFC: 'Anonimo',
-        txtRazonSocial: 'Anonimo',          
+        txtRazonSocial: 'Anonimo',
         txtNombre : 'Anonimo',
         txtApPaterno : 'Anonimo',
         txtApMaterno : 'Anonimo',
@@ -515,12 +515,12 @@ export default class Contact extends Component {
   render() {
     return (
 
-      <div className='mensaje pt-5' style={{backgroundColor: "#f4f4f4"}}>
+      <div className='d-flex justify-content-md-end' style={{backgroundColor: "#f4f4f4", minHeight: "100vh"}}>
 
         <form onSubmit={this.enviar.bind(this)} style={{display: "flex", flexDirection: "column", width: "100%", height: "100%"}}>
               
             {(this.state.step === 1 || this.state.step === 4)  && 
-              <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
+              <div className="container-fluid h-100 py-4 px-3" style={{backgroundColor: "#f4f4f4"}}>
                 <div className="row">
                   <div className="col-md-6">
                     {/* Lado izquierdo Azul */}
@@ -689,10 +689,7 @@ export default class Contact extends Component {
             }
 
           {(this.state.step === 2 || this.state.step === 4) && 
-            <div
-              className="container-fluid h-100 pt-5 px-3"
-              style={{ backgroundColor: "#f4f4f4" }}
-            >
+            <div className="container-fluid h-100 pt-5 px-3"style={{ backgroundColor: "#f4f4f4" }}>
               <div className="row mb-5">
                 {/* Lado izquiero */}
                 <div className="col-md-6">
@@ -1829,9 +1826,9 @@ export default class Contact extends Component {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                    <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                       <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
-                      <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
+                      <button className="btn btn-dark" onClick={this.enviar.bind(this)} style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
                     </div>
                   </div>
                 </div>
