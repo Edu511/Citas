@@ -100,13 +100,40 @@ export default class Contact extends Component {
     });
   }
 
+
+  onFileChange = (event) => {
+    
+    // cambia el estado de la variable
+    this.setState({ fileDocumento: event.target.files[0] }, () => {
+      // manda a consola detalles del archivo
+      console.log(this.state.fileDocumento);
+    });
+
+  
+  }
+
+  recargar = () => {
+    this.setState({
+      step: 1,
+      // step: parseInt(this.state.step) = 1,
+    });
+    document.location.reload();
+  }
+
+  //Limitar la longitud de caracteres
+  maxLengthCheck = (object) => {
+    if (object.target.value.length > object.target.maxLength) {
+     object.target.value = object.target.value.slice(0, object.target.maxLength)
+      }
+    }
+
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault();
 
     // console.log("Datos enviados correctamente")
     
-    if(this.state.swAnonimo){
+    if(this.state.swAnonimo && this.state.txtNumEdad >= 18){
       const parametrosAnonimo = {
         swAnonimo: true,
         raPersona: 'Anonimo',
@@ -117,7 +144,7 @@ export default class Contact extends Component {
         txtApPaterno : 'Anonimo',
         txtApMaterno : 'Anonimo',
         txtAlias : 'Anonimo',
-        txtNumEdad : this.inputTxttxtNumEdad.value,
+        txtNumEdad : this.inputTxtNumEdad.value,
         selSexo : this.inputSelSexo.value,
         selEntidadFederativa : 'Anonimo',
         selIdentificacion: 'Anonimo',
@@ -180,9 +207,10 @@ export default class Contact extends Component {
         // parametrosAnonimo.txtLongitud
         )
         {
-          firebase.database().ref("pruebaCentenario").push(parametrosAnonimo).then(()=>
+          firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
+            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -190,6 +218,9 @@ export default class Contact extends Component {
           })
         }else{
           alert("Por favor llene su formulario")
+          this.setState({
+            step: 1,
+          });
           console.log(parametrosAnonimo + "Parametros Anonimos")
         }
       
@@ -269,9 +300,10 @@ export default class Contact extends Component {
         // parametrosProtegidos.txtLongitud
         )
         {
-          firebase.database().ref("pruebaCentenario").push(parametrosProtegidos).then(()=>
+          firebase.database().ref("pruebaCentAnonimo").push(parametrosProtegidos).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
+            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -279,6 +311,9 @@ export default class Contact extends Component {
           })
         }else{
           alert("Por favor llene su formulario")
+          this.setState({
+            step: 1,
+          });
           console.log(parametrosProtegidos + "Parametros Protegidos")
         }
       
@@ -296,7 +331,7 @@ export default class Contact extends Component {
         txtApPaterno: this.inputTxtApPaterno.value,
         txtApMaterno: this.inputTxtApMaterno.value,
         txtAlias: this.inputTxtAlias.value,
-        txtNumEdad: this.inputTxttxtNumEdad.value,
+        txtNumEdad: this.inputTxtNumEdad.value,
         selSexo: this.inputSelSexo.value,
         selEntidadFederativa: this.inputSelEntidadFederativa.value,
         selIdentificacion: this.inputSelClasPersona.value,
@@ -382,6 +417,7 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
+            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -389,6 +425,9 @@ export default class Contact extends Component {
           })
         }else{
           alert("Por favor llene su formulario")
+          this.setState({
+            step: 1,
+          });
           console.log(parametrosFisica + "Parametros Fisica")
         }
     } 
@@ -472,6 +511,7 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
+            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -479,32 +519,15 @@ export default class Contact extends Component {
           })
         }else{
           alert("Por favor llene su formulario")
+          this.setState({
+            step: 1,
+          });
           console.log(parametrosMoral + "Parametros Moral")
         }
     }
   }
 
-  onFileChange = (event) => {
-    
-    // cambia el estado de la variable
-    this.setState({ fileDocumento: event.target.files[0] }, () => {
-      // manda a consola detalles del archivo
-      console.log(this.state.fileDocumento);
-    });
-
-  
-  }
-
-  //Limitar la longitud de caracteres
-  maxLengthCheck = (object) => {
-    if (object.target.value.length > object.target.maxLength) {
-     object.target.value = object.target.value.slice(0, object.target.maxLength)
-      }
-    }
-
-
   // Información del archiv subido cuando es cargado
-
   handlerOnChange = (e) => {
     const state = this.state;
     state[e.target.name] = e.target.value;
@@ -546,7 +569,7 @@ export default class Contact extends Component {
 
                       <div className="form-group mb-3">
                         {/* Select Clasificacion de Persona*/}
-                        <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
+                        <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" required value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
                           <option value="defaultClasificacionPersona" >Clasificacion de Persona</option>
                           <option value="Denunciante">Denunciante</option>
                           <option value="Inputado">Inputado</option>
@@ -557,37 +580,38 @@ export default class Contact extends Component {
                       </div>                      
 
                       <div className="form-group mb-3">
-                        {/* <span>RFC</span> */}
+                        {/* RFC */}
                         <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
                       </div>
 
                       <div className="form-group mb-3">
-                        {/* <span>Razon Social</span> */}
+                        {/* Razon Social */}
                         <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
                       </div>
 
                       <div className="form-group mb-3">
-                        {/* <span>Nombre</span> */}
+                        {/* Nombre */}
                         <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
                       </div>
 
                       <div className="form-group mb-3">
-                        {/* <span>Apellido Paterno</span> */}
+                        {/* Apellido Paterno */}
                         <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control"  placeholder="Apellido Paterno" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
                       </div>
                       
                       <div className="form-group mb-3">
-                        {/* <span>Apellido Materno</span> */}
+                        {/* Apellido Materno*/}
                         <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" placeholder="Apellido Materno" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
                       </div>
 
                       <div className="form-group mb-3">
-                        {/* <span>Alias</span> */}
+                        {/* Alias */}
                         <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxttxtNumEdad = txtNumEdad} />
+                        {/* Edad */}
+                        <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} onInput={this.maxLengthCheck} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxtNumEdad = txtNumEdad} />
                       </div>
 
                       {/* <div className="form-group mb-3 w-100">
@@ -689,10 +713,7 @@ export default class Contact extends Component {
             }
 
           {(this.state.step === 2 || this.state.step === 4) && 
-            <div
-              className="container-fluid h-100 pt-5 px-3"
-              style={{ backgroundColor: "#f4f4f4" }}
-            >
+            <div className="container-fluid h-100 pt-5 px-3" style={{ backgroundColor: "#f4f4f4" }} >
               <div className="row mb-5">
                 {/* Lado izquiero */}
                 <div className="col-md-6">
@@ -1831,7 +1852,7 @@ export default class Contact extends Component {
                   <div className="row">
                     <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                       <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
-                      <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}} type="submit">FINALIZAR</button>
+                      <button className="btn btn-dark"  style={{marginTop: "10px"}} type="submit">ENVIAR</button>
                     </div>
                   </div>
                 </div>
@@ -1841,7 +1862,20 @@ export default class Contact extends Component {
               (this.state.step === 4 || this.state.step === 4) && 
                 <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
                   <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
+                      <div className="card mb-5">
+                        <div className="card-body text-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="mw-25 text-success" viewBox="0 0 20 20" fill="currentColor" style={{width: '150px'}}>
+                              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <h5 className="card-title">Finalizado</h5>
+                          <h6 className="card-subtitle mb-2 text-muted">Se ha enviado el formulario con éxito</h6>
+                          <p className="card-text">
+                            En la brevedad, recibirá un correo electrónico con su numero de cita y formato de solicitud de denuncia
+                          </p>
+                          <a className="btn btn-dark" onClick={this.recargar.bind(this)}>FINALIZAR</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
