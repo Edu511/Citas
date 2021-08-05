@@ -8,6 +8,9 @@ import Edit from './components/citas/Edit'
 import Contact from './components/contact/Contact'
 import Msg from './components/contact/Msg'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useForm } from "react-hook-form";
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 
 function App (props) {

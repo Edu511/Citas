@@ -72,6 +72,7 @@ export default class Contact extends Component {
       step: parseInt(this.state.step) + 1,
     });
   };
+
   anterior() {
     this.setState({
       step: parseInt(this.state.step) - 1,
@@ -227,8 +228,7 @@ export default class Contact extends Component {
     // axios.post("api/uploadfile", formData); 
   }
 
-  // File content to be displayed after
-  // file upload is complete
+  // Información del archiv subido cuando es cargado
   fileData = () => {
     if (this.state.fileDocumento) {
       return (
