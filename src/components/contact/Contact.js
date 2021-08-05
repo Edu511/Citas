@@ -124,7 +124,7 @@ export default class Contact extends Component {
         selEntidadFederativa : 'Anonimo',
         selIdentificacion: 'Anonimo',
         txtCurp: 'XXXX010101XXXXXXX1',
-        selNotificacion: this.inputSelNotificacion.value,
+        selNotificacion: 'Correo Electronico',
         txtnumTel1 : 'Anonimo',
         txtnumTel2 : 'Anonimo',
         emailCorreo: this.inputEmailCorreo.value,
@@ -212,7 +212,7 @@ export default class Contact extends Component {
         selEntidadFederativa : 'Anonimo',
         selIdentificacion: 'Anonimo',
         txtCurp: 'XXXX010101XXXXXXX1',
-        selNotificacion: this.inputSelNotificacion.value,
+        selNotificacion: 'Correo Electronico',
         txtnumTel1 : 'Anonimo',
         txtnumTel2 : 'Anonimo',
         emailCorreo: this.inputEmailCorreo.value,
@@ -650,7 +650,7 @@ export default class Contact extends Component {
                       <div className="form-group mb-3">
                         <div className="mb-3 w-100">
                           {/* <span>CURP</span> */}
-                          <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
+                          <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" maxLength="18"  placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                         </div>
                       </div>
                       
@@ -674,7 +674,7 @@ export default class Contact extends Component {
                 {/* Lado izquiero */}
                 <div className="col-md-6">
                   <div className="form-group mb-3">
-                    <select onChange={this.handlerOnChange} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
                       <option value="defaultMedioNotificacion" >Medio de notificacion</option>
                       <option value="Correo Electronico">Correo Electronico</option>
                       <option value="Domicilio" disabled={this.state.swAnonimo === true}>Domicilio</option>
@@ -1258,11 +1258,11 @@ export default class Contact extends Component {
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" className="form-control" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
+                        <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
                       </div>
 
                       <div className="form-group mb-3">
-                        <input onChange={this.handlerOnChange} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} type="number" className="form-control" placeholder="Numero exterior" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
+                        <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} maxLength="5" type="number" className="form-control" placeholder="Numero exterior" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
                       </div>
                       
                       <div className="form-group mb-3">
