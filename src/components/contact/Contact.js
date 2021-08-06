@@ -275,33 +275,33 @@ export default class Contact extends Component {
     if(this.state.txtNumEdad < 18 && this.state.raPersona === "Fisica"){
       const parametrosProtegidos = {
         swAnonimo: true,
-        raPersona: ' ',
+        raPersona: 'Anonimo',
         selClasPersona: this.state.selClasPersona,
-        txtRFC: ' ',
-        txtRazonSocial: ' ',          
-        txtNombre : ' ',
-        txtApPaterno : ' ',
-        txtApMaterno : ' ',
-        txtAlias : ' ',
-        txtNumEdad : ' ',
-        selSexo : this.state.inputSelSexo,
-        selEntidadFederativa : ' ',
-        selIdentificacion: ' ',
+        txtRFC: 'Anonimo',
+        txtRazonSocial: 'Anonimo',          
+        txtNombre : 'Anonimo',
+        txtApPaterno : 'Anonimo',
+        txtApMaterno : 'Anonimo',
+        txtAlias : 'Anonimo',
+        txtNumEdad : 'Anonimo',
+        selSexo : this.state.selSexo,
+        selEntidadFederativa : 'Anonimo',
+        selIdentificacion: 'Anonimo',
         txtCurp: 'XXXX010101XXXXXXX1',
         selNotificacion: 'Correo Electronico',
-        txtnumTel1 : ' ',
-        txtnumTel2 : ' ',
+        txtnumTel1 : 'Anonimo',
+        txtnumTel2 : 'Anonimo',
         emailCorreo: this.state.emailCorreo,
-        txtNacionalidad : ' ',
-        selEstadoCivil : ' ',
-        selOcupacion : ' ',
-        selNivelEstudios : ' ',
-        selLengua : ' ',
-        selReligion : ' ',
+        txtNacionalidad : 'Anonimo',
+        selEstadoCivil : 'Anonimo',
+        selOcupacion : 'Anonimo',
+        selNivelEstudios : 'Anonimo',
+        selLengua : 'Anonimo',
+        selReligion : 'Anonimo',
         swLGBT : false,
-        selLGBT : ' ',
+        selLGBT : 'Anonimo',
         swDiscapacidad : false,
-        selDiscapacidad : ' ',
+        selDiscapacidad : 'Anonimo',
         selTipoDelito : this.state.selTipoDelito,
         timeHoraSuceso : this.state.timeHoraSuceso,
         dateFSuceso : this.state.dateFSuceso,
@@ -631,15 +631,15 @@ export default class Contact extends Component {
                     <span hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>
                       <small className="text-danger">* Requerido</small>
                     </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                    <div className="form-group mb-3" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>
+                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false}  onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
                     </div>
 
                     {/* Razon social */}
                     <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Fisica"}>
                       <small className="text-danger">* Requerido</small>
                     </span>
-                    <div className="form-group mb-3">
+                    <div className="form-group mb-3" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
                       <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
                     </div>
 
@@ -838,7 +838,7 @@ export default class Contact extends Component {
                   </div>
                   
                   {/* nacionalidad */}
-                  <span hidden={ this.state.swAnonimo === true }>
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
                     <small className="text-danger">* Requerido</small>
                   </span>
                   <div className="form-group mb-3">
@@ -846,7 +846,7 @@ export default class Contact extends Component {
                   </div>
 
                   {/* Estado civil */}
-                  <span hidden={ this.state.swAnonimo === true }>
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
                     <small className="text-danger">* Requerido</small>
                   </span>
                   <div className="form-group mb-3">
@@ -872,7 +872,7 @@ export default class Contact extends Component {
                     <small className="text-danger">* Requerido</small>
                   </span>
                   <div className="form-group mb-3">                    
-                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true || this.state.raPersona === "Moral"} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="defaultOcupacion" >Ocupacion</option>
                       <option value="Abogado">Abogado</option>
                       <option value="Actor, Actriz, Director de Espectáculos">
@@ -1105,7 +1105,7 @@ export default class Contact extends Component {
                   </div>
 
                   {/* Nivel de estudios */}
-                  <span hidden={ this.state.swAnonimo === true}>
+                  <span hidden={ this.state.swAnonimo === true  || this.state.raPersona === "Moral"}>
                     <small className="text-danger">* Requerido</small>
                   </span>
                   <div className="form-group mb-3">
@@ -1160,7 +1160,7 @@ export default class Contact extends Component {
 
                   {/* Lengua */}
                   <div className="form-group mb-3">
-                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true || this.state.raPersona === "Moral"} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
                       <option value="defaultLengua" >Lengua</option>
                       <option value="Akateko">Akateko</option>
                       <option value="Amuzgo">Amuzgo</option>
