@@ -210,7 +210,6 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
-            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -303,7 +302,6 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentAnonimo").push(parametrosProtegidos).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
-            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -417,7 +415,6 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
-            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
@@ -511,7 +508,6 @@ export default class Contact extends Component {
           firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
           {
             alert("Sus datos han sido enviados correctamente")
-            this.history.push("/mensaje")
           }).catch((e)=>
           {
             console.log(e);
