@@ -177,7 +177,7 @@ export default class Contact extends Component {
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault();
-    
+    this.validateEmail();    
     // si los datos que se vana enviar son anonimos
     if(this.state.swAnonimo){
       const parametrosAnonimo = {
@@ -275,7 +275,7 @@ export default class Contact extends Component {
     if(this.state.txtNumEdad < 18 && this.state.raPersona === "Fisica"){
       const parametrosProtegidos = {
         swAnonimo: true,
-        raPersona: ' ',
+        raPersona: 'Física',
         selClasPersona: this.state.selClasPersona,
         txtRFC: ' ',
         txtRazonSocial: ' ',          
@@ -284,7 +284,7 @@ export default class Contact extends Component {
         txtApMaterno : ' ',
         txtAlias : ' ',
         txtNumEdad : ' ',
-        selSexo : this.state.inputSelSexo,
+        selSexo : this.state.selSexo,
         selEntidadFederativa : ' ',
         selIdentificacion: ' ',
         txtCurp: 'XXXX010101XXXXXXX1',
@@ -322,7 +322,7 @@ export default class Contact extends Component {
 
       console.log(parametrosProtegidos)
   
-      if(parametrosProtegidos.swAnonimo &&
+      if(
         parametrosProtegidos.selClasPersona &&
         parametrosProtegidos.txtNumEdad &&
         parametrosProtegidos.selSexo &&
@@ -523,8 +523,9 @@ export default class Contact extends Component {
 
       if(
         parametrosMoral.raPersona &&
+        parametrosMoral.txtRFC &&
+        parametrosMoral.txtRazonSocial &&
         parametrosMoral.selClasPersona &&
-        parametrosMoral.fileDocumento &&
         parametrosMoral.selNotificacion &&
         parametrosMoral.txtnumTel1 &&
         parametrosMoral.emailCorreo &&
@@ -568,9 +569,7 @@ export default class Contact extends Component {
   handlerOnChange = (e) => {
     const state = this.state;
     state[e.target.name] = e.target.value;
-    this.setState({ state });
-    this.validateEmail();
-    
+    this.setState({ state });    
   };
 
   render() {
@@ -1600,14 +1599,14 @@ export default class Contact extends Component {
                   </div>
                   
                   {/* Numero Interior */}
-                  <span>
-                    <small className="text-danger">* Requerido</small>
-                  </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
                   </div>
 
                   {/* numero exterior */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     <input required onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} maxLength="5" type="number" className="form-control" placeholder="Numero exterior" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
                   </div>
