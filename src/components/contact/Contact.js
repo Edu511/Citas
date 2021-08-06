@@ -167,11 +167,7 @@ export default class Contact extends Component {
   // funcion para validar correo
   validateEmail = () => {
     if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(this.state.emailCorreo)) { 
-      this.setState({
-        emailCorreo: this.state.emailCorreo
-      }, () => {
-        console.log('correo autorizado para pasar')
-      })
+      console.log('correo autorizado para pasar')
     } else {
       alert('Por favor introduzca un correo válido')
     }
@@ -256,10 +252,10 @@ export default class Contact extends Component {
         {
           firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
           {
-            alert("Sus datos han sido enviados correctamente");
-            // this.setState({
-            //   step: 4,
-            // });
+            // alert("Sus datos han sido enviados correctamente");
+            this.setState({
+              step: 4,
+            });
           }).catch((e)=>
           {
             console.log(e);
@@ -349,10 +345,10 @@ export default class Contact extends Component {
         {
           firebase.database().ref("pruebaCentAnonimo").push(parametrosProtegidos).then(()=>
           {
-            alert("Sus datos han sido enviados correctamente");
-            // this.setState({
-            //   step: 4,
-            // });
+            // alert("Sus datos han sido enviados correctamente");
+            this.setState({
+              step: 4,
+            });
 
           }).catch((e)=>
           {
@@ -364,7 +360,6 @@ export default class Contact extends Component {
           this.setState({
             step: 1,
           });
-          console.log(parametrosProtegidos + "Parametros Protegidos")
         }
       
     }
@@ -457,10 +452,10 @@ export default class Contact extends Component {
         {
           firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
-            alert("Sus datos han sido enviados correctamente");
-            // this.setState({
-            //   step: 4,
-            // });
+            // alert("Sus datos han sido enviados correctamente");
+            this.setState({
+              step: 4,
+            });
           }).catch((e)=>
           {
             console.log(e);
@@ -471,7 +466,6 @@ export default class Contact extends Component {
           this.setState({
             step: 1,
           });
-          console.log(parametrosFisica)
         }
     } 
     
@@ -551,10 +545,10 @@ export default class Contact extends Component {
         {
           firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
           {
-            alert("Sus datos han sido enviados correctamente");
-            // this.setState({
-            //   step: 4,
-            // });
+            // alert("Sus datos han sido enviados correctamente");
+            this.setState({
+              step: 4,
+            });
           }).catch((e)=>
           {
             console.log(e);
@@ -565,7 +559,6 @@ export default class Contact extends Component {
           this.setState({
             step: 1,
           });
-          console.log(parametrosMoral + "Parametros Moral")
         }
     }
   }
@@ -575,7 +568,7 @@ export default class Contact extends Component {
     const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState({ state });
-    // this.validateEmail();S
+    this.validateEmail();
     
   };
 
@@ -590,8 +583,18 @@ export default class Contact extends Component {
           {(this.state.step === 1 )  && 
             <div className="container-fluid h-100 pt-5 px-3" style={{backgroundColor: "#f4f4f4"}}>
               <div className="row">
+                <div className="col">
+                  <h3>Datos generales</h3>
+                </div>
+              </div>
+              <div className="row">
                 <div className="col-md-6">
                   {/* Lado izquierdo Azul */}
+                  <div className="form-group mb-3">
+                      <label>
+                        <small>Los campos marcados con * son obligatorios. Por favor, llenelos correctamente.</small>
+                      </label>
+                    </div>
                     <div className="form-group mb-3">
                       <label>
                         <input onChange={this.checkAnonimo.bind(this)} checked={this.state.swAnonimo === true} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
@@ -612,6 +615,9 @@ export default class Contact extends Component {
                       </label>
                     </div>
 
+                    <span>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       {/* Select Clasificacion de Persona*/}
                       <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
@@ -624,36 +630,55 @@ export default class Contact extends Component {
                       </select>
                     </div>                      
 
+                    {/* RFC */}
+                    <span hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
-                      {/* <span>RFC</span> */}
                       <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
                     </div>
 
+                    {/* Razon social */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Fisica"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
-                      {/* <span>Razon Social</span> */}
                       <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
                     </div>
 
+                    {/* Nombre */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
-                      {/* <span>Nombre</span> */}
                       <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
                     </div>
 
+                    {/* Apellido parterno */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
-                      {/* <span>Apellido Paterno</span> */}
                       <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control"  placeholder="Apellido Paterno" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
                     </div>
                     
+                    {/* Apellido materno */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
-                      {/* <span>Apellido Materno</span> */}
                       <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" placeholder="Apellido Materno" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
                     </div>
 
+                    {/* Alias */}
                     <div className="form-group mb-3">
-                      {/* <span>Alias</span> */}
                       <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                     </div>
 
+                    {/* Edad */}
+                    <span hidden={ this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxtNumEdad = txtNumEdad} />
                     </div>
@@ -669,6 +694,10 @@ export default class Contact extends Component {
                       </div>
                     </div> */}
 
+                    {/* Sexo */}
+                    <span hidden={ this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       {/* Select Sexo*/}
                       <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
@@ -680,6 +709,10 @@ export default class Contact extends Component {
               </div>
               <div className="col-md-6">
                 {/* Lado derecho Azull */}
+                    {/* entidad de nacimiento */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
                         <option value="defaultEntidadFederativa" >Entidad Federativa de Nacimiento</option>
@@ -718,6 +751,9 @@ export default class Contact extends Component {
                       </select>
                     </div>
 
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       {/* Select Documento de Identificacion*/}
                       <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
@@ -734,20 +770,26 @@ export default class Contact extends Component {
                       </select>
                     </div>
                     
+                    {/* documento de identificacion */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       <input type="file" accept="image/*" onChange={this.cargarDocumento.bind(this)} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
                     </div>
 
+                    {/* CURP */}
+                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="form-group mb-3">
                       <div className="mb-3 w-100">
-                        {/* <span>CURP</span> */}
                         <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                       </div>
-                    </div>
-                    
-                                          
+                    </div>         
                 </div>                
               </div>
+              
               <div className="row">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                   <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
@@ -761,6 +803,9 @@ export default class Contact extends Component {
               <div className="row mb-5">
                 {/* Lado izquiero */}
                 <div className="col-md-6">
+                  <span hidden={ this.state.swAnonimo === true}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
                       <option value="defaultMedioNotificacion" >Medio de notificacion</option>
@@ -769,25 +814,40 @@ export default class Contact extends Component {
                       <option value="Telefono" disabled={this.state.swAnonimo === true}>Telefono</option>
                     </select>
                   </div>
-
+                  
+                  {/* telefono 1 */}
+                  <span hidden={ this.state.swAnonimo === true }>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel1" type="number" placeholder="Telefono 1" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
                   </div>
 
+                  {/* telefono 2 */}
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel2" type="number" placeholder="Telefono 2" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
                   </div>
 
+                  {/* Correo electronico */}
+                  <span>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
-                    {this.validateEmail}
+                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="Correo electronico" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>
                   
-
+                  {/* nacionalidad */}
+                  <span hidden={ this.state.swAnonimo === true }>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-control" id="txtNacionalidad" type="text" placeholder="Nacionalidad" name="txtNacionalidad" value={this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
                   </div>
 
+                  {/* Estado civil */}
+                  <span hidden={ this.state.swAnonimo === true }>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     {/* Select Estado Civil*/}
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selEstadoCivil" name="selEstadoCivil" value={this.state.selEstadoCivil} ref={selEstadoCivil=>this.inputSelEstadoCivil = selEstadoCivil}>
@@ -806,8 +866,11 @@ export default class Contact extends Component {
 
                 {/* Lado derecho */}
                 <div className="col-md-6">
-                  <div className="form-group mb-3">
-                    {/* Select Ocupacion*/}
+                  {/* Ocupacion*/}
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
+                  <div className="form-group mb-3">                    
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="DefaultOcupacion" >Ocupacion</option>
                       <option value="Abogado">Abogado</option>
@@ -1040,6 +1103,10 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
+                  {/* Nivel de estudios */}
+                  <span hidden={ this.state.swAnonimo === true}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     {/* Select Nivel de Estudios*/}
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNivelEstudios" name="selNivelEstudios" value={this.state.selNivelEstudios} ref={selNivelEstudios=>this.inputSelNivelEstudios = selNivelEstudios}>
@@ -1090,8 +1157,8 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
+                  {/* Lengua */}
                   <div className="form-group mb-3">
-                    {/* Select Lengua*/}
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
                       <option value="defaultLengua" >Lengua</option>
                       <option value="Akateko">Akateko</option>
@@ -1175,8 +1242,8 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
+                  {/* Religion */}
                   <div className="form-group mb-3">
-                    {/* Select Religion*/}
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selReligion" name="selReligion" value={this.state.selReligion} ref={selReligion=>this.inputSelReligion = selReligion}>
                       <option value="defaultReligion" >Religión</option>
                       <option value="Cristianismo">Cristianismo</option>
@@ -1215,34 +1282,31 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
-                  {/* <div className="form-group mb-3"> */}
-                    <div className=" row mb-3 align-items-center">
-                      <div className="col">
-                        <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} onChange={this.checkLGBT.bind(this)} checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true}  ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
-                        <label className="form-label">&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
-                      </div>
-                      {/* Select LGBT*/}
-                      <div className="col">
-                        <select onChange={this.handlerOnChange} disabled={this.state.swLGBT === false} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
-                          <option value="defaultLGBT" >Seleccione...</option>
-                          <option value="Lesbiana">Lesbiana</option>
-                          <option value="Gay">Gay</option>
-                          <option value="Bisexual">Bisexual</option>
-                          <option value="Transgénero">Transgénero</option>
-                          <option value="Transexual">Transexual</option>
-                          <option value="Travesti">Travesti</option>
-                          <option value="Queer">Queer</option>
-                          <option value="Questioning">Questioning</option>
-                          <option value="Intersexual">Intersexual</option>
-                          <option value="Asexual">Asexual</option>
-                          <option value="Pansexual">Pansexual</option>
-                          <option value="Otro">Otro</option>
-                        </select>
-                      </div>
+                  {/* opcion LGTB */}
+                  <div className=" row mb-3 align-items-center">
+                    <div className="col">
+                      <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} onChange={this.checkLGBT.bind(this)} checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true}  ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
+                      <label className="form-label">&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
                     </div>
-                  {/* </div> */}
-
-                  {/* <div className="form-group mb-3"> */}
+                    {/* Select LGBT*/}
+                    <div className="col">
+                      <select onChange={this.handlerOnChange} disabled={this.state.swLGBT === false} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
+                        <option value="defaultLGBT" >Seleccione...</option>
+                        <option value="Lesbiana">Lesbiana</option>
+                        <option value="Gay">Gay</option>
+                        <option value="Bisexual">Bisexual</option>
+                        <option value="Transgénero">Transgénero</option>
+                        <option value="Transexual">Transexual</option>
+                        <option value="Travesti">Travesti</option>
+                        <option value="Queer">Queer</option>
+                        <option value="Questioning">Questioning</option>
+                        <option value="Intersexual">Intersexual</option>
+                        <option value="Asexual">Asexual</option>
+                        <option value="Pansexual">Pansexual</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                    </div>
+                  </div>
                     <div className="row mb-3 align-items-center">
                       <div className="col">
                         <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} disabled={this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
@@ -1285,8 +1349,11 @@ export default class Contact extends Component {
               <div className="row">
                 {/* Lado izquierdo */}
                 <div className="col-md-6">
+                  {/* Delito */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
-                    {/* Select Delitos*/}
                     <select onChange={this.handlerOnChange} className="form-select" id="selTipoDelito" name="selTipoDelito" value={this.state.selTipoDelito} ref={selTipoDelito=>this.inputSelTipoDelito = selTipoDelito}  aria-label="Tipo de delito">
                         <option value="defaultTipoDelito" >Tipo de delito</option>
                         <option value="ABORTO">ABORTO</option>
@@ -1490,7 +1557,9 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
-                  {/* <div className="form-group mb-3"> */}
+                    <span>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                     <div className="row mb-3 align-items-center">
                       <div className="col">
                         <small>Hora del suceso:</small>
@@ -1501,37 +1570,53 @@ export default class Contact extends Component {
                     </div>
                   {/* </div> */}
 
-                  {/* <div className="form-group mb-3"> */}
-                    <div className="row mb-3 align-items-center">
-                      <div className="col">
-                        <small>Fecha del suceso:</small>
-                      </div>
-                      <div className="col">
-                        <input onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" placeholder="Fecha del suceso" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
-                      </div>
+                  {/* fecha del suceso */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="row mb-3 align-items-center">
+                    <div className="col">
+                      <small>Fecha del suceso:</small>
                     </div>
-                  {/* </div> */}
-                  
+                    <div className="col">
+                      <input onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" placeholder="Fecha del suceso" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
+                    </div>
+                  </div>
+                    <span>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} id="txtCalle" name="txtCalle" value={this.state.txtCalle} type="text" className="form-control" placeholder="Calle" ref={txtCalle=>this.inputTxtCalle = txtCalle} />
                   </div>
-
+                    {/* Numero Interior */}
+                    <span>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
                   </div>
 
+                  {/* numero exterior */}
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} maxLength="5" type="number" className="form-control" placeholder="Numero exterior" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
                   </div>
                   
+                  {/* Entre calle 1 */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} id="txtEntCalle1" name="txtEntCalle1" value={this.state.txtEntCalle1} type="text" className="form-control" placeholder="Entre calle 1" ref={txtEntCalle1=>this.inputTxtEntCalle1 = txtEntCalle1} />
                   </div>
 
+                  {/* Entre calle 2 */}
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} id="txtEntCalle2" name="txtEntCalle2" value={this.state.txtEntCalle2} type="text" className="form-control" placeholder="Entre calle 2"  ref={(txtEntCalle2) => (this.inputTxtEntCalle2 = txtEntCalle2) }/>
                   </div>
-
+                  {/* Referencias */}
+                  <span>
+                      <small className="text-danger">* Requerido</small>
+                    </span>
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} id="txtReferencias" name="txtReferencias" value={this.state.txtReferencias} type="text" className="form-control" placeholder="Referencias" ref={(txtReferencias) => (this.inputTxtReferencias = txtReferencias)} />
                   </div>
@@ -1539,17 +1624,12 @@ export default class Contact extends Component {
 
                 {/* Lado derecho */}
                 <div className="col-md-6">
+                  {/* Pais */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
-                    {/* Select Pais*/}
-                    <select
-                      onChange={this.handlerOnChange}
-                      className="form-select"
-                      id="selPais"
-                      name="selPais"
-                      value={this.state.selPais}
-                      ref={(selPais) => (this.inputSelPais = selPais)}
-                      aria-label="pais"
-                    >
+                    <select onChange={this.handlerOnChange} className="form-select" id="selPais"  name="selPais" value={this.state.selPais} ref={(selPais) => (this.inputSelPais = selPais)} aria-label="pais" >
                       <option value="defaultPais">Pais</option>
                       <option value="AF">Afganistán</option>
                       <option value="AL">Albania</option>
@@ -1692,9 +1772,7 @@ export default class Contact extends Component {
                       <option value="LI">Liechtenstein</option>
                       <option value="LT">Lituania</option>
                       <option value="LU">Luxemburgo</option>
-                      <option value="MK">
-                        Macedonia, Ex-República Yugoslava de
-                      </option>
+                      <option value="MK">Macedonia, Ex-República Yugoslava de</option>
                       <option value="MG">Madagascar</option>
                       <option value="MY">Malasia</option>
                       <option value="MW">Malawi</option>
@@ -1796,17 +1874,12 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
+                  {/* Estado */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
-                    {/* Select Estado*/}
-                    <select
-                      onChange={this.handlerOnChange}
-                      className="form-select"
-                      id="selEstado"
-                      name="selEstado"
-                      value={this.state.selEstado}
-                      ref={(selEstado) => (this.inputSelEstado = selEstado)}
-                      aria-label="estado"
-                    >
+                    <select onChange={this.handlerOnChange} className="form-select" id="selEstado" name="selEstado" value={this.state.selEstado} ref={(selEstado) => (this.inputSelEstado = selEstado)} aria-label="estado" >
                       <option value="defaultEstado">Estado</option>
                       <option value="Aguascalientes">Aguascalientes</option>
                       <option value="Baja California">Baja California</option>
@@ -1843,55 +1916,33 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
+                  {/* Municipio */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
-                    {/* Select Municipio*/}
-                    <select
-                      onChange={this.handlerOnChange}
-                      className="form-select"
-                      id="selMunicipio"
-                      name="selMunicipio"
-                      value={this.state.selMunicipio}
-                      ref={(selMunicipio) =>
-                        (this.inputSelMunicipio = selMunicipio)
-                      }
-                      aria-label="municipio"
-                    >
+                    <select onChange={this.handlerOnChange} className="form-select" id="selMunicipio" name="selMunicipio" value={this.state.selMunicipio} ref={(selMunicipio) => (this.inputSelMunicipio = selMunicipio) } aria-label="municipio" >
                       <option value="defaultMunicipio">Municipio</option>
                       <option value="Opcion 1">Opcion 1</option>
                     </select>
                   </div>
-
+                  
+                  {/* Numero Localidad */}
+                  <span>
+                      <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
-                    {/* Select Localidad*/}
-                    <select
-                      onChange={this.handlerOnChange}
-                      className="form-select"
-                      id="selLocalidad"
-                      name="selLocalidad"
-                      value={this.state.selLocalidad}
-                      ref={(selLocalidad) =>
-                        (this.inputSelLocalidad = selLocalidad)
-                      }
-                      aria-label="municipio"
-                    >
+                    <select onChange={this.handlerOnChange} className="form-select" id="selLocalidad" name="selLocalidad" ref={(selLocalidad) => (this.inputSelLocalidad = selLocalidad)} aria-label="municipio">
                       <option value="defaultLocalidad">Localidad</option>
                       <option value="Opcion 1">Opcion 1</option>
                     </select>
                   </div>
-
+                  {/* Codigo postal */}
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
                   <div className="form-group mb-3">
-                  <input
-                    onChange={this.handlerOnChange}
-                    id="txtCodPostal"
-                    type="text"
-                    className="form-control"
-                    placeholder="Codigo Postal"
-                    name="txtCodPostal"
-                    value={this.state.txtCodPostal}
-                    ref={(txtCodPostal) =>
-                      (this.inputTxtCodPostal = txtCodPostal)
-                    }
-                  />
+                  <input onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" placeholder="Codigo Postal" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
                 </div>
                 </div>
               </div>
