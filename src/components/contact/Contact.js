@@ -19,6 +19,7 @@ export default class Contact extends Component {
       txtApMaterno: '',
       txtAlias: '',
       txtNumEdad: '',
+      dateFNacimiento: '',
       selSexo: '',
       selEntidadFederativa: '',
       selIdentificacion: '',
@@ -54,6 +55,9 @@ export default class Contact extends Component {
       txtCodPostal: '',
       txtLatitud: '',
       txtLongitud: '',
+      selAgenciaAVisitar: '',
+      selHorarioCita: '',
+      dateFechaCita: '',
       file: []
     }
     this.reader = new FileReader();
@@ -120,6 +124,36 @@ export default class Contact extends Component {
 
   }
 
+  handleChange_edad = (event) => {
+    console.log("fecha: "+ event.target.value)
+    this.setState({ txtNumEdad: event.target.value })
+
+    // call calculate_age with event.target.value
+    var edad_calculada = { txtNumEdad: this.obtenerEdad(event.target.value) }
+
+    this.setState({ txtNumEdad: edad_calculada }, () => {
+      // this will have the latest this.state.age1
+      console.log("Edad asignada:", this.state.txtNumEdad);
+    })
+  }
+
+  // Obtiene la edad a partir de la fecha de nacimiento
+  obtenerEdad = (fecha_guardada) => {
+
+    var hoy = new Date();
+    var fecha_nacimiento = new Date(fecha_guardada);
+    var edad = hoy.getFullYear() - fecha_nacimiento.getFullYear();
+
+    // console.log(fecha_nacimiento);
+    var mes_actual = hoy.getMonth() - fecha_nacimiento.getMonth();
+    if (mes_actual < 0 || (mes_actual === 0 && hoy.getDate() < fecha_nacimiento.getDate())) 
+    {
+      edad--;
+    }
+
+    return edad;
+  }
+
   // refresca la vista para una nueva solicitud
   recargar = () => {
     this.setState({
@@ -167,7 +201,7 @@ export default class Contact extends Component {
 
   // funcion para validar correo
   validateEmail = () => {
-    if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(this.state.emailCorreo)) { 
+    if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.state.emailCorreo)) { 
       console.log('correo autorizado para pasar')
     } else {
       alert('Por favor introduzca un correo válido')
@@ -569,7 +603,9 @@ export default class Contact extends Component {
   handlerOnChange = (e) => {
     const state = this.state;
     state[e.target.name] = e.target.value;
-    this.setState({ state });    
+    this.setState({ state });
+    this.handleChange_edad(e);   
+    // this.validateEmail();
   };
 
   render() {
@@ -586,6 +622,8 @@ export default class Contact extends Component {
                 <div className="col mb-2">
                   <h3>Datos generales</h3>
                   <small>Los campos marcados con * son obligatorios. Por favor, llenelos correctamente.</small>
+                  <br/>
+                  <small className="text-danger">Servicio únicamente disponible para CESIS Pachuca, Tula, Tulancingo e Ixmiquilpan</small>
                 </div>
               </div>
               <div className="row">
@@ -671,24 +709,24 @@ export default class Contact extends Component {
                   <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                 </div>
 
-                {/* Edad */}
+                {/* Edad
                 <span hidden={ this.state.raPersona === "Moral"}>
                   <small className="text-danger">* Requerido</small>
                 </span>
                 <div className="form-group mb-3">
                   <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxtNumEdad = txtNumEdad} />
-                </div>
+                </div> */}
 
-                {/* <div className="form-group mb-3 w-100">
+                <div className="form-group mb-3 w-100">
                   <div className="row mb-3 align-items-center">
                     <div className="col">
                       <small>Fecha de nacimiento:</small>
                     </div>
                     <div className="col">
-                      <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                      <input onChange={this.handlerOnChange.bind(this)} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
                     </div>
                   </div>
-                </div> */}
+                </div>
 
                 {/* Sexo */}
                 <span hidden={ this.state.raPersona === "Moral"}>
@@ -799,7 +837,9 @@ export default class Contact extends Component {
               <div className="col mb-2">
                   <h3>Datos complementarios</h3>
                   <small>Los campos marcados con * son obligatorios. Por favor, llenelos correctamente.</small>
-                </div>
+                  <br/>
+                  <small className="text-danger">Servicio únicamente disponible para CESIS Pachuca, Tula, Tulancingo e Ixmiquilpan</small>
+              </div>
               <div className="row mb-5">
                 {/* Lado izquierdo */}
                 <div className="col-md-6">
@@ -1351,6 +1391,8 @@ export default class Contact extends Component {
                 <div className="col mb-2">
                   <h3>Datos de la denuncia</h3>
                   <small>Los campos marcados con * son obligatorios. Por favor, llenelos correctamente.</small>
+                  <br/>
+                  <small className="text-danger">Servicio únicamente disponible para CESIS Pachuca, Tula, Tulancingo e Ixmiquilpan</small>
                 </div>
               </div>
               <div className="row">
@@ -1953,8 +1995,46 @@ export default class Contact extends Component {
                     <small className="text-danger">* Requerido</small>
                   </span>
                   <div className="form-group mb-3">
-                  <input required onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" placeholder="Codigo Postal" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
-                </div>
+                    <input required onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" placeholder="Codigo Postal" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
+                  </div>
+                
+                  {/* Agencia para cita */}
+                  <small>Agencia a visitar*:</small>
+                  <div className="form-group mb-3 align-items-center">
+                      <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
+                        <option value="">Seleccione</option>
+                        <option value="Opcion 1">CESIS Pachuca</option>
+                        <option value="Opcion 1">CESIS Tula</option>
+                        <option value="Opcion 1">CESIS Tulancingo</option>
+                        <option value="Opcion 1">CESIS Ixmiquilpan</option>
+                      </select>
+                 </div>
+
+                  {/* fecha de visita */}
+                  <div className="row mb-3 align-items-center">
+                    <div className="col">
+                      <small>Fecha para cita*:</small>
+                    </div>
+                    <div className="col">
+                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita" className="form-control" placeholder="Fecha del suceso" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} />
+                    </div>
+                  </div>
+
+                  {/* hora de visita */}
+                  <div className="row mb-3 align-items-center">
+                    <div className="col">
+                      <small>Horario para cita*:</small>
+                    </div>
+                    <div className="col">
+                      <select required onChange={this.handlerOnChange} className="form-select" id="selHorarioCita" name="selHorarioCita" value={this.state.selHorarioCita} ref={(selHorarioCita) => (this.inputSelHorarioCita = selHorarioCita) } aria-label="municipio" >
+                        <option value="">Seleccione</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="row">
