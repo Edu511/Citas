@@ -38,7 +38,7 @@ export default class Contact extends Component {
       selLGBT: '',
       swDiscapacidad: false,
       selDiscapacidad: '',
-      selTipoDelito: '',
+      txtDescHechos: '',
       timeHoraSuceso: '',
       dateFSuceso: '',
       txtCalle: '',
@@ -85,7 +85,6 @@ export default class Contact extends Component {
     this.setState({
       swLGBT: !this.state.swLGBT
     })
-
   }
 
   // habilita las opciones al seleccionar discapacidad
@@ -108,7 +107,6 @@ export default class Contact extends Component {
       step: parseInt(this.state.step) - 1,
     });
   }
-
 
   onFileChange = (event) => {
     
@@ -181,147 +179,175 @@ export default class Contact extends Component {
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault();
-    this.validateEmail();    
-    // si los datos que se vana enviar son anonimos
-    if(this.state.swAnonimo){
-      const parametrosAnonimo = {
-        swAnonimo: true,
-        raPersona: ' ',
-        selClasPersona: this.state.selClasPersona,
-        txtRFC: ' ',
-        txtRazonSocial: ' ',          
-        txtNombre : ' ',
-        txtApPaterno : ' ',
-        txtApMaterno : ' ',
-        txtAlias : ' ',
-        txtNumEdad : this.state.txtNumEdad,
-        selSexo : this.state.selSexo,
-        selEntidadFederativa : ' ',
-        selIdentificacion: ' ',
-        txtCurp: 'XXXX010101XXXXXXX1',
-        selNotificacion: 'Correo Electronico',
-        txtnumTel1 : ' ',
-        txtnumTel2 : ' ',
-        emailCorreo: this.state.emailCorreo,
-        txtNacionalidad : ' ',
-        selEstadoCivil : ' ',
-        selOcupacion : ' ',
-        selNivelEstudios : ' ',
-        selLengua : ' ',
-        selReligion : ' ',
-        swLGBT : false,
-        selLGBT : ' ',
-        swDiscapacidad : false,
-        selDiscapacidad : ' ',
-        selTipoDelito : this.state.selTipoDelito,
-        timeHoraSuceso : this.state.timeHoraSuceso,
-        dateFSuceso : this.state.dateFSuceso,
-        txtCalle : this.state.txtCalle,
-        txtNumInt : this.state.txtNumInt,
-        txtNumExt : this.state.txtNumExt,
-        txtEntCalle1 : this.state.txtEntCalle1,
-        txtEntCalle2 : this.state.txtEntCalle2,
-        txtReferencias : this.state.txtReferencias,
-        selPais : this.state.selPais,
-        selEstado : this.state.selEstado,
-        selMunicipio : this.state.selMunicipio,
-        selLocalidad : this.state.selLocalidad,
-        txtCodPostal : this.state.txtCodPostal,
-        // txtLatitud : this.state.txtLatitud,
-        // txtLongitud : this.state.txtLongitud
-      }
-
-      console.log(parametrosAnonimo)
-  
-      if(
-        parametrosAnonimo.selClasPersona &&
-        parametrosAnonimo.txtNumEdad &&
-        parametrosAnonimo.selSexo &&
-        parametrosAnonimo.selNotificacion &&
-        parametrosAnonimo.emailCorreo &&
-        parametrosAnonimo.selTipoDelito &&
-        parametrosAnonimo.timeHoraSuceso &&
-        parametrosAnonimo.dateFSuceso &&
-        parametrosAnonimo.txtCalle &&
-        parametrosAnonimo.txtNumExt &&
-        parametrosAnonimo.txtEntCalle1 &&
-        parametrosAnonimo.selPais &&
-        parametrosAnonimo.selEstado &&
-        parametrosAnonimo.selMunicipio &&
-        parametrosAnonimo.selLocalidad &&
-        parametrosAnonimo.txtCodPostal 
-        // parametrosAnonimo.txtLatitud &&
-        // parametrosAnonimo.txtLongitud
-        )
-        {
-          firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
+    var response = this.validateEmail();    
+    if(response !== true){
+      this.setState({
+        step: 2,
+      });
+    } else {
+      // si los datos que se vana enviar son anonimos
+      if(this.state.swAnonimo){
+        const parametrosAnonimo = {
+          swAnonimo: true,
+          raPersona: ' ',
+          selClasPersona: this.state.selClasPersona,
+          txtRFC: ' ',
+          txtRazonSocial: ' ',          
+          txtNombre : ' ',
+          txtApPaterno : ' ',
+          txtApMaterno : ' ',
+          txtAlias : ' ',
+          txtNumEdad : this.state.txtNumEdad,
+          selSexo : this.state.selSexo,
+          selEntidadFederativa : ' ',
+          selIdentificacion: ' ',
+          txtCurp: 'XXXX010101XXXXXXX1',
+          selNotificacion: 'Correo Electronico',
+          txtnumTel1 : ' ',
+          txtnumTel2 : ' ',
+          emailCorreo: this.state.emailCorreo,
+          txtNacionalidad : ' ',
+          selEstadoCivil : ' ',
+          selOcupacion : ' ',
+          selNivelEstudios : ' ',
+          selLengua : ' ',
+          selReligion : ' ',
+          swLGBT : false,
+          selLGBT : ' ',
+          swDiscapacidad : false,
+          selDiscapacidad : ' ',
+          txtDescHechos : this.state.txtDescHechos,
+          timeHoraSuceso : this.state.timeHoraSuceso,
+          dateFSuceso : this.state.dateFSuceso,
+          txtCalle : this.state.txtCalle,
+          txtNumInt : this.state.txtNumInt,
+          txtNumExt : this.state.txtNumExt,
+          txtEntCalle1 : this.state.txtEntCalle1,
+          txtEntCalle2 : this.state.txtEntCalle2,
+          txtReferencias : this.state.txtReferencias,
+          selPais : this.state.selPais,
+          selEstado : this.state.selEstado,
+          selMunicipio : this.state.selMunicipio,
+          selLocalidad : this.state.selLocalidad,
+          txtCodPostal : this.state.txtCodPostal,
+          // txtLatitud : this.state.txtLatitud,
+          // txtLongitud : this.state.txtLongitud
+        }
+    
+        if(
+          parametrosAnonimo.selClasPersona &&
+          parametrosAnonimo.txtNumEdad &&
+          parametrosAnonimo.selSexo &&
+          parametrosAnonimo.selNotificacion &&
+          parametrosAnonimo.emailCorreo &&
+          parametrosAnonimo.txtDescHechos &&
+          parametrosAnonimo.timeHoraSuceso &&
+          parametrosAnonimo.dateFSuceso &&
+          parametrosAnonimo.txtCalle &&
+          parametrosAnonimo.txtNumExt &&
+          parametrosAnonimo.selPais &&
+          parametrosAnonimo.selEstado &&
+          parametrosAnonimo.selMunicipio &&
+          parametrosAnonimo.selLocalidad &&
+          parametrosAnonimo.txtCodPostal 
+          // parametrosAnonimo.txtLatitud &&
+          // parametrosAnonimo.txtLongitud
+          )
           {
             // alert("Sus datos han sido enviados correctamente");
             this.setState({
               step: 4,
             });
-          }).catch((e)=>
+          }
+        
+      }
+
+      // si s menor a 18 años, se convierten en parametros protegidos
+      if(this.state.txtNumEdad < 18 && this.state.raPersona === "Fisica"){
+        const parametrosProtegidos = {
+          swAnonimo: true,
+          raPersona: 'Física',
+          selClasPersona: this.state.selClasPersona,
+          txtRFC: ' ',
+          txtRazonSocial: ' ',          
+          txtNombre : ' ',
+          txtApPaterno : ' ',
+          txtApMaterno : ' ',
+          txtAlias : ' ',
+          txtNumEdad : ' ',
+          selSexo : this.state.selSexo,
+          selEntidadFederativa : ' ',
+          selIdentificacion: ' ',
+          txtCurp: 'XXXX010101XXXXXXX1',
+          selNotificacion: 'Correo Electronico',
+          txtnumTel1 : 'Anonimo',
+          txtnumTel2 : 'Anonimo',
+          emailCorreo: this.state.emailCorreo,
+          txtNacionalidad : 'Anonimo',
+          selEstadoCivil : 'Anonimo',
+          selOcupacion : 'Anonimo',
+          selNivelEstudios : 'Anonimo',
+          selLengua : 'Anonimo',
+          selReligion : 'Anonimo',
+          swLGBT : false,
+          selLGBT : 'Anonimo',
+          swDiscapacidad : false,
+          selDiscapacidad : 'Anonimo',
+          txtDescHechos : this.state.txtDescHechos,
+          timeHoraSuceso : this.state.timeHoraSuceso,
+          dateFSuceso : this.state.dateFSuceso,
+          txtCalle : this.state.txtCalle,
+          txtNumInt : this.state.txtNumInt,
+          txtNumExt : this.state.txtNumExt,
+          txtEntCalle1 : this.state.txtEntCalle1,
+          txtEntCalle2 : this.state.txtEntCalle2,
+          txtReferencias : this.state.txtReferencias,
+          selPais : this.state.selPais,
+          selEstado : this.state.selEstado,
+          selMunicipio : this.state.selMunicipio,
+          selLocalidad : this.state.selLocalidad,
+          txtCodPostal : this.state.txtCodPostal,
+          // txtLatitud : this.state.txtLatitud,
+          // txtLongitud : this.state.txtLongitud
+        }
+    
+        if(
+          parametrosProtegidos.selClasPersona &&
+          parametrosProtegidos.txtNumEdad &&
+          parametrosProtegidos.selSexo &&
+          parametrosProtegidos.selNotificacion &&
+          parametrosProtegidos.emailCorreo &&
+          parametrosProtegidos.txtDescHechos &&
+          parametrosProtegidos.timeHoraSuceso &&
+          parametrosProtegidos.dateFSuceso &&
+          parametrosProtegidos.txtCalle &&
+          parametrosProtegidos.txtNumExt &&
+          parametrosProtegidos.selPais &&
+          parametrosProtegidos.selEstado &&
+          parametrosProtegidos.selMunicipio &&
+          parametrosProtegidos.selLocalidad &&
+          parametrosProtegidos.txtCodPostal
+          // parametrosProtegidos.txtLatitud &&
+          // parametrosProtegidos.txtLongitud
+          )
           {
-            console.log(e);
-            alert("Faltan campos por llenar")
-          })
-        }else{
+            firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
+            {
+              // alert("Sus datos han sido enviados correctamente");
+              this.setState({
+                step: 4,
+              });
+            }).catch((e)=>
+            {
+              console.log(e);
+              alert("Faltan campos por llenar")
+            })
+        } else {
           alert("Por favor llene su formulario")
           this.setState({
             step: 1,
           });
         }
-      
-    }
-
-    // si s menor a 18 años, se convierten en parametros protegidos
-    if(this.state.txtNumEdad < 18 && this.state.raPersona === "Fisica"){
-      const parametrosProtegidos = {
-        swAnonimo: true,
-        raPersona: 'Física',
-        selClasPersona: this.state.selClasPersona,
-        txtRFC: ' ',
-        txtRazonSocial: ' ',          
-        txtNombre : ' ',
-        txtApPaterno : ' ',
-        txtApMaterno : ' ',
-        txtAlias : ' ',
-        txtNumEdad : ' ',
-        selSexo : this.state.selSexo,
-        selEntidadFederativa : ' ',
-        selIdentificacion: ' ',
-        txtCurp: 'XXXX010101XXXXXXX1',
-        selNotificacion: 'Correo Electronico',
-        txtnumTel1 : ' ',
-        txtnumTel2 : ' ',
-        emailCorreo: this.state.emailCorreo,
-        txtNacionalidad : ' ',
-        selEstadoCivil : ' ',
-        selOcupacion : ' ',
-        selNivelEstudios : ' ',
-        selLengua : ' ',
-        selReligion : ' ',
-        swLGBT : false,
-        selLGBT : ' ',
-        swDiscapacidad : false,
-        selDiscapacidad : ' ',
-        selTipoDelito : this.state.selTipoDelito,
-        timeHoraSuceso : this.state.timeHoraSuceso,
-        dateFSuceso : this.state.dateFSuceso,
-        txtCalle : this.state.txtCalle,
-        txtNumInt : this.state.txtNumInt,
-        txtNumExt : this.state.txtNumExt,
-        txtEntCalle1 : this.state.txtEntCalle1,
-        txtEntCalle2 : this.state.txtEntCalle2,
-        txtReferencias : this.state.txtReferencias,
-        selPais : this.state.selPais,
-        selEstado : this.state.selEstado,
-        selMunicipio : this.state.selMunicipio,
-        selLocalidad : this.state.selLocalidad,
-        txtCodPostal : this.state.txtCodPostal,
-        // txtLatitud : this.state.txtLatitud,
-        // txtLongitud : this.state.txtLongitud
-      }
 
       console.log(parametrosProtegidos)
   
@@ -344,15 +370,13 @@ export default class Contact extends Component {
         parametrosProtegidos.txtCodPostal
         // parametrosProtegidos.txtLatitud &&
         // parametrosProtegidos.txtLongitud
-        )
-        {
-          firebase.database().ref("pruebaCentAnonimo").push(parametrosProtegidos).then(()=>
+        ){
+        firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
             // alert("Sus datos han sido enviados correctamente");
             this.setState({
               step: 4,
             });
-
           }).catch((e)=>
           {
             console.log(e);
@@ -364,93 +388,95 @@ export default class Contact extends Component {
             step: 1,
           });
         }
-      
-    }
+      // si son mayores de edad, pero seleccionaron persona fisica.
+      if (this.state.raPersona === 'Fisica' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18) {
+        
+        const parametrosFisica = {
+          swAnonimo: false,
+          raPersona: this.state.raPersona,
+          txtRFC: ' ',
+          txtRazonSocial: ' ',
+          selClasPersona: this.state.selClasPersona,
+          txtNombre: this.state.txtNombre,
+          txtApPaterno: this.state.txtApPaterno,
+          txtApMaterno: this.state.txtApMaterno,
+          txtAlias: this.state.txtAlias,
+          txtNumEdad: this.state.txtNumEdad,
+          selSexo: this.state.selSexo,
+          selEntidadFederativa: this.state.selEntidadFederativa,
+          selIdentificacion: this.state.selIdentificacion,
+          fileDocumento: this.state.fileDocumento,
+          txtCurp: this.state.txtCurp,
+          selNotificacion: this.state.selNotificacion,
+          txtnumTel1: this.state.txtnumTel1,
+          txtnumTel2: this.state.txtnumTel2,
+          emailCorreo: this.state.emailCorreo,
+          txtNacionalidad: this.state.txtNacionalidad,
+          selEstadoCivil: this.state.selEstadoCivil,
+          selOcupacion: this.state.selOcupacion,
+          selNivelEstudios: this.state.selNivelEstudios,
+          selLengua: this.state.selLengua,
+          selReligion: this.state.selReligion,
+          swLGBT: this.state.swLGBT,
+          selLGBT: this.state.selLGBT,
+          swDiscapacidad: this.state.swDiscapacidad,
+          selDiscapacidad: this.state.selDiscapacidad,
+          txtDescHechos: this.state.txtDescHechos,
+          timeHoraSuceso : this.state.timeHoraSuceso,
+          dateFSuceso: this.state.dateFSuceso,
+          txtCalle: this.state.txtCalle,
+          txtNumInt: this.state.txtNumInt,
+          txtNumExt: this.state.txtNumExt,
+          txtEntCalle1: this.state.txtEntCalle1,
+          txtEntCalle2: this.state.txtEntCalle2,
+          txtReferencias: this.state.txtReferencias,
+          selPais: this.state.selPais,
+          selEstado: this.state.selEstado,
+          selMunicipio: this.state.selMunicipio,
+          selLocalidad: this.state.selLocalidad,
+          txtCodPostal: this.state.txtCodPostal,
+          // txtLatitud: this.state.txtLatitud,
+          // txtLongitud: this.state.txtLongitud,
+        }
+        // if (parametrosFisica.swLGBT === false ){
+        //   parametrosFisica.selLGBT = ' '
+        // }
 
-    // si son mayores de edad, pero seleccionaron persona fisica.
-    if (this.state.raPersona === 'Fisica' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18) {
-      
-      const parametrosFisica = {
-        swAnonimo: false,
-        raPersona: this.state.raPersona,
-        txtRFC: ' ',
-        txtRazonSocial: ' ',
-        selClasPersona: this.state.selClasPersona,
-        txtNombre: this.state.txtNombre,
-        txtApPaterno: this.state.txtApPaterno,
-        txtApMaterno: this.state.txtApMaterno,
-        txtAlias: this.state.txtAlias,
-        txtNumEdad: this.state.txtNumEdad,
-        selSexo: this.state.selSexo,
-        selEntidadFederativa: this.state.selEntidadFederativa,
-        selIdentificacion: this.state.selIdentificacion,
-        fileDocumento: this.state.fileDocumento,
-        txtCurp: this.state.txtCurp,
-        selNotificacion: this.state.selNotificacion,
-        txtnumTel1: this.state.txtnumTel1,
-        txtnumTel2: this.state.txtnumTel2,
-        emailCorreo: this.state.emailCorreo,
-        txtNacionalidad: this.state.txtNacionalidad,
-        selEstadoCivil: this.state.selEstadoCivil,
-        selOcupacion: this.state.selOcupacion,
-        selNivelEstudios: this.state.selNivelEstudios,
-        selLengua: this.state.selLengua,
-        selReligion: this.state.selReligion,
-        swLGBT: this.state.swLGBT,
-        selLGBT: this.state.selLGBT,
-        swDiscapacidad: this.state.swDiscapacidad,
-        selDiscapacidad: this.state.selDiscapacidad,
-        selTipoDelito: this.state.selTipoDelito,
-        timeHoraSuceso : this.state.timeHoraSuceso,
-        dateFSuceso: this.state.dateFSuceso,
-        txtCalle: this.state.txtCalle,
-        txtNumInt: this.state.txtNumInt,
-        txtNumExt: this.state.txtNumExt,
-        txtEntCalle1: this.state.txtEntCalle1,
-        txtEntCalle2: this.state.txtEntCalle2,
-        txtReferencias: this.state.txtReferencias,
-        selPais: this.state.selPais,
-        selEstado: this.state.selEstado,
-        selMunicipio: this.state.selMunicipio,
-        selLocalidad: this.state.selLocalidad,
-        txtCodPostal: this.state.txtCodPostal,
-        // txtLatitud: this.state.txtLatitud,
-        // txtLongitud: this.state.txtLongitud,
-      }
-
-      console.log(parametrosFisica)
-  
-      if(
-        parametrosFisica.raPersona &&
-        parametrosFisica.selClasPersona &&
-        parametrosFisica.txtNombre &&
-        parametrosFisica.txtApPaterno &&
-        parametrosFisica.txtApMaterno &&
-        parametrosFisica.txtNumEdad &&
-        parametrosFisica.selSexo &&
-        parametrosFisica.selEntidadFederativa &&
-        parametrosFisica.txtCurp &&
-        parametrosFisica.selNotificacion &&
-        parametrosFisica.txtnumTel1 &&
-        parametrosFisica.emailCorreo &&
-        parametrosFisica.txtNacionalidad &&
-        parametrosFisica.selEstadoCivil &&
-        parametrosFisica.selTipoDelito &&
-        parametrosFisica.timeHoraSuceso &&
-        parametrosFisica.dateFSuceso &&
-        parametrosFisica.txtCalle &&
-        parametrosFisica.txtNumExt &&
-        parametrosFisica.txtEntCalle1 &&
-        parametrosFisica.selPais &&
-        parametrosFisica.selEstado &&
-        parametrosFisica.selMunicipio &&
-        parametrosFisica.selLocalidad &&
-        parametrosFisica.txtCodPostal 
-        // parametrosFisica.txtLatitud &&
-        // parametrosFisica.txtLongitud
-        )
-        {
-          firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
+        // if(parametrosFisica.swDiscapacidad === false){
+        //   parametrosFisica.selDiscapacidad = ' '
+        // }
+        
+        
+        if(
+          parametrosFisica.raPersona &&
+          parametrosFisica.selClasPersona &&
+          parametrosFisica.txtNombre &&
+          parametrosFisica.txtApPaterno &&
+          parametrosFisica.txtApMaterno &&
+          parametrosFisica.txtNumEdad &&
+          parametrosFisica.selSexo &&
+          parametrosFisica.selEntidadFederativa &&
+          parametrosFisica.selIdentificacion &&
+          parametrosFisica.txtCurp &&
+          parametrosFisica.selNotificacion &&
+          parametrosFisica.txtnumTel1 &&
+          parametrosFisica.emailCorreo &&
+          parametrosFisica.txtNacionalidad &&
+          parametrosFisica.selEstadoCivil &&
+          parametrosFisica.txtDescHechos &&
+          parametrosFisica.timeHoraSuceso &&
+          parametrosFisica.dateFSuceso &&
+          parametrosFisica.txtCalle &&
+          parametrosFisica.txtNumExt &&
+          parametrosFisica.selPais &&
+          parametrosFisica.selEstado &&
+          parametrosFisica.selMunicipio &&
+          parametrosFisica.selLocalidad &&
+          parametrosFisica.txtCodPostal 
+          // parametrosFisica.txtLatitud &&
+          // parametrosFisica.txtLongitud
+          ){
+            firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
             // alert("Sus datos han sido enviados correctamente");
             this.setState({
@@ -466,6 +492,58 @@ export default class Contact extends Component {
           this.setState({
             step: 1,
           });
+        }
+      } 
+      
+      // si son mayores de edad pero seleccionaron persona moral
+      if (this.state.raPersona === 'Moral' && this.state.swAnonimo === false){
+      
+        const parametrosMoral = {
+          swAnonimo: false,
+          raPersona: this.state.raPersona,
+          txtRFC: this.state.txtRFC,
+          txtRazonSocial: this.state.txtRazonSocial,
+          selClasPersona: this.state.selClasPersona,
+          txtNombre: ' ',
+          txtApPaterno: ' ',
+          txtApMaterno: ' ',
+          txtAlias: ' ',
+          txtNumEdad: ' ',
+          selSexo: ' ',
+          selEntidadFederativa: ' ',
+          selIdentificacion: ' ',
+          fileDocumento: this.state.fileDocumento,
+          txtCurp: ' ',
+          selNotificacion: this.state.selNotificacion,
+          txtnumTel1: this.state.txtnumTel1,
+          txtnumTel2: this.state.txtnumTel2,
+          emailCorreo: this.state.emailCorreo,
+          txtNacionalidad: ' ',
+          selEstadoCivil: ' ',
+          selOcupacion: ' ',
+          selNivelEstudios: ' ',
+          selLengua: ' ',
+          selReligion: ' ',
+          swLGBT: ' ',
+          selLGBT: ' ',
+          swDiscapacidad: ' ',
+          selDiscapacidad: ' ',
+          txtDescHechos: this.state.txtDescHechos,
+          timeHoraSuceso: this.state.timeHoraSuceso,
+          dateFSuceso: this.state.dateFSuceso,
+          txtCalle: this.state.txtCalle,
+          txtNumInt: this.state.txtNumInt,
+          txtNumExt: this.state.txtNumExt,
+          txtEntCalle1: this.state.txtEntCalle1,
+          txtEntCalle2: this.state.txtEntCalle2,
+          txtReferencias: this.state.txtReferencias,
+          selPais: this.state.selPais,
+          selEstado: this.state.selEstado,
+          selMunicipio: this.state.selMunicipio,
+          selLocalidad: this.state.selLocalidad,
+          txtCodPostal: this.state.txtCodPostal,
+          // txtLatitud: this.state.txtLatitud,
+          // txtLongitud: this.state.txtLongitud,
         }
     } 
     
@@ -520,30 +598,29 @@ export default class Contact extends Component {
         // txtLongitud: this.state.txtLongitud,
       }
 
-      if(
-        parametrosMoral.raPersona &&
-        parametrosMoral.txtRFC &&
-        parametrosMoral.txtRazonSocial &&
-        parametrosMoral.selClasPersona &&
-        parametrosMoral.selNotificacion &&
-        parametrosMoral.txtnumTel1 &&
-        parametrosMoral.emailCorreo &&
-        parametrosMoral.selTipoDelito &&
-        parametrosMoral.timeHoraSuceso &&
-        parametrosMoral.dateFSuceso &&
-        parametrosMoral.txtCalle &&
-        parametrosMoral.txtNumExt &&
-        parametrosMoral.txtEntCalle1 &&
-        parametrosMoral.selPais &&
-        parametrosMoral.selEstado &&
-        parametrosMoral.selMunicipio &&
-        parametrosMoral.selLocalidad &&
-        parametrosMoral.txtCodPostal 
-        // parametrosMoral.txtLatitud &&
-        // parametrosMoral.txtLongitud
-        )
-        {
-          firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
+        if(
+          parametrosMoral.raPersona &&
+          parametrosMoral.txtRFC &&
+          parametrosMoral.txtRazonSocial &&
+          parametrosMoral.selClasPersona &&
+          parametrosMoral.selNotificacion &&
+          parametrosMoral.txtnumTel1 &&
+          parametrosMoral.emailCorreo &&
+          parametrosMoral.txtDescHechos &&
+          parametrosMoral.timeHoraSuceso &&
+          parametrosMoral.dateFSuceso &&
+          parametrosMoral.txtCalle &&
+          parametrosMoral.txtNumExt &&
+          parametrosMoral.selPais &&
+          parametrosMoral.selEstado &&
+          parametrosMoral.selMunicipio &&
+          parametrosMoral.selLocalidad &&
+          parametrosMoral.txtCodPostal 
+          // parametrosMoral.txtLatitud &&
+          // parametrosMoral.txtLongitud
+          )
+          {
+            firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
           {
             // alert("Sus datos han sido enviados correctamente");
             this.setState({
@@ -560,7 +637,6 @@ export default class Contact extends Component {
             step: 1,
           });
         }
-    }
   }
 
   // Información del archivo subido cuando es cargado
@@ -572,6 +648,7 @@ export default class Contact extends Component {
   };
 
   render() {
+
     return (
 
       <div className='d-flex justify-content-md-end' style={{backgroundColor: "#f4f4f4", minHeight: "100vh"}}>
@@ -682,17 +759,6 @@ export default class Contact extends Component {
                 <div className="form-group mb-3">
                   <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxtNumEdad = txtNumEdad} />
                 </div>
-
-                {/* <div className="form-group mb-3 w-100">
-                  <div className="row mb-3 align-items-center">
-                    <div className="col">
-                      <small>Fecha de nacimiento:</small>
-                    </div>
-                    <div className="col">
-                      <input onChange={this.handlerOnChange} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
-                    </div>
-                  </div>
-                </div> */}
 
                 {/* Sexo */}
                 <span>
@@ -1263,7 +1329,7 @@ export default class Contact extends Component {
                       <option value="" >Seleccione...</option>
                       <option value="Cristianismo">Cristianismo</option>
                       <option value="Catolicismo">Catolicismo</option>
-                      <option value="Ortodoxos3">Ortodoxos</option>
+                      <option value="Ortodoxos">Ortodoxos</option>
                       <option value="Protestantismo histórico o reformado">
                         Protestantismo histórico o reformado
                       </option>
@@ -1297,11 +1363,14 @@ export default class Contact extends Component {
                     </select>
                   </div>
 
-                  {/* select LGBT */}
+                  {/* Checkbox LGBT */}
                   <div className=" row mb-3 align-items-center">
                     <div className="col">
-                      <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} onChange={this.checkLGBT.bind(this)} checked={this.state.swLGBT === true} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
-                      <label className="form-label" style={{fontSize: "14px"}}>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
+                      <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} onChange={this.checkLGBT.bind(this)} 
+                        checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true} 
+                        ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
+                      
+                      <label className="form-label" onClick={this.checkLGBT.bind(this)} style={{fontSize: "14px"}}>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
                     </div>
                     {/* Select LGBT*/}
                     <div className="col">
@@ -1323,11 +1392,12 @@ export default class Contact extends Component {
                     </div>
                   </div>
 
-                  {/* Select Discapacidad*/}
+                  {/* Checkbox Discapacidad*/}
                   <div className="row mb-3 align-items-center">
                     <div className="col">
-                      <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
-                      <label className="form-label" style={{fontSize: "14px"}}>&nbsp;¿Tiene alguna discapacidad?</label>
+                      <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} 
+                        disabled={this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
+                      <label className="form-label" onClick={this.checkDisc.bind(this)} style={{fontSize: "14px"}}>&nbsp;¿Tiene alguna discapacidad?</label>
                     </div>
                     {/* Select Discapacidad*/}
                     <div className="col">
@@ -1373,6 +1443,7 @@ export default class Contact extends Component {
               <div className="row">
                 {/* Lado izquierdo */}
                 <div className="col-md-6">
+                  
                   {/* Delito */}
                   <span>
                     <small className="text-secondary">Tipo de delito: *</small> 
@@ -1624,6 +1695,11 @@ export default class Contact extends Component {
                   <div className="form-group mb-3">
                     <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
                   </div>
+                  
+                  {/* Numero Interior */}
+                  <div className="form-group mb-3">
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control w-100" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
+                  </div>                  
                   
                   {/* Entre calle 1 */}
                   <span>
