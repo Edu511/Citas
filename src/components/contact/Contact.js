@@ -241,7 +241,6 @@ export default class Contact extends Component {
         parametrosAnonimo.txtCalle &&
         parametrosAnonimo.txtNumExt &&
         parametrosAnonimo.txtEntCalle1 &&
-        parametrosAnonimo.txtReferencias &&
         parametrosAnonimo.selPais &&
         parametrosAnonimo.selEstado &&
         parametrosAnonimo.selMunicipio &&
@@ -334,7 +333,6 @@ export default class Contact extends Component {
         parametrosProtegidos.txtCalle &&
         parametrosProtegidos.txtNumExt &&
         parametrosProtegidos.txtEntCalle1 &&
-        parametrosProtegidos.txtReferencias &&
         parametrosProtegidos.selPais &&
         parametrosProtegidos.selEstado &&
         parametrosProtegidos.selMunicipio &&
@@ -427,8 +425,6 @@ export default class Contact extends Component {
         parametrosFisica.txtNumEdad &&
         parametrosFisica.selSexo &&
         parametrosFisica.selEntidadFederativa &&
-        parametrosFisica.selIdentificacion &&
-        parametrosFisica.fileDocumento &&
         parametrosFisica.txtCurp &&
         parametrosFisica.selNotificacion &&
         parametrosFisica.txtnumTel1 &&
@@ -441,7 +437,6 @@ export default class Contact extends Component {
         parametrosFisica.txtCalle &&
         parametrosFisica.txtNumExt &&
         parametrosFisica.txtEntCalle1 &&
-        parametrosFisica.txtReferencias &&
         parametrosFisica.selPais &&
         parametrosFisica.selEstado &&
         parametrosFisica.selMunicipio &&
@@ -535,7 +530,6 @@ export default class Contact extends Component {
         parametrosMoral.txtCalle &&
         parametrosMoral.txtNumExt &&
         parametrosMoral.txtEntCalle1 &&
-        parametrosMoral.txtReferencias &&
         parametrosMoral.selPais &&
         parametrosMoral.selEstado &&
         parametrosMoral.selMunicipio &&
