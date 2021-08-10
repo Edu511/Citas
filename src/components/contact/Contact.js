@@ -249,26 +249,28 @@ export default class Contact extends Component {
       return true;
     } else {
       
-      console.log('correo autorizado: ' + this.state.emailCorreo);
-      alert('Por favor introduzca un correo válido');
+      console.log('correo no autorizado: ' + this.state.emailCorreo);
+      return false
     }
   }
-
-  // selectEmpty = (e) => {
-  //   if(this.state.swAnonimo === true)
-  // }
-
   
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault();
-    var response = this.validateEmail(); 
+    var email_validate_response = this.validateEmail(); 
 
-    if(response !== true){
-      alert('por favor, ingrese un correo válido');
-      this.setState({
-        step: 2,
-      });
+    if(email_validate_response !== true){
+      alert('Por favor, ingrese un correo válido');
+      
+      if(this.state.swAnonimo === true){
+        this.setState({
+          step: 1,
+        });
+      } else {
+        this.setState({
+          step: 2,
+        });
+      }
 
     } else {
       
@@ -285,6 +287,7 @@ export default class Contact extends Component {
           txtApMaterno : ' ',
           txtAlias : ' ',
           txtNumEdad : this.state.txtNumEdad,
+          dateFNacimiento : this.state.dateFNacimiento,
           selSexo : this.state.selSexo,
           selEntidadFederativa : ' ',
           selIdentificacion: ' ',
@@ -327,6 +330,7 @@ export default class Contact extends Component {
         if(
           parametrosAnonimo.selClasPersona &&
           parametrosAnonimo.txtNumEdad &&
+          parametrosAnonimo.dateFNacimiento &&
           parametrosAnonimo.selSexo &&
           parametrosAnonimo.selNotificacion &&
           parametrosAnonimo.emailCorreo &&
@@ -335,8 +339,6 @@ export default class Contact extends Component {
           parametrosAnonimo.dateFSuceso &&
           parametrosAnonimo.txtCalle &&
           parametrosAnonimo.txtNumExt &&
-          parametrosAnonimo.txtEntCalle1 &&
-          parametrosAnonimo.txtReferencias &&
           parametrosAnonimo.selPais &&
           parametrosAnonimo.selEstado &&
           parametrosAnonimo.selMunicipio &&
@@ -804,7 +806,7 @@ export default class Contact extends Component {
 
                   {/* Sexo */}
                   <span>
-                    <small className="text-secondary">Sexo: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                    <small className="text-secondary">Sexo: *</small> 
                   </span>
                   <div className="form-group mb-3">
                     {/* Select Sexo*/}
@@ -1505,7 +1507,7 @@ export default class Contact extends Component {
                      <small> Descripcion de los hechos </small>
                   </label>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} id="txtDescHechos" type="text" className="form-control w-100" name="txtDescHechos" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos} />
+                    <textarea onChange={this.handlerOnChange} id="txtDescHechos" rows="3" className="form-control w-100" name="txtDescHechos" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos}></textarea>
                   </div>
 
                   {/* fecha del suceso */}
