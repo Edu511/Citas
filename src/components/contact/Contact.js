@@ -19,6 +19,7 @@ export default class Contact extends Component {
       txtApMaterno: '',
       txtAlias: '',
       txtNumEdad: '',
+      dateFNacimiento: '',
       selSexo: '',
       selEntidadFederativa: '',
       selIdentificacion: '',
@@ -54,6 +55,9 @@ export default class Contact extends Component {
       txtCodPostal: '',
       txtLatitud: '',
       txtLongitud: '',
+      selAgenciaAVisitar: '',
+      selHorarioCita: '',
+      dateFechaCita: '',
       file: []
     }
     this.reader = new FileReader();
@@ -81,10 +85,27 @@ export default class Contact extends Component {
   }
 
   // habilita las opciones al seleccionar LGTB checked
-  checkLGBT(){
+  checkLGBT = () =>{
+
     this.setState({
       swLGBT: !this.state.swLGBT
+    }, () => {
+      console.log('Valor del checkbox en LGTB: ' + this.state.swLGBT);
     })
+
+    if(this.state.swLGBT === false){
+     
+      this.setState({
+        selLGBT: this.state.selLGBT
+      })
+
+    } else {
+      this.setState({
+        selLGBT: ""
+      })
+
+    }
+
   }
 
   // habilita las opciones al seleccionar discapacidad
@@ -92,22 +113,49 @@ export default class Contact extends Component {
     this.setState({
       swDiscapacidad: !this.state.swDiscapacidad
     })
+
+    if(this.state.swDiscapacidad === false){
+     
+      this.setState({
+        selDiscapacidad: this.state.selDiscapacidad
+      })
+
+    } else {
+      this.setState({
+        selDiscapacidad: ""
+      })
+
+    }
+
   }
 
   //Se ocupa de cambiar de seccion
   siguiente = () => {
-    this.setState({
-      step: parseInt(this.state.step) + 1,
-    });
+    if(this.state.swAnonimo === true){
+      this.setState({
+        step: 3,
+      });
+    } else {
+      this.setState({
+        step: parseInt(this.state.step) + 1,
+      });
+    }
   };
 
   // regresa a la seccion anterior
   anterior() {
-    this.setState({
-      step: parseInt(this.state.step) - 1,
-    });
+    if(this.state.swAnonimo === true){
+      this.setState({
+        step: 1,
+      });
+    } else {
+      this.setState({
+        step: parseInt(this.state.step) - 1,
+      });
+    }
   }
 
+  // estado OnChange para el documento
   onFileChange = (event) => {
     
     // cambia el estado de la variable
@@ -116,6 +164,36 @@ export default class Contact extends Component {
       console.log(this.state.fileDocumento);
     });
 
+  }
+
+  // handle changer para edad
+  handleChange_edad = (event) => {
+    console.log("fecha de nacimiento recogida: "+ event.target.value);
+    this.setState({ dateFNacimiento: event.target.value });
+
+    // llama a la función para calcular con el valor guardado en el event
+    var edad_calculada = this.obtenerEdad(event.target.value);
+
+    // Asigna el valor calculado a la variable de edad
+    this.setState({ txtNumEdad: edad_calculada }, () => {
+      console.log("Edad asignada:", this.state.txtNumEdad);
+    })
+  }
+
+  // Obtiene la edad a partir de la fecha de nacimiento
+  obtenerEdad = (fecha_guardada) => {
+
+    var hoy = new Date();
+    var fecha_nacimiento = new Date(fecha_guardada);
+    var edad = hoy.getFullYear() - fecha_nacimiento.getFullYear();
+
+    // console.log(fecha_nacimiento);
+    var mes_actual = hoy.getMonth() - fecha_nacimiento.getMonth();
+    if (mes_actual < 0 || (mes_actual === 0 && hoy.getDate() < fecha_nacimiento.getDate())) 
+    {
+      edad--;
+    }
+    return edad;
   }
 
   // refresca la vista para una nueva solicitud
@@ -130,9 +208,9 @@ export default class Contact extends Component {
   //Limitar la longitud de caracteres
   maxLengthCheck = (object) => {
     if (object.target.value.length > object.target.maxLength) {
-     object.target.value = object.target.value.slice(0, object.target.maxLength)
-      }
+      object.target.value = object.target.value.slice(0, object.target.maxLength)
     }
+  }
 
   // sube el documento cargado a firebase
   cargarDocumento = (event) => {
@@ -166,25 +244,34 @@ export default class Contact extends Component {
   // funcion para validar correo
   validateEmail = () => {
     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.state.emailCorreo)) { 
-      console.log('correo autorizado para pasar')
+      
+      console.log('correo autorizado: ' + this.state.emailCorreo);
+      return true;
     } else {
-      alert('Por favor introduzca un correo válido')
+      
+      console.log('correo autorizado: ' + this.state.emailCorreo);
+      alert('Por favor introduzca un correo válido');
     }
   }
 
-  setEmpty = () => {
-    var setEmptyValue = " ";
-  }
+  // selectEmpty = (e) => {
+  //   if(this.state.swAnonimo === true)
+  // }
 
+  
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault();
-    var response = this.validateEmail();    
+    var response = this.validateEmail(); 
+
     if(response !== true){
+      alert('por favor, ingrese un correo válido');
       this.setState({
         step: 2,
       });
+
     } else {
+      
       // si los datos que se vana enviar son anonimos
       if(this.state.swAnonimo){
         const parametrosAnonimo = {
@@ -230,6 +317,9 @@ export default class Contact extends Component {
           selMunicipio : this.state.selMunicipio,
           selLocalidad : this.state.selLocalidad,
           txtCodPostal : this.state.txtCodPostal,
+          selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+          dateFechaCita : this.state.dateFechaCita,
+          selHorarioCita : this.state.selHorarioCita,
           // txtLatitud : this.state.txtLatitud,
           // txtLongitud : this.state.txtLongitud
         }
@@ -245,18 +335,34 @@ export default class Contact extends Component {
           parametrosAnonimo.dateFSuceso &&
           parametrosAnonimo.txtCalle &&
           parametrosAnonimo.txtNumExt &&
+          parametrosAnonimo.txtEntCalle1 &&
+          parametrosAnonimo.txtReferencias &&
           parametrosAnonimo.selPais &&
           parametrosAnonimo.selEstado &&
           parametrosAnonimo.selMunicipio &&
           parametrosAnonimo.selLocalidad &&
-          parametrosAnonimo.txtCodPostal 
+          parametrosAnonimo.txtCodPostal &&
+          parametrosAnonimo.selAgenciaAVisitar &&
+          parametrosAnonimo.dateFechaCita &&
+          parametrosAnonimo.selHorarioCita 
           // parametrosAnonimo.txtLatitud &&
           // parametrosAnonimo.txtLongitud
           )
           {
-            // alert("Sus datos han sido enviados correctamente");
+            firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
+            {
+              this.setState({
+                step: 4,
+              });
+            }).catch((e)=>
+            {
+              console.log(e);
+              alert("Faltan campos por llenar")
+            })
+          }else{
+            alert("Por favor llene su formulario")
             this.setState({
-              step: 4,
+              step: 1,
             });
           }
         
@@ -280,19 +386,19 @@ export default class Contact extends Component {
           selIdentificacion: ' ',
           txtCurp: 'XXXX010101XXXXXXX1',
           selNotificacion: 'Correo Electronico',
-          txtnumTel1 : 'Anonimo',
-          txtnumTel2 : 'Anonimo',
+          txtnumTel1 : ' ',
+          txtnumTel2 : ' ',
           emailCorreo: this.state.emailCorreo,
-          txtNacionalidad : 'Anonimo',
-          selEstadoCivil : 'Anonimo',
-          selOcupacion : 'Anonimo',
-          selNivelEstudios : 'Anonimo',
-          selLengua : 'Anonimo',
-          selReligion : 'Anonimo',
+          txtNacionalidad : ' ',
+          selEstadoCivil : ' ',
+          selOcupacion : ' ',
+          selNivelEstudios : ' ',
+          selLengua : ' ',
+          selReligion : ' ',
           swLGBT : false,
-          selLGBT : 'Anonimo',
+          selLGBT : ' ',
           swDiscapacidad : false,
-          selDiscapacidad : 'Anonimo',
+          selDiscapacidad : ' ',
           txtDescHechos : this.state.txtDescHechos,
           timeHoraSuceso : this.state.timeHoraSuceso,
           dateFSuceso : this.state.dateFSuceso,
@@ -307,9 +413,14 @@ export default class Contact extends Component {
           selMunicipio : this.state.selMunicipio,
           selLocalidad : this.state.selLocalidad,
           txtCodPostal : this.state.txtCodPostal,
+          selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+          dateFechaCita : this.state.dateFechaCita,
+          selHorarioCita : this.state.selHorarioCita,
           // txtLatitud : this.state.txtLatitud,
           // txtLongitud : this.state.txtLongitud
         }
+
+        console.log(parametrosProtegidos)
     
         if(
           parametrosProtegidos.selClasPersona &&
@@ -322,72 +433,40 @@ export default class Contact extends Component {
           parametrosProtegidos.dateFSuceso &&
           parametrosProtegidos.txtCalle &&
           parametrosProtegidos.txtNumExt &&
+          parametrosProtegidos.txtEntCalle1 &&
+          parametrosProtegidos.txtReferencias &&
           parametrosProtegidos.selPais &&
           parametrosProtegidos.selEstado &&
           parametrosProtegidos.selMunicipio &&
           parametrosProtegidos.selLocalidad &&
-          parametrosProtegidos.txtCodPostal
+          parametrosProtegidos.txtCodPostal &&
+          parametrosProtegidos.selAgenciaAVisitar &&
+          parametrosProtegidos.dateFechaCita &&
+          parametrosProtegidos.selHorarioCita
           // parametrosProtegidos.txtLatitud &&
           // parametrosProtegidos.txtLongitud
           )
           {
-            firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
-            {
-              // alert("Sus datos han sido enviados correctamente");
-              this.setState({
-                step: 4,
-              });
-            }).catch((e)=>
-            {
-              console.log(e);
-              alert("Faltan campos por llenar")
-            })
-        } else {
-          alert("Por favor llene su formulario")
-          this.setState({
-            step: 1,
-          });
-        }
-
-      console.log(parametrosProtegidos)
-  
-      if(
-        parametrosProtegidos.selClasPersona &&
-        parametrosProtegidos.txtNumEdad &&
-        parametrosProtegidos.selSexo &&
-        parametrosProtegidos.selNotificacion &&
-        parametrosProtegidos.emailCorreo &&
-        parametrosProtegidos.selTipoDelito &&
-        parametrosProtegidos.timeHoraSuceso &&
-        parametrosProtegidos.dateFSuceso &&
-        parametrosProtegidos.txtCalle &&
-        parametrosProtegidos.txtNumExt &&
-        parametrosProtegidos.txtEntCalle1 &&
-        parametrosProtegidos.selPais &&
-        parametrosProtegidos.selEstado &&
-        parametrosProtegidos.selMunicipio &&
-        parametrosProtegidos.selLocalidad &&
-        parametrosProtegidos.txtCodPostal
-        // parametrosProtegidos.txtLatitud &&
-        // parametrosProtegidos.txtLongitud
-        ){
-        firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
-          {
-            // alert("Sus datos han sido enviados correctamente");
+            firebase.database().ref("pruebaCentAnonimo").push(parametrosProtegidos).then(()=>
+              {
+                // alert("Sus datos han sido enviados correctamente");
+                this.setState({
+                  step: 4,
+                });
+              }).catch((e)=>
+              {
+                console.log(e);
+                alert("Faltan campos por llenar")
+              })
+          } else {
+            alert("Por favor llene su formulario")
             this.setState({
-              step: 4,
+              step: 1,
             });
-          }).catch((e)=>
-          {
-            console.log(e);
-            alert("Faltan campos por llenar")
-          })
-        }else{
-          alert("Por favor llene su formulario")
-          this.setState({
-            step: 1,
-          });
-        }
+          }
+          
+      }
+
       // si son mayores de edad, pero seleccionaron persona fisica.
       if (this.state.raPersona === 'Fisica' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18) {
         
@@ -435,18 +514,13 @@ export default class Contact extends Component {
           selMunicipio: this.state.selMunicipio,
           selLocalidad: this.state.selLocalidad,
           txtCodPostal: this.state.txtCodPostal,
+          selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+          dateFechaCita : this.state.dateFechaCita,
+          selHorarioCita : this.state.selHorarioCita,
           // txtLatitud: this.state.txtLatitud,
           // txtLongitud: this.state.txtLongitud,
         }
-        // if (parametrosFisica.swLGBT === false ){
-        //   parametrosFisica.selLGBT = ' '
-        // }
 
-        // if(parametrosFisica.swDiscapacidad === false){
-        //   parametrosFisica.selDiscapacidad = ' '
-        // }
-        
-        
         if(
           parametrosFisica.raPersona &&
           parametrosFisica.selClasPersona &&
@@ -457,6 +531,7 @@ export default class Contact extends Component {
           parametrosFisica.selSexo &&
           parametrosFisica.selEntidadFederativa &&
           parametrosFisica.selIdentificacion &&
+          parametrosFisica.fileDocumento &&
           parametrosFisica.txtCurp &&
           parametrosFisica.selNotificacion &&
           parametrosFisica.txtnumTel1 &&
@@ -468,35 +543,41 @@ export default class Contact extends Component {
           parametrosFisica.dateFSuceso &&
           parametrosFisica.txtCalle &&
           parametrosFisica.txtNumExt &&
+          parametrosFisica.txtEntCalle1 &&
+          parametrosFisica.txtReferencias &&
           parametrosFisica.selPais &&
           parametrosFisica.selEstado &&
           parametrosFisica.selMunicipio &&
           parametrosFisica.selLocalidad &&
-          parametrosFisica.txtCodPostal 
+          parametrosFisica.txtCodPostal &&
+          parametrosFisica.selAgenciaAVisitar &&
+          parametrosFisica.dateFechaCita &&
+          parametrosFisica.selHorarioCita 
           // parametrosFisica.txtLatitud &&
           // parametrosFisica.txtLongitud
-          ){
+          )
+          {
             firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
-          {
-            // alert("Sus datos han sido enviados correctamente");
+            {
+              // alert("Sus datos han sido enviados correctamente");
+              this.setState({
+                step: 4,
+              });
+            }).catch((e)=>
+            {
+              console.log(e);
+              alert("Faltan campos por llenar")
+            })
+          }else{
+            alert("Por favor llene su formulario")
             this.setState({
-              step: 4,
+              step: 1,
             });
-          }).catch((e)=>
-          {
-            console.log(e);
-            alert("Faltan campos por llenar")
-          })
-        }else{
-          alert("Por favor llene su formulario")
-          this.setState({
-            step: 1,
-          });
-        }
-      } 
+          }
+      }
       
       // si son mayores de edad pero seleccionaron persona moral
-      if (this.state.raPersona === 'Moral' && this.state.swAnonimo === false){
+      if (this.state.raPersona === 'Moral' && this.state.swAnonimo === false && this.state.txtNumEdad >= 18){
       
         const parametrosMoral = {
           swAnonimo: false,
@@ -504,14 +585,14 @@ export default class Contact extends Component {
           txtRFC: this.state.txtRFC,
           txtRazonSocial: this.state.txtRazonSocial,
           selClasPersona: this.state.selClasPersona,
-          txtNombre: ' ',
-          txtApPaterno: ' ',
-          txtApMaterno: ' ',
-          txtAlias: ' ',
-          txtNumEdad: ' ',
-          selSexo: ' ',
-          selEntidadFederativa: ' ',
-          selIdentificacion: ' ',
+          txtNombre: this.state.txtNombre,
+          txtApPaterno: this.state.txtApPaterno,
+          txtApMaterno: this.state.txtApMaterno,
+          txtAlias: this.state.txtAlias,
+          txtNumEdad: this.state.txtNumEdad,
+          selSexo: this.state.selSexo,
+          selEntidadFederativa: this.state.selEntidadFederativa,
+          selIdentificacion: this.state.selIdentificacion,
           fileDocumento: this.state.fileDocumento,
           txtCurp: ' ',
           selNotificacion: this.state.selNotificacion,
@@ -542,61 +623,12 @@ export default class Contact extends Component {
           selMunicipio: this.state.selMunicipio,
           selLocalidad: this.state.selLocalidad,
           txtCodPostal: this.state.txtCodPostal,
+          selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+          dateFechaCita : this.state.dateFechaCita,
+          selHorarioCita : this.state.selHorarioCita,
           // txtLatitud: this.state.txtLatitud,
           // txtLongitud: this.state.txtLongitud,
         }
-    } 
-    
-    // si son mayores de edad pero seleccionaron persona moral
-    if (this.state.raPersona === 'Moral' && this.state.swAnonimo === false){
-     
-      const parametrosMoral = {
-        swAnonimo: false,
-        raPersona: this.state.raPersona,
-        txtRFC: this.state.txtRFC,
-        txtRazonSocial: this.state.txtRazonSocial,
-        selClasPersona: this.state.selClasPersona,
-        txtNombre: ' ',
-        txtApPaterno: ' ',
-        txtApMaterno: ' ',
-        txtAlias: ' ',
-        txtNumEdad: ' ',
-        selSexo: ' ',
-        selEntidadFederativa: ' ',
-        selIdentificacion: ' ',
-        fileDocumento: this.state.fileDocumento,
-        txtCurp: ' ',
-        selNotificacion: this.state.selNotificacion,
-        txtnumTel1: this.state.txtnumTel1,
-        txtnumTel2: this.state.txtnumTel2,
-        emailCorreo: this.state.emailCorreo,
-        txtNacionalidad: ' ',
-        selEstadoCivil: ' ',
-        selOcupacion: ' ',
-        selNivelEstudios: ' ',
-        selLengua: ' ',
-        selReligion: ' ',
-        swLGBT: ' ',
-        selLGBT: ' ',
-        swDiscapacidad: ' ',
-        selDiscapacidad: ' ',
-        selTipoDelito: this.state.selTipoDelito,
-        timeHoraSuceso: this.state.timeHoraSuceso,
-        dateFSuceso: this.state.dateFSuceso,
-        txtCalle: this.state.txtCalle,
-        txtNumInt: this.state.txtNumInt,
-        txtNumExt: this.state.txtNumExt,
-        txtEntCalle1: this.state.txtEntCalle1,
-        txtEntCalle2: this.state.txtEntCalle2,
-        txtReferencias: this.state.txtReferencias,
-        selPais: this.state.selPais,
-        selEstado: this.state.selEstado,
-        selMunicipio: this.state.selMunicipio,
-        selLocalidad: this.state.selLocalidad,
-        txtCodPostal: this.state.txtCodPostal,
-        // txtLatitud: this.state.txtLatitud,
-        // txtLongitud: this.state.txtLongitud,
-      }
 
         if(
           parametrosMoral.raPersona &&
@@ -611,41 +643,47 @@ export default class Contact extends Component {
           parametrosMoral.dateFSuceso &&
           parametrosMoral.txtCalle &&
           parametrosMoral.txtNumExt &&
+          parametrosMoral.txtEntCalle1 &&
+          parametrosMoral.txtReferencias &&
           parametrosMoral.selPais &&
           parametrosMoral.selEstado &&
           parametrosMoral.selMunicipio &&
           parametrosMoral.selLocalidad &&
-          parametrosMoral.txtCodPostal 
+          parametrosMoral.txtCodPostal &&
+          parametrosMoral.selAgenciaAVisitar &&
+          parametrosMoral.dateFechaCita &&
+          parametrosMoral.selHorarioCita 
           // parametrosMoral.txtLatitud &&
           // parametrosMoral.txtLongitud
           )
           {
-            firebase.database().ref("pruebaCentenario").push(parametrosFisica).then(()=>
-          {
-            // alert("Sus datos han sido enviados correctamente");
+            firebase.database().ref("pruebaCentenario").push(parametrosMoral).then(()=>
+            {
+              // alert("Sus datos han sido enviados correctamente");
+              this.setState({
+                step: 4,
+              });
+            }).catch((e)=>
+            {
+              console.log(e);
+              alert("Faltan campos por llenar")
+            })
+          }else{
+            alert("Por favor llene su formulario")
             this.setState({
-              step: 4,
+              step: 1,
             });
-          }).catch((e)=>
-          {
-            console.log(e);
-            alert("Faltan campos por llenar")
-          })
-        }else{
-          alert("Por favor llene su formulario")
-          this.setState({
-            step: 1,
-          });
-        }
+          }
+      }
+    }
   }
 
   // Información del archivo subido cuando es cargado
   handlerOnChange = (e) => {
     const state = this.state;
     state[e.target.name] = e.target.value;
-    this.setState({ state });    
-    // this.validateEmail();
-  };
+    this.setState({ state });
+  }
 
   render() {
 
@@ -661,204 +699,217 @@ export default class Contact extends Component {
               <div className="row">
                 <div className="col mb-2">
                   <h3>Datos generales</h3>
-                  <small>Los campos marcados con * son obligatorios. Por favor, llenelos correctamente.</small>
+                  <small>Los campos marcados con * son obligatorios. Por favor, llénelos correctamente.</small>
                   <br/>
-                  <small className="text-danger">Servicio únicamente disponible para CESIS Pachuca, Tula, Tulancingo e Ixmiquilpan</small>
+                  <small className="text-danger">Servicio disponible únicamente para CESIS Pachuca, Tula, Tulancingo e Ixmiquilpan</small>
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-6">
                   {/* Lado izquierdo Azul */}
-                    <div className="form-group mb-3">
-                      <label>
-                        <input onChange={this.checkAnonimo.bind(this)} checked={this.state.swAnonimo === true} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
-                        <span>&nbsp;¿Su denuncia es anonima?</span>
-                      </label>
-                    </div>
-                    
-                    <div className="form-group mb-3">
-                      <label>
-                        <input onChange={this.checkF.bind(this)} disabled= {this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
-                        checked={this.state.raPersona === "Fisica" ? true : false}/>
-                        <span>Fisica &nbsp; &nbsp;</span>
-                      </label>
-                      <label>
-                        <input onChange={this.checkM.bind(this)} disabled={this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona}
-                        checked={this.state.raPersona === "Moral" ? true : false}/>
-                        <span>Moral</span>
-                      </label>
-                    </div>
+                  <div className="form-group mb-3">
+                    <label>
+                      <input onChange={this.checkAnonimo.bind(this)} checked={this.state.swAnonimo === true} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
+                      <span>&nbsp;¿Su denuncia es anónima?</span>
+                    </label>
+                  </div>
+                  
+                  <div className="form-group mb-3">
+                    <label>
+                      <input onChange={this.checkF.bind(this)} disabled= {this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
+                      checked={this.state.raPersona === "Fisica" ? true : false}/>
+                      <span>&nbsp;Física &nbsp; &nbsp;</span>
+                    </label>
+                    <label>
+                      <input onChange={this.checkM.bind(this)} disabled={this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona}
+                      checked={this.state.raPersona === "Moral" ? true : false}/>
+                      <span>&nbsp;Moral</span>
+                    </label>
+                  </div>
 
-                    <span>
-                      <small className="text-secondary">Clasificacion de persona: *</small> 
-                    </span>
-                    <div className="form-group mb-3">
-                      {/* Select Clasificacion de Persona*/}
-                      <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
-                        <option value="">Seleccione...</option>
-                        <option value="Denunciante">Denunciante</option>
-                        <option value="Inputado">Inputado</option>
-                        <option value="Testigo">Testigo</option>
-                        <option value="Victima Directa">Victima Directa</option>
-                        <option value="Victima Indirecta">Victima Indirecta</option>
-                      </select>
-                    </div>                      
+                  <span>
+                    <small className="text-secondary">Clasificacion de persona: *</small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    {/* Select Clasificacion de Persona*/}
+                    <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
+                      <option value="">Seleccione...</option>
+                      <option value="Denunciante">Denunciante</option>
+                      <option value="Inputado">Inputado</option>
+                      <option value="Testigo">Testigo</option>
+                      <option value="Victima Directa">Victima Directa</option>
+                      <option value="Victima Indirecta">Victima Indirecta</option>
+                    </select>
+                  </div>                      
 
-                    {/* RFC */}
-                    <span>
-                      <small className="text-secondary">RFC: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
-                    </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" value={(this.state.swAnonimo === true || this.state.raPersona === "Fisica") ? this.setEmpty : this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
-                    </div>
+                  {/* RFC */}
+                  <span hidden={this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
+                    <small className="text-secondary">RFC: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3" hidden={this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
+                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} id="txtRFC" type="text" className="form-control" name="txtRFC" value={(this.state.swAnonimo === true || this.state.raPersona === 'Fisica') ? " " : this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                  </div>
 
-                    {/* Razon social */}
-                    <span>
-                      <small className="text-secondary">Razon Social: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
-                    </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" value={(this.state.swAnonimo === true || this.state.raPersona === "Fisica") ? this.setEmpty : this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
-                    </div>
+                  {/* Razon social */}
+                  <span hidden={this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
+                    <small className="text-secondary">Razon Social: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3" hidden={this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
+                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" value={(this.state.swAnonimo === true || this.state.raPersona === 'Fisica') ? " " : this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
+                  </div>
 
-                    {/* Nombre */}
-                    <span>
-                      <small className="text-secondary">Nombre: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
-                    </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
-                    </div>
+                  {/* Nombre */}
+                  <span>
+                    <small className="text-secondary">Nombre: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" value={(this.state.swAnonimo === true) ? " " : this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
+                  </div>
 
-                {/* Apellido parterno */}
-                <span>
-                  <small className="text-secondary">Apellido Paterno: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
-                </span>
-                <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control" name="txtApPaterno" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
-                </div>
+                  {/* Apellido parterno */}
+                  <span>
+                    <small className="text-secondary">Apellido Paterno: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control" name="txtApPaterno" value={this.state.swAnonimo === true ? " " : this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
+                  </div>
                 
-                {/* Apellido materno */}
-                <span>
-                  <small className="text-secondary">Apellido Materno: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
-                </span>
-                <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" name="txtApMaterno" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
+                  {/* Apellido materno */}
+                  <span>
+                    <small className="text-secondary">Apellido Materno: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" name="txtApMaterno" value={this.state.swAnonimo === true ? " " : this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
+                  </div>
+
+                  {/* Alias */}
+                  <span>
+                    <small className="text-secondary">Alias: </small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" name="txtAlias" value={this.state.swAnonimo === true ? " " : this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
+                  </div>
+
+                  {/* Fecha de nacimiento */}
+                  <div className="row mb-3 align-items-center">
+                    <div className="col-md-6">
+                      <span>
+                        <small className="text-secondary">Fecha de Nacimiento: *</small> 
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <input onChange={this.handleChange_edad} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                    </div>
+                  </div>
+
+                  {/* Sexo */}
+                  <span>
+                    <small className="text-secondary">Sexo: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    {/* Select Sexo*/}
+                    <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
+                      <option value="">Seleccione...</option>
+                      <option value="Masculino">Masculino</option>
+                      <option value="Femenino">Femenino</option>
+                    </select>
+                  </div>
                 </div>
 
-                {/* Alias */}
-                <span>
-                  <small className="text-secondary">Alias: </small> 
-                </span>
-                <div className="form-group mb-3">
-                  <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" name="txtAlias" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
-                </div>
-
-                {/* Edad */}
-                <span hidden={ this.state.raPersona === "Moral"}>
-                  <small className="text-danger">* Requerido</small>
-                </span>
-                <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxtNumEdad = txtNumEdad} />
-                </div>
-
-                {/* Sexo */}
-                <span>
-                  <small className="text-secondary">Sexo: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
-                </span>
-                <div className="form-group mb-3">
-                  {/* Select Sexo*/}
-                  <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
-                    <option value="">Seleccione...</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
                 <div className="col-md-6">
-                  {/* Lado derecho Azull */}
-                      {/* entidad de nacimiento */}
-                      <span>
-                        <small className="text-secondary">Entidad Federativa de Nacimiento: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
-                      </span>
-                      <div className="form-group mb-3">
-                        <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
-                          <option value="">Seleccione...</option>
-                          <option value="Aguascalientes">Aguascalientes</option>
-                          <option value="Baja California">Baja California</option>
-                          <option value="Baja California Sur">Baja California Sur</option>
-                          <option value="Campeche">Campeche</option>
-                          <option value="Chiapas">Chiapas</option>
-                          <option value="Chihuahua">Chihuahua</option>
-                          <option value="CDMX">Ciudad de México</option>
-                          <option value="Coahuila">Coahuila</option>
-                          <option value="Colima">Colima</option>
-                          <option value="Durango">Durango</option>
-                          <option value="Estado de México">Estado de México</option>
-                          <option value="Guanajuato">Guanajuato</option>
-                          <option value="Guerrero">Guerrero</option>
-                          <option value="Hidalgo">Hidalgo</option>
-                          <option value="Jalisco">Jalisco</option>
-                          <option value="Michoacán">Michoacán</option>
-                          <option value="Morelos">Morelos</option>
-                          <option value="Nayarit">Nayarit</option>
-                          <option value="Nuevo León">Nuevo León</option>
-                          <option value="Oaxaca">Oaxaca</option>
-                          <option value="Puebla">Puebla</option>
-                          <option value="Querétaro">Querétaro</option>
-                          <option value="Quintana Roo">Quintana Roo</option>
-                          <option value="San Luis Potosí">San Luis Potosí</option>
-                          <option value="Sinaloa">Sinaloa</option>
-                          <option value="Sonora">Sonora</option>
-                          <option value="Tabasco">Tabasco</option>
-                          <option value="Tamaulipas">Tamaulipas</option>
-                          <option value="Tlaxcala">Tlaxcala</option>
-                          <option value="Veracruz">Veracruz</option>
-                          <option value="Yucatán">Yucatán</option>
-                          <option value="Zacatecas">Zacatecas</option>
-                        </select>
-                      </div>
+                  {/* Lado derecho */}
+                  {/* entidad de nacimiento */}
+                  <span>
+                    <small className="text-secondary">Entidad Federativa de Nacimiento: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
+                      <option value="" >Seleccione...</option>
+                      <option value="Aguascalientes">Aguascalientes</option>
+                      <option value="Baja California">Baja California</option>
+                      <option value="Baja California Sur">Baja California Sur</option>
+                      <option value="Campeche">Campeche</option>
+                      <option value="Chiapas">Chiapas</option>
+                      <option value="Chihuahua">Chihuahua</option>
+                      <option value="CDMX">Ciudad de México</option>
+                      <option value="Coahuila">Coahuila</option>
+                      <option value="Colima">Colima</option>
+                      <option value="Durango">Durango</option>
+                      <option value="Estado de México">Estado de México</option>
+                      <option value="Guanajuato">Guanajuato</option>
+                      <option value="Guerrero">Guerrero</option>
+                      <option value="Hidalgo">Hidalgo</option>
+                      <option value="Jalisco">Jalisco</option>
+                      <option value="Michoacán">Michoacán</option>
+                      <option value="Morelos">Morelos</option>
+                      <option value="Nayarit">Nayarit</option>
+                      <option value="Nuevo León">Nuevo León</option>
+                      <option value="Oaxaca">Oaxaca</option>
+                      <option value="Puebla">Puebla</option>
+                      <option value="Querétaro">Querétaro</option>
+                      <option value="Quintana Roo">Quintana Roo</option>
+                      <option value="San Luis Potosí">San Luis Potosí</option>
+                      <option value="Sinaloa">Sinaloa</option>
+                      <option value="Sonora">Sonora</option>
+                      <option value="Tabasco">Tabasco</option>
+                      <option value="Tamaulipas">Tamaulipas</option>
+                      <option value="Tlaxcala">Tlaxcala</option>
+                      <option value="Veracruz">Veracruz</option>
+                      <option value="Yucatán">Yucatán</option>
+                      <option value="Zacatecas">Zacatecas</option>
+                    </select>
+                  </div>
 
-                      <span>
-                        <small className="text-secondary">Documento de Identificación: </small> 
-                      </span>
-                      <div className="form-group mb-3">
-                        {/* Select Documento de Identificacion*/}
-                        <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
-                          <option value="" >Seleccione...</option>
-                          <option value="INE">INE</option>
-                          <option value="Licencia de Conducir">Licencia de Conducir</option>
-                          <option value="Pasaporte">Pasaporte</option>
-                          <option value="Cedula Profesional">Cédula Profesional</option>
-                          <option value="Cartilla Militar">Cartilla del Servicio Militar Nacional</option>
-                          <option value="Credencial Laboral">Credencial de Identificacion Laboral</option>
-                          <option value="Credencial de Derechohabiente">Credencial de Derechohabiente</option>
-                          <option value="Acta de Nacimiento">Acta de Nacimiento</option>
-                          <option value="CURP">CURP</option>
-                        </select>
-                      </div>
+                  <span>
+                    <small className="text-secondary">Documento de Identificación: </small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    {/* Select Documento de Identificacion*/}
+                    <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
+                      <option value="" >Seleccione...</option>
+                      <option value="INE">INE</option>
+                      <option value="Licencia de Conducir">Licencia de Conducir</option>
+                      <option value="Pasaporte">Pasaporte</option>
+                      <option value="Cedula Profesional">Cédula Profesional</option>
+                      <option value="Cartilla Militar">Cartilla del Servicio Militar Nacional</option>
+                      <option value="Credencial Laboral">Credencial de Identificacion Laboral</option>
+                      <option value="Credencial de Derechohabiente">Credencial de Derechohabiente</option>
+                      <option value="Acta de Nacimiento">Acta de Nacimiento</option>
+                      <option value="CURP">CURP</option>
+                    </select>
+                  </div>
                       
-                      {/* documento de identificacion */}
-                      <span>
-                        <small className="text-secondary">Seleccione Documento de Identificación: </small> 
-                      </span>
-                      <div className="form-group mb-3">
-                        <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} type="file" accept="image/*" onChange={this.cargarDocumento.bind(this)} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
-                      </div>
+                  {/* documento de identificacion */}
+                  <span>
+                    <small className="text-secondary">Seleccione Documento de Identificación: </small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} type="file" accept="image/*" onChange={this.cargarDocumento.bind(this)} disabled={this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
+                  </div>
 
-                      {/* CURP */}
-                      <span>
-                        <small className="text-secondary">CURP: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
-                      </span>
-                      <div className="form-group mb-3">
-                        <div className="mb-3 w-100">
-                          <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
-                        </div>
-                      </div>         
-                  </div>                
+                  {/* CURP */}
+                  <span>
+                    <small className="text-secondary">CURP: <small className="text-secondary" hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>*</small></small> 
+                  </span>
+                  <div className="form-group mb-3">
+                    <div className="w-100">
+                      <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" name="txtCurp" value={this.state.swAnonimo === true ? " " : this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
+                    </div>
+                  </div>
+
+                  {/* Correo electronico */}
+                  <span hidden={ this.state.swAnonimo === false} >
+                    <small className="text-secondary">Correo electrónico :*</small>
+                  </span>
+                  <div className="form-group mb-3" hidden={ this.state.swAnonimo === false}>
+                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="ejemplo@ejemplo.com" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
+                  </div>        
+                </div>                
               </div>
               
               <div className="row">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
+                  <button className="btn btn-dark fs-6" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
                 </div>
               </div> 
             </div>
@@ -876,7 +927,7 @@ export default class Contact extends Component {
                 {/* Lado izquierdo */}
                 <div className="col-md-6">
                   <span>
-                    <small className="text-secondary">Medio de notificacion: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
+                    <small className="text-secondary">Medio de notificacion: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNotificacion" name="selNotificacion" value={this.state.selNotificacion} ref={selNotificacion=>this.inputSelNotificacion = selNotificacion}>
@@ -892,7 +943,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Telefono 1: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel1" type="number" name="txtnumTel1" value={this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel1" type="number" name="txtnumTel1" value={this.state.swAnonimo === true ? " " : this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
                   </div>
 
                   {/* telefono 2 */}
@@ -900,7 +951,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Telefono 2: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel2" type="number" name="txtnumTel2" value={this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel2" type="number" name="txtnumTel2" value={this.state.swAnonimo === true ? " " : this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
                   </div>
 
                   {/* Correo electronico */}
@@ -908,22 +959,28 @@ export default class Contact extends Component {
                     <small className="text-secondary">Correo electronico: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
+                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" name="emailCorreo" value={this.state.swAnonimo === true ? " " : this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>
                   
-                  {/* nacionalidad */}
+                  {/* nacionalidad */}                  
                   <span>
-                    <small className="text-secondary">Nacionalidad: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
+                    <small className="text-secondary">Nacionalidad: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="txtNacionalidad" type="text" name="txtNacionalidad" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
+                    <select required={this.state.raPersona === "Moral"} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="txtNacionalidad" type="text" name="txtNacionalidad" value={this.state.swAnonimo === true ? " " : this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad}>
+                      <option value="">Seleccione</option>
+                      <option value="Opcion 1">Opcion 1</option>
+                      <option value="Opcion 1">Opcion 1</option>
+                      <option value="Opcion 1">Opcion 1</option>
+                      <option value="Opcion 1">Opcion 1</option>
+                    </select>
                   </div>
-
+                  
                   {/* Estado civil */}
-                  <span>
-                    <small className="text-secondary">Estado Civil: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
+                  <span hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
+                    <small className="text-secondary">Estado Civil: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
-                  <div className="form-group mb-3">
+                  <div className="form-group mb-3" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     {/* Select Estado Civil*/}
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selEstadoCivil" name="selEstadoCivil" value={this.state.selEstadoCivil} ref={selEstadoCivil=>this.inputSelEstadoCivil = selEstadoCivil}>
                       <option value="" >Seleccione...</option>
@@ -946,7 +1003,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Ocupacion: </small>
                   </span>
                   <div className="form-group mb-3">                    
-                    <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="" >Seleccione...</option>
                       <option value="Abogado">Abogado</option>
                       <option value="Actor, Actriz, Director de Espectáculos">
@@ -1184,7 +1241,7 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3">
                     {/* Select Nivel de Estudios*/}
-                    <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selNivelEstudios" name="selNivelEstudios" value={this.state.selNivelEstudios} ref={selNivelEstudios=>this.inputSelNivelEstudios = selNivelEstudios}>
+                    <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNivelEstudios" name="selNivelEstudios" value={this.state.selNivelEstudios} ref={selNivelEstudios=>this.inputSelNivelEstudios = selNivelEstudios}>
                       <option value="" >Seleccione...</option>
                       <option value="Preescolar Incompleta">Preescolar Incompleta</option>
                       <option value="Preescolar">Preescolar</option>
@@ -1233,10 +1290,10 @@ export default class Contact extends Component {
                   </div>
 
                   {/* Lengua */}
-                  <span>
+                  <span hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     <small className="text-secondary">Lengua: </small> 
                   </span>
-                  <div className="form-group mb-3">
+                  <div className="form-group mb-3" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
                       <option value="" >Seleccione...</option>
                       <option value="Akateko">Akateko</option>
@@ -1321,10 +1378,10 @@ export default class Contact extends Component {
                   </div>
 
                   {/* Religion */}
-                  <span>
+                  <span hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     <small className="text-secondary">Religion: </small> 
                   </span>
-                  <div className="form-group mb-3">
+                  <div className="form-group mb-3" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selReligion" name="selReligion" value={this.state.selReligion} ref={selReligion=>this.inputSelReligion = selReligion}>
                       <option value="" >Seleccione...</option>
                       <option value="Cristianismo">Cristianismo</option>
@@ -1364,16 +1421,15 @@ export default class Contact extends Component {
                   </div>
 
                   {/* Checkbox LGBT */}
-                  <div className=" row mb-3 align-items-center">
-                    <div className="col">
+                  <div className="row mb-3 align-items-center" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
+                    <div className="col-md-6">
                       <input type="checkbox" id="swLGBT" name="swLGBT" value={this.state.swLGBT} onChange={this.checkLGBT.bind(this)} 
                         checked={this.state.swLGBT === true} disabled={this.state.swAnonimo === true} 
                         ref={swLGBT=>this.inputSwLGBT = swLGBT}/>
-                      
                       <label className="form-label" onClick={this.checkLGBT.bind(this)} style={{fontSize: "14px"}}>&nbsp;¿Pertenece a la comunidad LGBTTTQA?</label>
                     </div>
                     {/* Select LGBT*/}
-                    <div className="col">
+                    <div className="col-md-6">
                       <select required={this.state.swLGBT === true} onChange={this.handlerOnChange} disabled={this.state.swLGBT === false} className="form-select" id="selLGBT" name="selLGBT" value={this.state.selLGBT} ref={selLGBT=>this.inputSelLGBT =selLGBT}>
                         <option value="" >Seleccione...</option>
                         <option value="Lesbiana">Lesbiana</option>
@@ -1393,14 +1449,14 @@ export default class Contact extends Component {
                   </div>
 
                   {/* Checkbox Discapacidad*/}
-                  <div className="row mb-3 align-items-center">
-                    <div className="col">
+                  <div className="row mb-3 align-items-center" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
+                    <div className="col-md-6">
                       <input type="checkbox" id="swDiscapacidad" name="swDiscapacidad" onChange={this.checkDisc.bind(this)} checked={this.state.swDiscapacidad === true} value={this.state.swDiscapacidad} 
                         disabled={this.state.swAnonimo === true} ref={swDiscapacidad=>this.inputSwDiscapacidad = swDiscapacidad}/>
                       <label className="form-label" onClick={this.checkDisc.bind(this)} style={{fontSize: "14px"}}>&nbsp;¿Tiene alguna discapacidad?</label>
                     </div>
                     {/* Select Discapacidad*/}
-                    <div className="col">
+                    <div className="col-md-6">
                       <select required={this.state.swDiscapacidad === true} onChange={this.handlerOnChange} disabled={this.state.swDiscapacidad === false} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
                         <option value="" >Seleccione...</option>
                         <option value="Autismo">Autismo</option>
@@ -1445,211 +1501,11 @@ export default class Contact extends Component {
                 <div className="col-md-6">
                   
                   {/* Delito */}
-                  <span>
-                    <small className="text-secondary">Tipo de delito: *</small> 
-                  </span>
+                  <label>
+                     <small> Descripcion de los hechos </small>
+                  </label>
                   <div className="form-group mb-3">
-                    {/* Select Delitos*/}
-                    <select required onChange={this.handlerOnChange} className="form-select" id="selTipoDelito" name="selTipoDelito" value={this.state.selTipoDelito} ref={selTipoDelito=>this.inputSelTipoDelito = selTipoDelito}  aria-label="Tipo de delito">
-                      <option value="" >Seleccione...</option>
-                      <option value="ABORTO">ABORTO</option>
-                      <option value="COHECHO DE PARTICULARES">COHECHO DE PARTICULARES</option>
-                      <option value="DELITOS COMETIDOS EN EL EJERCICIO DE UNA ACTIVIDAD PROFESIONAL O TÉCNICA">DELITOS COMETIDOS EN EL EJERCICIO DE UNA ACTIVIDAD PROFESIONAL O TÉCNICA</option>
-                      <option value="DELITOS CONTRA EL RESPETO A LOS MUERTOS Y CONTRA LAS NORMAS DE INHUMACIÓN Y EXHUMACIÓN">PORTACION, FABRICACIÓN Y ACOPIO DE ARMAS PROHIBIDAS</option>
-                      <option value="DELITOS CONTRA EL RESPETO A LOS MUERTOS Y CONTRA LAS NORMAS DE INHUMACIÓN Y EXHUMACIÓN">DELITOS CONTRA EL RESPETO A LOS MUERTOS Y CONTRA LAS NORMAS DE INHUMACIÓN Y EXHUMACIÓN</option>
-                      <option value="VIOLENCIA FAMILIAR">VIOLENCIA FAMILIAR</option>
-                      <option value="ABANDONO DE ATROPELLADO">ABANDONO DE ATROPELLADO</option>
-                      <option value="HOMICIDIO CULPOSO">HOMICIDIO CULPOSO</option>
-                      <option value="HOMICIDIO DOLOSO">HOMICIDIO DOLOSO</option>
-                      <option value="REVELACIÓN DE SECRETO">REVELACIÓN DE SECRETO</option>
-                      <option value="DELITOS EN CONTRA DE LOS ANIMALES">DELITOS EN CONTRA DE LOS ANIMALES </option>
-                      <option value="DELITOS CONTRA EL TRABAJO Y LA PREVISIÓN SOCIAL">DELITOS CONTRA EL TRABAJO Y LA PREVISIÓN SOCIAL</option>
-                      <option value="ASALTO EN NEGOCIO U OFICINA">ASALTO EN NEGOCIO U OFICINA</option>
-                      <option value="ASALTO EN VEHÍCULO PARTICULAR">ASALTO EN VEHÍCULO PARTICULAR</option>
-                      <option value="ASALTO EN CASA HABITACIÓN">ASALTO EN CASA HABITACIÓN</option>
-                      <option value="ASALTO EN ESPACIO ABIERTO AL PÚBLICO">ASALTO EN ESPACIO ABIERTO AL PÚBLICO</option>
-                      <option value="ASALTO EN TRANSPORTE PÚBLICO">ASALTO EN TRANSPORTE PÚBLICO</option>
-                      <option value="ROBO A INSTITUCIONES BANCARIAS SIN VIOLENCIA">ROBO A INSTITUCIONES BANCARIAS SIN VIOLENCIA</option>
-                      <option value="ROBO A TRANSEÚNTE SIN VIOLENCIA">ROBO A TRANSEÚNTE SIN VIOLENCIA</option>
-                      <option value="ROBO A DEPENDENCIAS DE GOBIERNO CON VIOLENCIA">ROBO A DEPENDENCIAS DE GOBIERNO CON VIOLENCIA</option>
-                      <option value="ROBO A PERSONA EN LUGAR PRIVADO CON VIOLENCIA">ROBO A PERSONA EN LUGAR PRIVADO CON VIOLENCIA</option>
-                      <option value="ROBO A ESCUELAS SIN VIOLENCIA">ROBO A ESCUELAS SIN VIOLENCIA</option>
-                      <option value="ROBO DE AUTOPARTES CON VIOLENCIA">ROBO DE AUTOPARTES CON VIOLENCIA</option>
-                      <option value="ROBO A CASA HABITACIÓN CON VIOLENCIA">ROBO A CASA HABITACIÓN CON VIOLENCIA</option>
-                      <option value="ROBO A IGLESIAS SIN VIOLENCIA">ROBO A IGLESIAS SIN VIOLENCIA</option>
-                      <option value="ROBO A DEPENDENCIAS DE GOBIERNO SIN VIOLENCIA">ROBO A DEPENDENCIAS DE GOBIERNO SIN VIOLENCIA</option>
-                      <option value="ROBO EN AUTOBUSES SIN VIOLENCIA">ROBO EN AUTOBUSES SIN VIOLENCIA</option>
-                      <option value="ROBO A MAQUINARIA SIN VIOLENCIA">ROBO A MAQUINARIA SIN VIOLENCIA</option>
-                      <option value="ROBO A ESCUELAS CON VIOLENCIA">ROBO A ESCUELAS CON VIOLENCIA</option>
-                      <option value="ROBO A CUENTAHABIENTE SIN VIOLENCIA">ROBO A CUENTAHABIENTE SIN VIOLENCIA</option>
-                      <option value="ROBO EN TRANSPORTE DE SERVICIO PUBLICO INDIVIDUAL SIN VIOLENCIA">ROBO EN TRANSPORTE DE SERVICIO PUBLICO INDIVIDUAL SIN VIOLENCIA</option>
-                      <option value="ROBO EN TRANSPORTE DE SERVICIO PUBLICO COLECTIVO SIN VIOLENCIA">ROBO EN TRANSPORTE DE SERVICIO PUBLICO COLECTIVO SIN VIOLENCIA</option>
-                      <option value="ROBO A MAQUINARIA CON VIOLENCIA">ROBO A MAQUINARIA CON VIOLENCIA</option>
-                      <option value="ROBO EN VEHÍCULO DE PARTICULARES SIN VIOLENCIA">ROBO EN VEHÍCULO DE PARTICULARES SIN VIOLENCIA</option>
-                      <option value="ROBO DE CAMIONES DE CARGA SIN VIOLENCIA">ROBO DE CAMIONES DE CARGA SIN VIOLENCIA</option>
-                      <option value="ROBO OTRO TIPO SIN VIOLENCIA">ROBO OTRO TIPO SIN VIOLENCIA</option>
-                      <option value="ROBO DE HIDROCARBURO SIN VIOLENCIA">ROBO DE HIDROCARBURO SIN VIOLENCIA</option>
-                      <option value="ROBO A TRANSEÚNTE EN ESPACIO ABIERTO AL PUBLICO CON VIOLENCIA">ROBO A TRANSEÚNTE EN ESPACIO ABIERTO AL PUBLICO CON VIOLENCIA</option>
-                      <option value="ROBO A INSTITUCIONES DE SALUD CON VIOLENCIA">ROBO A INSTITUCIONES DE SALUD CON VIOLENCIA</option>
-                      <option value="ROBO A NEGOCIO U OFICINA CON VIOLENCIA">ROBO A NEGOCIO U OFICINA CON VIOLENCIA</option>
-                      <option value="ROBO A TRANSEÚNTE EN VÍA PUBLICA SIN VIOLENCIA">ROBO A TRANSEÚNTE EN VÍA PUBLICA SIN VIOLENCIA</option>
-                      <option value="ROBO A NEGOCIO U OFICINA SIN VIOLENCIA">ROBO A NEGOCIO U OFICINA SIN VIOLENCIA</option>
-                      <option value="ROBO A CASA HABITACIÓN SIN VIOLENCIA">ROBO A CASA HABITACIÓN SIN VIOLENCIA</option>
-                      <option value="ROBO A TRANSPORTISTAS CON VIOLENCIA">ROBO A TRANSPORTISTAS CON VIOLENCIA</option>
-                      <option value="ROBO A VEHÍCULO CON VIOLENCIA">ROBO A VEHÍCULO CON VIOLENCIA</option>
-                      <option value="ROBO DE VEHÍCULO SIN VIOLENCIA">ROBO DE VEHÍCULO SIN VIOLENCIA</option>
-                      <option value="ROBO EN VEHÍCULO DE PARTICULARES CON VIOLENCIA">ROBO EN VEHÍCULO DE PARTICULARES CON VIOLENCIA</option>
-                      <option value="ROBO DE VEHÍCULO CON VIOLENCIA">ROBO DE VEHÍCULO CON VIOLENCIA</option>
-                      <option value="ROBO A TRANSEÚNTE CON VIOLENCIA">ROBO A TRANSEÚNTE CON VIOLENCIA</option>
-                      <option value="ROBO EN TRANSPORTE DE SERVICIO PÚBLICO COLECTIVO CON VIOLENCIA">ROBO EN TRANSPORTE DE SERVICIO PÚBLICO COLECTIVO CON VIOLENCIA</option>
-                      <option value="ROBO DE ENERGÍA ELÉCTRICA SIN VIOLENCIA">ROBO DE ENERGÍA ELÉCTRICA SIN VIOLENCIA</option>
-                      <option value="ROBO A PERSONA EN LUGAR PRIVADO SIN VIOLENCIA">ROBO A PERSONA EN LUGAR PRIVADO SIN VIOLENCIA</option>
-                      <option value="ROBO EN AUTOBUSES CON VIOLENCIA">ROBO EN AUTOBUSES CON VIOLENCIA</option>
-                      <option value="ROBO DE ENERGÍA ELÉCTRICA CON VIOLENCIA">ROBO DE ENERGÍA ELÉCTRICA CON VIOLENCIA</option>
-                      <option value="ROBO OTRO TIPO CON VIOLENCIA">ROBO OTRO TIPO CON VIOLENCIA</option>
-                      <option value="ROBO A CUENTAHABIENTE CON VIOLENCIA">ROBO A CUENTAHABIENTE CON VIOLENCIA</option>
-                      <option value="ROBO A TRANSEUNTE EN ESPACIO ABIERTO AL PUBLICO SIN VIOLENCIA">ROBO A TRANSEUNTE EN ESPACIO ABIERTO AL PUBLICO SIN VIOLENCIA</option>
-                      <option value="ROBO DE CAMIONES DE CARGA CON VIOLENCIA">ROBO DE CAMIONES DE CARGA CON VIOLENCIA</option>
-                      <option value="ROBO A INSTITUCIONES DE SALUD SIN VIOLENCIA">ROBO A INSTITUCIONES DE SALUD SIN VIOLENCIA</option>
-                      <option value="ROBO DE AUTOPARTES SIN VIOLENCIA">ROBO DE AUTOPARTES SIN VIOLENCIA</option>
-                      <option value="ROBO DE HIDROCARBURO CON VIOLENCIA">ROBO DE HIDROCARBURO CON VIOLENCIA</option>
-                      <option value="ROBO A INSTITUCIONES BANCARIAS CON VIOLENCIA">ROBO A INSTITUCIONES BANCARIAS CON VIOLENCIA</option>
-                      <option value="ROBO EN TRANSPORTE DE SERVICIO PÚBLICO INDIVIDUAL CON VIOLENCIA">ROBO EN TRANSPORTE DE SERVICIO PÚBLICO INDIVIDUAL CON VIOLENCIA</option>
-                      <option value="ROBO A TRANSPORTISTAS SIN VIOLENCIA">ROBO A TRANSPORTISTAS SIN VIOLENCIA</option>
-                      <option value="ROBO A VEHÍCULO SIN VIOLENCIA">ROBO A VEHÍCULO SIN VIOLENCIA</option>
-                      <option value="ROBO A IGLESIAS CON VIOLENCIA">ROBO A IGLESIAS CON VIOLENCIA</option>
-                      <option value="ROBO A TRANSEÚNTE EN VÍA PUBLICA CON VIOLENCIA">ROBO A TRANSEÚNTE EN VÍA PUBLICA CON VIOLENCIA</option>
-                      <option value="DAÑO EN LA PROPIEDAD NO ESPECIFICADO">DAÑO EN LA PROPIEDAD NO ESPECIFICADO</option>
-                      <option value="DAÑO EN LA PROPIEDAD CULPOSO">DAÑO EN LA PROPIEDAD CULPOSO</option>
-                      <option value="DAÑO EN LA PROPIEDAD OTRO TIPO">DAÑO EN LA PROPIEDAD OTRO TIPO</option>
-                      <option value="DAÑO EN LA PROPIEDAD DOLOSO">DAÑO EN LA PROPIEDAD DOLOSO</option>
-                      <option value="INCUMPLIMIENTO DE UN DEBER LEGAL">INCUMPLIMIENTO DE UN DEBER LEGAL</option>
-                      <option value="VIOLACIÓN A LA INTIMIDAD SEXUAL">VIOLACIÓN A LA INTIMIDAD SEXUAL</option>
-                      <option value="PELIGRO DE CONTAGIO DE ENFERMEDADES">PELIGRO DE CONTAGIO DE ENFERMEDADES</option>
-                      <option value="INTIMIDACIÓN">INTIMIDACIÓN</option>
-                      <option value="EJERCICIO INDEBIDO DEL PROPIO DERECHO">EJERCICIO INDEBIDO DEL PROPIO DERECHO</option>
-                      <option value="REBELIÓN">REBELIÓN</option>
-                      <option value="SABOTAJE">SABOTAJE</option>
-                      <option value="DESAPARICIÓN DE PERSONAS COMETIDAS POR PARTICULARES">DESAPARICIÓN DE PERSONAS COMETIDAS POR PARTICULARES</option>
-                      <option value="TRÁFICO DE MENORES">TRÁFICO DE MENORES</option>
-                      <option value="RECEPTACIÓN">RECEPTACIÓN</option>
-                      <option value="TRATA DE PERSONAS CON FINES DE EXPLOTACIÓN SEXUAL">TRATA DE PERSONAS CON FINES DE EXPLOTACIÓN SEXUAL</option>
-                      <option value="TRATA DE PERSONAS CON FINES DE TRABAJO O SERVICIOS FORZADOS">TRATA DE PERSONAS CON FINES DE TRABAJO O SERVICIOS FORZADOS</option>
-                      <option value="TRATA DE PERSONAS CON FINES DE TRAFICO DE ORGANOS">TRATA DE PERSONAS CON FINES DE TRAFICO DE ORGANOS</option>
-                      <option value="TRATA DE PERSONAS CON OTROS FINES DE EXPLOTACION">TRATA DE PERSONAS CON OTROS FINES DE EXPLOTACION</option>
-                      <option value="TRATA DE PERSONAS NO ESPECIFICADO">TRATA DE PERSONAS NO ESPECIFICADO</option>
-                      <option value="ABANDONADO DE INCAPAZ">ABANDONADO DE INCAPAZ</option>
-                      <option value="DISCRIMINACIÓN">DISCRIMINACIÓN</option>
-                      <option value="LESIONES DOLOSAS">LESIONES DOLOSAS</option>
-                      <option value="LESIONES CULPOSAS">LESIONES CULPOSAS</option>
-                      <option value="DELITOS ELECTORALES COMETIDOS POR PARTICULARES">DELITOS ELECTORALES COMETIDOS POR PARTICULARES</option>
-                      <option value="DELITOS ELECTORALES COMETIDOS POR SERVIDORES PÚBLICOS">DELITOS ELECTORALES COMETIDOS POR SERVIDORES PÚBLICOS</option>
-                      <option value="DELITOS ELECTORALES COMETIDOS POR FUNCIONARIOS ELECTORALES">DELITOS ELECTORALES COMETIDOS POR FUNCIONARIOS ELECTORALES</option>
-                      <option value="DELITOS ELECTORALES COMETIDOS POR FUNCIONARIOS PARTIDISTAS">DELITOS ELECTORALES COMETIDOS POR FUNCIONARIOS PARTIDISTAS</option>
-                      <option value="CALUMNIA (DEROGADO)">CALUMNIA (DEROGADO)</option>
-                      <option value="BIGAMIA">BIGAMIA</option>
-                      <option value="ABIGEATO CON VIOLENCIA">ABIGEATO CON VIOLENCIA</option>
-                      <option value="ABIGEATO SIN VIOLENCIA">ABIGEATO SIN VIOLENCIA</option>
-                      <option value="EXTORSIÓN COMETIDA POR VÍA TELEFÓNICA O CUALQUIER OTRO MEDIO ELECTRÓNICO O DE COMUNICACIÓN">EXTORSIÓN COMETIDA POR VÍA TELEFÓNICA O CUALQUIER OTRO MEDIO ELECTRÓNICO O DE COMUNICACIÓN</option>
-                      <option value="EXTORSIÓN OTRO TIPO">EXTORSIÓN OTRO TIPO</option>
-                      <option value="EXTORSIÓN NO ESPECIFICADO">EXTORSIÓN NO ESPECIFICADO</option>
-                      <option value="FEMINICIDIO">FEMINICIDIO</option>
-                      <option value="DESAPARICIÓN DE PERSONAS">DESAPARICIÓN DE PERSONAS</option>
-                      <option value="TORTURA">TORTURA</option>
-                      <option value="EJERCICIO INDEBIDO DEL SERVICIO PÚBLICO">EJERCICIO INDEBIDO DEL SERVICIO PÚBLICO</option>
-                      <option value="ENCUBRIMIENTO">ENCUBRIMIENTO</option>
-                      <option value="INCUMPLIMIENTO DE LAS OBLIGACIONES ALIMENTARIAS">INCUMPLIMIENTO DE LAS OBLIGACIONES ALIMENTARIAS</option>
-                      <option value="ALTERACIÓN DE LA IMAGEN URBANA">ALTERACIÓN DE LA IMAGEN URBANA</option>
-                      <option value="COALICIÓN DE SERVIDORES PÚBLICOS">COALICIÓN DE SERVIDORES PÚBLICOS</option>
-                      <option value="SIMULACIÓN DE SECUESTRO">SIMULACIÓN DE SECUESTRO</option>
-                      <option value="USO ILÍCITO DE ATRIBUCIONES Y FACULTADES">USO ILÍCITO DE ATRIBUCIONES Y FACULTADES</option>
-                      <option value="NEGOCIACIONES INDEBIDAS">NEGOCIACIONES INDEBIDAS</option>
-                      <option value="PUESTA A DISPOSICIÓN DE VEHÍCULO CON ALTERACIÓN EN SUS MEDIOS DE IDENTIFICACIÓN">PUESTA A DISPOSICIÓN DE VEHÍCULO CON ALTERACIÓN EN SUS MEDIOS DE IDENTIFICACIÓN</option>
-                      <option value="PUESTA A DISPOSICIÓN DE VEHÍCULO CON HUELLAS DE DESVALIGAMIENTO">PUESTA A DISPOSICIÓN DE VEHÍCULO CON HUELLAS DE DESVALIGAMIENTO</option>
-                      <option value="PUESTA A DISPOSICIÓN DE VEHÍCULO CON REPORTE DE ROBO">PUESTA A DISPOSICIÓN DE VEHÍCULO CON REPORTE DE ROBO</option>
-                      <option value="PUESTA A DISPOSICIÓN DE VEHÍCULO POR OTROS HECHOS">PUESTA A DISPOSICIÓN DE VEHÍCULO POR OTROS HECHOS</option>
-                      <option value="TRÁFICO DE INFLUENCIA">TRÁFICO DE INFLUENCIA</option>
-                      <option value="INCUMPLIMIENTO DE PENAS NO PRIVATIVAS DE LIBERTAD Y MEDIDAS DE SEGURIDAD">INCUMPLIMIENTO DE PENAS NO PRIVATIVAS DE LIBERTAD Y MEDIDAS DE SEGURIDAD</option>
-                      <option value="PECULADO">PECULADO</option>
-                      <option value="DELITOS COMETIDOS POR LOS SERVIDORES PÚBLICOS">DELITOS COMETIDOS POR LOS SERVIDORES PÚBLICOS</option>
-                      <option value="ALLANAMIENTO DE MORADA">ALLANAMIENTO DE MORADA</option>
-                      <option value="INSTIGACIÓN O AYUDA AL SUICIDIO">INSTIGACIÓN O AYUDA AL SUICIDIO</option>
-                      <option value="EVASIÓN DE PRESOS">EVASIÓN DE PRESOS </option>
-                      <option value="DELITOS CONTRA LA IDENTIDAD TERRITORIAL DEL ESTADO">DELITOS CONTRA LA IDENTIDAD TERRITORIAL DEL ESTADO</option>
-                      <option value="PELIGRO DE DEVASTACIÓN">PELIGRO DE DEVASTACIÓN</option>
-                      <option value="USURPACIÓN DE PROFESIONES">USURPACIÓN DE PROFESIONES</option>
-                      <option value="ATAQUES A LAS VÍAS DE COMUNICACIÓN Y A LOS MEDIOS DE TRANSPORTE">ATAQUES A LAS VÍAS DE COMUNICACIÓN Y A LOS MEDIOS DE TRANSPORTE</option>
-                      <option value="ABUSO DE AUTORIDAD">ABUSO DE AUTORIDAD</option>
-                      <option value="PROMOCIÓN DE CONDUCTAS ILÍCITAS">PROMOCIÓN DE CONDUCTAS ILÍCITAS</option>
-                      <option value="TERRORISMO">TERRORISMO</option>
-                      <option value="DELITOS CONTRA EL AMBIENTE">DELITOS CONTRA EL AMBIENTE</option>
-                      <option value="COBRANZA EXTRAJUDICIAL ILEGAL">COBRANZA EXTRAJUDICIAL ILEGAL</option>
-                      <option value="FACILITACIÓN DELICTIVA">FACILITACIÓN DELICTIVA</option>
-                      <option value="SEDICIÓN Y OTROS DESORDENES PÚBLICOS">SEDICIÓN Y OTROS DESORDENES PÚBLICOS</option>
-                      <option value="AMENAZAS">AMENAZAS</option>
-                      <option value="MATRIMONIO ILEGAL">MATRIMONIO ILEGAL</option>
-                      <option value="DESPOJO">DESPOJO</option>
-                      <option value="DELITOS CONTRA LA RIQUEZA FORESTAL">DELITOS CONTRA LA RIQUEZA FORESTAL</option>
-                      <option value="RAPTO">RAPTO</option>
-                      <option value="USURPACIÓN DE FUNCIONES PÚBLICAS Y EN MATERIA DE SERVICIOS DE SEGURIDAD PRIVADA Y USO INDEBIDO DE UNIFORMES, CONDECORACIONES Y ADITAMENTOS PROPIOS DE FUNCIONES POLICIALES">USURPACIÓN DE FUNCIONES PÚBLICAS Y EN MATERIA DE SERVICIOS DE SEGURIDAD PRIVADA Y USO INDEBIDO DE UNIFORMES, CONDECORACIONES Y ADITAMENTOS PROPIOS DE FUNCIONES POLICIALES</option>
-                      <option value="SECUESTRO GENÉRICO">SECUESTRO GENÉRICO</option>
-                      <option value="SECUESTRO OTRO TIPO">SECUESTRO OTRO TIPO</option>
-                      <option value="SECUESTRO CON CALIDAD DE REHÉN">SECUESTRO CON CALIDAD DE REHÉN</option>
-                      <option value="SECUESTRO PARA CAUSAR DAÑO">SECUESTRO PARA CAUSAR DAÑO</option>
-                      <option value="SECUESTRO EXPRÉS (POR EXTORSIÓN Y ROBO)">SECUESTRO EXPRÉS (POR EXTORSIÓN Y ROBO)</option>
-                      <option value="COHECHO">COHECHO</option>
-                      <option value="ABUSO SEXUAL">ABUSO SEXUAL</option>
-                      <option value="FALSIFICACIÓN DE DOCUMENTOS Y USO DE DOCUMENTOS FALSOS">FALSIFICACIÓN DE DOCUMENTOS Y USO DE DOCUMENTOS FALSOS</option>
-                      <option value="DISTRACCIÓN DE RECURSOS PÚBLICOS">DISTRACCIÓN DE RECURSOS PÚBLICOS</option>
-                      <option value="VIOLACIÓN DE CORRESPONDENCIA">VIOLACIÓN DE CORRESPONDENCIA</option>
-                      <option value="USO ILÍCITO DE ATRIBUCIONES Y FACULTADES RELACIONADO CON PARTICULARES">USO ILÍCITO DE ATRIBUCIONES Y FACULTADES RELACIONADO CON PARTICULARES</option>
-                      <option value="DIFAMACION (DEROGADO)">DIFAMACION (DEROGADO)</option>
-                      <option value="INFIDELIDAD DE LA CUSTODIA DE DOCUMENTOS Y VIOLACIÓN DE SECRETOS">INFIDELIDAD DE LA CUSTODIA DE DOCUMENTOS Y VIOLACIÓN DE SECRETOS</option>
-                      <option value="EMBARAZO NO DESEADO A TRAVÉS DE MEDIOS CLÍNICOS, ESTERILIDAD PROVOCADA Y DISPOSICIÓN DE ÓVULOS O ESPERMAS SIN CONSENTIMIENTO">EMBARAZO NO DESEADO A TRAVÉS DE MEDIOS CLÍNICOS, ESTERILIDAD PROVOCADA Y DISPOSICIÓN DE ÓVULOS O ESPERMAS SIN CONSENTIMIENTO</option>
-                      <option value="USURA">USURA</option>
-                      <option value="PANDILLA">PANDILLA</option>
-                      <option value="DESOBEDIENCIA Y RESISTENCIA DE PARTICULARES">DESOBEDIENCIA Y RESISTENCIA DE PARTICULARES</option>
-                      <option value="INCESTO">INCESTO</option>
-                      <option value="CORRUPCIÓN DE MENORES">CORRUPCIÓN DE MENORES</option>
-                      <option value="IMPUTACIÓN DE HECHOS FALSOS Y SIMULACIÓN DE PRUEBAS">IMPUTACIÓN DE HECHOS FALSOS Y SIMULACIÓN DE PRUEBAS</option>
-                      <option value="USO INDEBIDO DE LOS SISTEMAS DE EMERGENCIA">USO INDEBIDO DE LOS SISTEMAS DE EMERGENCIA</option>
-                      <option value="CONCUSIÓN">CONCUSIÓN</option>
-                      <option value="FALSEDAD ANTE LA AUTORIDAD">FALSEDAD ANTE LA AUTORIDAD</option>
-                      <option value="ENRIQUECIMIENTO ILÍCITO">ENRIQUECIMIENTO ILÍCITO</option>
-                      <option value="NARCOMENUDEO POR POSESION SIMPLE">NARCOMENUDEO POR POSESION SIMPLE</option>
-                      <option value="NARCOMENUDEO NO ESPECIFICADO">NARCOMENUDEO NO ESPECIFICADO</option>
-                      <option value="NARCOMENUDEO POR SUMINISTRO">NARCOMENUDEO POR SUMINISTRO</option>
-                      <option value="NARCOMENUDEO OTROS DELITOS CONTRA LA SALUD RELACIONADOS CON NARCOTICOS">NARCOMENUDEO OTROS DELITOS CONTRA LA SALUD RELACIONADOS CON NARCOTICOS</option>
-                      <option value="NARCOMENUDEO POR COMERCIO">NARCOMENUDEO POR COMERCIO</option>
-                      <option value="APROVECHAMIENTO SEXUAL">APROVECHAMIENTO SEXUAL</option>
-                      <option value="ADMINISTRACIÓN FRAUDULENTA">ADMINISTRACIÓN FRAUDULENTA</option>
-                      <option value="USURPACIÓN DE IDENTIDAD">USURPACIÓN DE IDENTIDAD</option>
-                      <option value="DELITOS CONTRA EL COMERCIO, LA INDUSTRIA, LA AGRICULTURA Y LA ESTABILIDAD ECONÓMICA">DELITOS CONTRA EL COMERCIO, LA INDUSTRIA, LA AGRICULTURA Y LA ESTABILIDAD ECONÓMICA</option>
-                      <option value="DELITOS COMETIDOS POR LOS FRACCIONADORES">DELITOS COMETIDOS POR LOS FRACCIONADORES</option>
-                      <option value="ESTUPRO">ESTUPRO</option>
-                      <option value="CONSPIRACIÓN">CONSPIRACIÓN</option>
-                      <option value="PRIVACIÓN ILEGAL DE LA LIBERTAD">PRIVACIÓN ILEGAL DE LA LIBERTAD</option>
-                      <option value="QUEBRANTAMIENTOS DE SELLOS">QUEBRANTAMIENTOS DE SELLOS</option>
-                      <option value="ABUSO DE CONFIANZA">ABUSO DE CONFIANZA</option>
-                      <option value="APROVECHAMIENTO INDEBIDO DE BIENES EJIDALES O COMUNALES">APROVECHAMIENTO INDEBIDO DE BIENES EJIDALES O COMUNALES</option>
-                      <option value="ULTRAJES A LA MORAL">ULTRAJES A LA MORAL</option>
-                      <option value="LO QUE RESULTE DE LA MUERTE">LO QUE RESULTE DE LA MUERTE</option>
-                      <option value="HECHOS POSIBLEMENTE CONSTITUTIVOS DEL DELITO">HECHOS POSIBLEMENTE CONSTITUTIVOS DEL DELITO</option>
-                      <option value="ULTRAJES A LA AUTORIDAD">ULTRAJES A LA AUTORIDAD</option>
-                      <option value="SUSTRACCIÓN DE MENORES E INCAPACES">SUSTRACCIÓN DE MENORES E INCAPACES</option>
-                      <option value="FRAUDE">FRAUDE</option>
-                      <option value="FRAUDE PROCESAL">FRAUDE PROCESAL</option>
-                      <option value="FALSIFICACIÓN Y USO INDEBIDO DE SELLOS, MARCAS, LLAVES, CONTRASEÑAS Y OTROS OBJETOS">FALSIFICACIÓN Y USO INDEBIDO DE SELLOS, MARCAS, LLAVES, CONTRASEÑAS Y OTROS OBJETOS</option>
-                      <option value="OMISIÓN DE AUXILIO">OMISIÓN DE AUXILIO</option>
-                      <option value="MOTÍN">MOTÍN</option>
-                      <option value="DELITOS DE ABOGADOS, DEFENSORES Y LITIGANTES">DELITOS DE ABOGADOS, DEFENSORES Y LITIGANTES</option>
-                      <option value="DELITOS COMETIDOS EN MATERIA DE PROTECCIÓN CIVIL">DELITOS COMETIDOS EN MATERIA DE PROTECCIÓN CIVIL</option>
-                      <option value="DELITOS CONTRA LA FILIACIÓN Y EL ESTADO FAMILIAR DE LAS PERSONAS">DELITOS CONTRA LA FILIACIÓN Y EL ESTADO FAMILIAR DE LAS PERSONAS</option>
-                      <option value="VIOLACIÓN SIMPLE">VIOLACIÓN SIMPLE</option>
-                      <option value="VIOLACIÓN EQUIPARADA">VIOLACIÓN EQUIPARADA</option>
-                      <option value="LENOCINIO">LENOCINIO</option>
-                      <option value="DESAPARICIÓN FORZADA DE PERSONAS">DESAPARICIÓN FORZADA DE PERSONAS</option>
-                    </select>
+                    <input onChange={this.handlerOnChange} id="txtDescHechos" type="text" className="form-control w-100" name="txtDescHechos" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos} />
                   </div>
 
                   {/* fecha del suceso */}
@@ -1685,7 +1541,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Numero exterior: *</small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} maxLength="5" type="number" className="form-control" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
+                    <input required onChange={this.handlerOnChange} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} type="text" className="form-control" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
                   </div>
                   
                   {/* Numero Interior */}
@@ -1693,13 +1549,8 @@ export default class Contact extends Component {
                     <small className="text-secondary">Numero interior: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
-                  </div>
-                  
-                  {/* Numero Interior */}
-                  <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="number" maxLength="5" className="form-control w-100" placeholder="Numero interior" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
-                  </div>                  
+                    <input onChange={this.handlerOnChange} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="text" className="form-control" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
+                  </div>                
                   
                   {/* Entre calle 1 */}
                   <span>
@@ -1730,7 +1581,7 @@ export default class Contact extends Component {
                 <div className="col-md-6">
                   {/* Pais */}
                   <span>
-                    <small className="text-secondary">Pais: *</small> 
+                    <small className="text-secondary">País: *</small> 
                   </span>
                   <div className="form-group mb-3">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selPais" name="selPais" value={this.state.selPais} ref={(selPais) => (this.inputSelPais = selPais)} aria-label="pais" >
@@ -2041,13 +1892,58 @@ export default class Contact extends Component {
                       <option value="Opcion 1">Opcion 1</option>
                     </select>
                   </div>
+
                   {/* Codigo postal */}
                   <span>
                     <small className="text-secondary">Codigo Postal: *</small> 
                   </span>
                   <div className="form-group mb-3">
-                  <input required onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
-                </div>
+                    <input required onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
+                  </div>
+                
+                  {/* Agencia para cita */}
+                  <span>
+                    <small className="text-secondary">Agencia a visitar: *</small> 
+                  </span>
+                  <div className="form-group mb-3 align-items-center">
+                    <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
+                      <option value="">Seleccione</option>
+                      <option value="CESIS Pachuca">CESIS Pachuca</option>
+                      <option value="CESIS Tula">CESIS Tula</option>
+                      <option value="CESIS Tulancingo">CESIS Tulancingo</option>
+                      <option value="CESIS Ixmiquilpan">CESIS Ixmiquilpan</option>
+                    </select>
+                  </div>
+
+                  {/* fecha de visita */}
+                  <div className="row mb-3 align-items-center">
+                    <div className="col-md-6">
+                      <span>
+                        <small className="text-secondary">Fecha para visitar: *</small> 
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita" className="form-control" placeholder="fecha de la cita" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} aria-label="Fecha de cita"/>
+                    </div>
+                  </div>
+
+                  {/* hora de visita */}
+                  <div className="row mb-3 align-items-center">
+                    <div className="col-md-6">
+                      <span>
+                        <small className="text-secondary">Horario para visitar: *</small> 
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <select required onChange={this.handlerOnChange} className="form-select" id="selHorarioCita" name="selHorarioCita" value={this.state.selHorarioCita} ref={(selHorarioCita) => (this.inputSelHorarioCita = selHorarioCita) } aria-label="Horario de cita" >
+                        <option value="">Seleccione</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                        <option value="Opcion 1">Opcion 1</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="row">
@@ -2074,7 +1970,7 @@ export default class Contact extends Component {
                       <p className="card-text">
                         En la brevedad, recibirá una notificación por el medio seleccionado con su numero de cita y formato de solicitud de denuncia
                       </p>
-                      <a className="btn btn-dark" onClick={this.recargar.bind(this)}>Registrar nueva denuncia</a>
+                      <button className="btn btn-dark" onClick={this.recargar.bind(this)}>Registrar nueva denuncia</button>
                     </div>
                   </div>
                 </div>
