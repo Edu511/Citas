@@ -175,7 +175,7 @@ export default class Contact extends Component {
   }
 
   setEmpty = () => {
-    var setEmptyValue = " ";
+    var setEmptyValue = " ";  
   }
 
   //Función para enviar el formulario
