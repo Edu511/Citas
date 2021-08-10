@@ -169,13 +169,13 @@ export default class Contact extends Component {
   // handle changer para edad
   handleChange_edad = (event) => {
     console.log("fecha de nacimiento recogida: "+ event.target.value);
-    this.setState({ txtNumEdad: event.target.value });
+    this.setState({ dateFNacimiento: event.target.value });
 
-    // call calculate_age with event.target.value
+    // llama a la función para calcular con el valor guardado en el event
     var edad_calculada = this.obtenerEdad(event.target.value);
 
+    // Asigna el valor calculado a la variable de edad
     this.setState({ txtNumEdad: edad_calculada }, () => {
-      // this will have the latest this.state.age1
       console.log("Edad asignada:", this.state.txtNumEdad);
     })
   }
@@ -193,7 +193,6 @@ export default class Contact extends Component {
     {
       edad--;
     }
-
     return edad;
   }
 
@@ -675,7 +674,6 @@ export default class Contact extends Component {
     const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState({ state });
-    // console.log(state);    
   };
 
   render() {
