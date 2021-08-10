@@ -174,6 +174,10 @@ export default class Contact extends Component {
     }
   }
 
+  setEmpty = () => {
+    var setEmptyValue = " ";
+  }
+
   //Función para enviar el formulario
   enviar(e) {
     e.preventDefault();
@@ -628,7 +632,7 @@ export default class Contact extends Component {
                       <small className="text-secondary">RFC: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
                     </span>
                     <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" value={(this.state.swAnonimo === true || this.state.raPersona === "Fisica") ? this.setEmpty : this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
                     </div>
 
                     {/* Razon social */}
@@ -636,7 +640,7 @@ export default class Contact extends Component {
                       <small className="text-secondary">Razon Social: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
                     </span>
                     <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
+                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" value={(this.state.swAnonimo === true || this.state.raPersona === "Fisica") ? this.setEmpty : this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
                     </div>
 
                     {/* Nombre */}
@@ -644,7 +648,7 @@ export default class Contact extends Component {
                       <small className="text-secondary">Nombre: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
                     </span>
                     <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
+                      <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
                     </div>
 
                 {/* Apellido parterno */}
@@ -652,7 +656,7 @@ export default class Contact extends Component {
                   <small className="text-secondary">Apellido Paterno: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
                 </span>
                 <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
+                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control" name="txtApPaterno" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
                 </div>
                 
                 {/* Apellido materno */}
@@ -660,7 +664,7 @@ export default class Contact extends Component {
                   <small className="text-secondary">Apellido Materno: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
                 </span>
                 <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
+                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" name="txtApMaterno" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
                 </div>
 
                 {/* Alias */}
@@ -668,7 +672,7 @@ export default class Contact extends Component {
                   <small className="text-secondary">Alias: </small> 
                 </span>
                 <div className="form-group mb-3">
-                  <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
+                  <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" name="txtAlias" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                 </div>
 
                 {/* Edad */}
@@ -846,7 +850,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Nacionalidad: <small className="text-secondary" hidden={ this.state.raPersona === "Moral" || this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="txtNacionalidad" type="text" name="txtNacionalidad" value={this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-control" id="txtNacionalidad" type="text" name="txtNacionalidad" value={(this.state.swAnonimo === true || this.state.raPersona === "Moral") ? this.setEmpty : this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad} />
                   </div>
 
                   {/* Estado civil */}
@@ -876,7 +880,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Ocupacion: </small>
                   </span>
                   <div className="form-group mb-3">                    
-                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="" >Seleccione...</option>
                       <option value="Abogado">Abogado</option>
                       <option value="Actor, Actriz, Director de Espectáculos">
@@ -1167,7 +1171,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Lengua: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
+                    <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
                       <option value="" >Seleccione...</option>
                       <option value="Akateko">Akateko</option>
                       <option value="Amuzgo">Amuzgo</option>
