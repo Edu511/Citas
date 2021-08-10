@@ -85,10 +85,26 @@ export default class Contact extends Component {
   }
 
   // habilita las opciones al seleccionar LGTB checked
-  checkLGBT(){
+  checkLGBT = () =>{
+
     this.setState({
       swLGBT: !this.state.swLGBT
+    }, () => {
+      console.log('Valor del checkbox en LGTB: ' + this.state.swLGBT);
     })
+
+    if(this.state.swLGBT === false){
+     
+      this.setState({
+        selLGBT: this.state.selLGBT
+      })
+
+    } else {
+      this.setState({
+        selLGBT: ""
+      })
+
+    }
 
   }
 
@@ -97,23 +113,49 @@ export default class Contact extends Component {
     this.setState({
       swDiscapacidad: !this.state.swDiscapacidad
     })
+
+    if(this.state.swDiscapacidad === false){
+     
+      this.setState({
+        selDiscapacidad: this.state.selDiscapacidad
+      })
+
+    } else {
+      this.setState({
+        selDiscapacidad: ""
+      })
+
+    }
+
   }
 
   //Se ocupa de cambiar de seccion
   siguiente = () => {
-    this.setState({
-      step: parseInt(this.state.step) + 1,
-    });
+    if(this.state.swAnonimo === true){
+      this.setState({
+        step: 3,
+      });
+    } else {
+      this.setState({
+        step: parseInt(this.state.step) + 1,
+      });
+    }
   };
 
   // regresa a la seccion anterior
   anterior() {
-    this.setState({
-      step: parseInt(this.state.step) - 1,
-    });
+    if(this.state.swAnonimo === true){
+      this.setState({
+        step: 1,
+      });
+    } else {
+      this.setState({
+        step: parseInt(this.state.step) - 1,
+      });
+    }
   }
 
-
+  // estado OnChange para el documento
   onFileChange = (event) => {
     
     // cambia el estado de la variable
@@ -124,12 +166,13 @@ export default class Contact extends Component {
 
   }
 
+  // handle changer para edad
   handleChange_edad = (event) => {
-    console.log("fecha: "+ event.target.value)
-    this.setState({ txtNumEdad: event.target.value })
+    console.log("fecha de nacimiento recogida: "+ event.target.value);
+    this.setState({ txtNumEdad: event.target.value });
 
     // call calculate_age with event.target.value
-    var edad_calculada = { txtNumEdad: this.obtenerEdad(event.target.value) }
+    var edad_calculada = this.obtenerEdad(event.target.value);
 
     this.setState({ txtNumEdad: edad_calculada }, () => {
       // this will have the latest this.state.age1
@@ -202,9 +245,13 @@ export default class Contact extends Component {
   // funcion para validar correo
   validateEmail = () => {
     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.state.emailCorreo)) { 
-      console.log('correo autorizado para pasar')
+      
+      console.log('correo autorizado: ' + this.state.emailCorreo);
+      return true;
     } else {
-      alert('Por favor introduzca un correo válido')
+      
+      console.log('correo autorizado: ' + this.state.emailCorreo);
+      alert('Por favor introduzca un correo válido');
     }
   }
 
@@ -257,6 +304,9 @@ export default class Contact extends Component {
         selMunicipio : this.state.selMunicipio,
         selLocalidad : this.state.selLocalidad,
         txtCodPostal : this.state.txtCodPostal,
+        selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+        dateFechaCita : this.state.dateFechaCita,
+        selHorarioCita : this.state.selHorarioCita,
         // txtLatitud : this.state.txtLatitud,
         // txtLongitud : this.state.txtLongitud
       }
@@ -280,7 +330,10 @@ export default class Contact extends Component {
         parametrosAnonimo.selEstado &&
         parametrosAnonimo.selMunicipio &&
         parametrosAnonimo.selLocalidad &&
-        parametrosAnonimo.txtCodPostal 
+        parametrosAnonimo.txtCodPostal &&
+        parametrosAnonimo.selAgenciaAVisitar &&
+        parametrosAnonimo.dateFechaCita &&
+        parametrosAnonimo.selHorarioCita 
         // parametrosAnonimo.txtLatitud &&
         // parametrosAnonimo.txtLongitud
         )
@@ -350,6 +403,9 @@ export default class Contact extends Component {
         selMunicipio : this.state.selMunicipio,
         selLocalidad : this.state.selLocalidad,
         txtCodPostal : this.state.txtCodPostal,
+        selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+        dateFechaCita : this.state.dateFechaCita,
+        selHorarioCita : this.state.selHorarioCita,
         // txtLatitud : this.state.txtLatitud,
         // txtLongitud : this.state.txtLongitud
       }
@@ -373,7 +429,10 @@ export default class Contact extends Component {
         parametrosProtegidos.selEstado &&
         parametrosProtegidos.selMunicipio &&
         parametrosProtegidos.selLocalidad &&
-        parametrosProtegidos.txtCodPostal
+        parametrosProtegidos.txtCodPostal &&
+        parametrosProtegidos.selAgenciaAVisitar &&
+        parametrosProtegidos.dateFechaCita &&
+        parametrosProtegidos.selHorarioCita
         // parametrosProtegidos.txtLatitud &&
         // parametrosProtegidos.txtLongitud
         )
@@ -446,6 +505,9 @@ export default class Contact extends Component {
         selMunicipio: this.state.selMunicipio,
         selLocalidad: this.state.selLocalidad,
         txtCodPostal: this.state.txtCodPostal,
+        selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+        dateFechaCita : this.state.dateFechaCita,
+        selHorarioCita : this.state.selHorarioCita,
         // txtLatitud: this.state.txtLatitud,
         // txtLongitud: this.state.txtLongitud,
       }
@@ -480,7 +542,10 @@ export default class Contact extends Component {
         parametrosFisica.selEstado &&
         parametrosFisica.selMunicipio &&
         parametrosFisica.selLocalidad &&
-        parametrosFisica.txtCodPostal 
+        parametrosFisica.txtCodPostal &&
+        parametrosFisica.selAgenciaAVisitar &&
+        parametrosFisica.dateFechaCita &&
+        parametrosFisica.selHorarioCita 
         // parametrosFisica.txtLatitud &&
         // parametrosFisica.txtLongitud
         )
@@ -551,6 +616,9 @@ export default class Contact extends Component {
         selMunicipio: this.state.selMunicipio,
         selLocalidad: this.state.selLocalidad,
         txtCodPostal: this.state.txtCodPostal,
+        selAgenciaAVisitar : this.state.selAgenciaAVisitar,
+        dateFechaCita : this.state.dateFechaCita,
+        selHorarioCita : this.state.selHorarioCita,
         // txtLatitud: this.state.txtLatitud,
         // txtLongitud: this.state.txtLongitud,
       }
@@ -574,7 +642,10 @@ export default class Contact extends Component {
         parametrosMoral.selEstado &&
         parametrosMoral.selMunicipio &&
         parametrosMoral.selLocalidad &&
-        parametrosMoral.txtCodPostal 
+        parametrosMoral.txtCodPostal &&
+        parametrosMoral.selAgenciaAVisitar &&
+        parametrosMoral.dateFechaCita &&
+        parametrosMoral.selHorarioCita 
         // parametrosMoral.txtLatitud &&
         // parametrosMoral.txtLongitud
         )
@@ -604,8 +675,7 @@ export default class Contact extends Component {
     const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState({ state });
-    this.handleChange_edad(e);   
-    // this.validateEmail();
+    // console.log(state);    
   };
 
   render() {
@@ -629,118 +699,109 @@ export default class Contact extends Component {
               <div className="row">
                 <div className="col-md-6">
                   {/* Lado izquierdo Azul */}
-                    <div className="form-group mb-3">
-                      <label>
-                        <input onChange={this.checkAnonimo.bind(this)} checked={this.state.swAnonimo === true} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
-                        <span>&nbsp;¿Su denuncia es anonima?</span>
-                      </label>
-                    </div>
-                    
-                    <div className="form-group mb-3">
-                      <label>
-                        <input onChange={this.checkF.bind(this)} disabled= {this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
-                        checked={this.state.raPersona === "Fisica" ? true : false}/>
-                        <span>Fisica &nbsp; &nbsp;</span>
-                      </label>
-                      <label>
-                        <input onChange={this.checkM.bind(this)} disabled={this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona}
-                        checked={this.state.raPersona === "Moral" ? true : false}/>
-                        <span>Moral</span>
-                      </label>
-                    </div>
+                  <div className="form-group mb-3">
+                    <label>
+                      <input onChange={this.checkAnonimo.bind(this)} checked={this.state.swAnonimo === true} type="checkbox" id="swAnonimo" name="swAnonimo" value={this.state.swAnonimo} ref={swAnonimo=>this.inputSwAnonimo = swAnonimo}/>
+                      <span>&nbsp;¿Su denuncia es anonima?</span>
+                    </label>
+                  </div>
+                  
+                  <div className="form-group mb-3">
+                    <label>
+                      <input onChange={this.checkF.bind(this)} disabled= {this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona} 
+                      checked={this.state.raPersona === "Fisica" ? true : false}/>
+                      <span>Fisica &nbsp; &nbsp;</span>
+                    </label>
+                    <label>
+                      <input onChange={this.checkM.bind(this)} disabled={this.state.swAnonimo === true} type="checkbox" id="raPersona" name="raPersona" value={this.state.raPersona} ref={raPersona=>this.inputRaPersona = raPersona}
+                      checked={this.state.raPersona === "Moral" ? true : false}/>
+                      <span>Moral</span>
+                    </label>
+                  </div>
 
-                    <span>
-                      <small className="text-danger">* Requerido</small>
-                    </span>
-                    <div className="form-group mb-3">
-                      {/* Select Clasificacion de Persona*/}
-                      <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
-                        <option value="defaultClasificacionPersona">Clasificacion de Persona</option>
-                        <option value="Denunciante">Denunciante</option>
-                        <option value="Inputado">Inputado</option>
-                        <option value="Testigo">Testigo</option>
-                        <option value="Victima Directa">Victima Directa</option>
-                        <option value="Victima Indirecta">Victima Indirecta</option>
-                      </select>
-                    </div>                      
+                  <span>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    {/* Select Clasificacion de Persona*/}
+                    <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
+                      <option value="defaultClasificacionPersona">Clasificacion de Persona</option>
+                      <option value="Denunciante">Denunciante</option>
+                      <option value="Inputado">Inputado</option>
+                      <option value="Testigo">Testigo</option>
+                      <option value="Victima Directa">Victima Directa</option>
+                      <option value="Victima Indirecta">Victima Indirecta</option>
+                    </select>
+                  </div>                      
 
-                    {/* RFC */}
-                    <span hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>
-                      <small className="text-danger">* Requerido</small>
-                    </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
-                    </div>
+                  {/* RFC */}
+                  <span hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRFC" type="text" className="form-control" name="txtRFC" placeholder="RFC" value={this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                  </div>
 
-                    {/* Razon social */}
-                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Fisica"}>
-                      <small className="text-danger">* Requerido</small>
-                    </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
-                    </div>
+                  {/* Razon social */}
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Fisica"}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" placeholder="Razon Social" value={this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
+                  </div>
 
-                    {/* Nombre */}
-                    <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
-                      <small className="text-danger">* Requerido</small>
-                    </span>
-                    <div className="form-group mb-3">
-                      <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
-                    </div>
+                  {/* Nombre */}
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" placeholder="Nombre" value={this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
+                  </div>
 
-                {/* Apellido parterno */}
-                <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
-                  <small className="text-danger">* Requerido</small>
-                </span>
-                <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control"  placeholder="Apellido Paterno" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
-                </div>
+                  {/* Apellido parterno */}
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control"  placeholder="Apellido Paterno" name="txtApPaterno" value={this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
+                  </div>
                 
-                {/* Apellido materno */}
-                <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
-                  <small className="text-danger">* Requerido</small>
-                </span>
-                <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" placeholder="Apellido Materno" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
-                </div>
+                  {/* Apellido materno */}
+                  <span hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" placeholder="Apellido Materno" name="txtApMaterno" value={this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
+                  </div>
 
-                {/* Alias */}
-                <div className="form-group mb-3">
-                  <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
-                </div>
+                  {/* Alias */}
+                  <div className="form-group mb-3">
+                    <input onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" placeholder="Alias" name="txtAlias" value={this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
+                  </div>
 
-                {/* Edad
-                <span hidden={ this.state.raPersona === "Moral"}>
-                  <small className="text-danger">* Requerido</small>
-                </span>
-                <div className="form-group mb-3">
-                  <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.raPersona === "Moral"} type="number" maxLength="3" placeholder="Edad" id="txtNumEdad" className="form-control" name="txtNumEdad" value={this.state.txtNumEdad} ref={txtNumEdad=>this.inputTxtNumEdad = txtNumEdad} />
-                </div> */}
-
-                <div className="form-group mb-3 w-100">
+                  {/* Fecha de nacimiento */}
                   <div className="row mb-3 align-items-center">
-                    <div className="col">
+                    <div className="col-md-6">
                       <small>Fecha de nacimiento:</small>
                     </div>
-                    <div className="col">
-                      <input onChange={this.handlerOnChange.bind(this)} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                    <div className="col-md-6">
+                      <input onChange={this.handlerOnChange, this.handleChange_edad} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
                     </div>
                   </div>
-                </div>
 
-                {/* Sexo */}
-                <span hidden={ this.state.raPersona === "Moral"}>
-                  <small className="text-danger">* Requerido</small>
-                </span>
-                <div className="form-group mb-3">
-                  {/* Select Sexo*/}
-                  <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
-                    <option value="defaultSexo" >Sexo</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
+                  {/* Sexo */}
+                  <span hidden={ this.state.raPersona === "Moral"}>
+                    <small className="text-danger">* Requerido</small>
+                  </span>
+                  <div className="form-group mb-3">
+                    <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral"} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
+                      <option value="defaultSexo" >Sexo</option>
+                      <option value="Masculino">Masculino</option>
+                      <option value="Femenino">Femenino</option>
+                    </select>
+                  </div>
+
                 </div>
-              </div>
                 <div className="col-md-6">
                   {/* Lado derecho Azull */}
                       {/* entidad de nacimiento */}
@@ -820,13 +881,21 @@ export default class Contact extends Component {
                         <div className="mb-3 w-100">
                           <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" placeholder="CURP" name="txtCurp" value={this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                         </div>
-                      </div>         
+                      </div>
+
+                      {/* Correo electronico */}
+                      <span hidden={ this.state.swAnonimo === false} >
+                        <small className="text-secondary">Correo electrónico*</small>
+                      </span>
+                      <div className="form-group mb-3" hidden={ this.state.swAnonimo === false}>
+                        <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="ejemplo@ejemplo.com" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
+                      </div>        
                   </div>                
               </div>
               
               <div className="row">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
+                  <button className="btn btn-dark" onClick={this.handlerOnChange, this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
                 </div>
               </div> 
             </div>
@@ -2003,10 +2072,10 @@ export default class Contact extends Component {
                   <div className="form-group mb-3 align-items-center">
                       <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
                         <option value="">Seleccione</option>
-                        <option value="Opcion 1">CESIS Pachuca</option>
-                        <option value="Opcion 1">CESIS Tula</option>
-                        <option value="Opcion 1">CESIS Tulancingo</option>
-                        <option value="Opcion 1">CESIS Ixmiquilpan</option>
+                        <option value="CESIS Pachuca">CESIS Pachuca</option>
+                        <option value="CESIS Tula">CESIS Tula</option>
+                        <option value="CESIS Tulancingo">CESIS Tulancingo</option>
+                        <option value="CESIS Ixmiquilpan">CESIS Ixmiquilpan</option>
                       </select>
                  </div>
 
@@ -2016,7 +2085,7 @@ export default class Contact extends Component {
                       <small>Fecha para cita*:</small>
                     </div>
                     <div className="col">
-                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita" className="form-control" placeholder="Fecha del suceso" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} />
+                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita" className="form-control" placeholder="fecha de la cita" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} aria-label="Fecha de cita"/>
                     </div>
                   </div>
 
@@ -2026,7 +2095,7 @@ export default class Contact extends Component {
                       <small>Horario para cita*:</small>
                     </div>
                     <div className="col">
-                      <select required onChange={this.handlerOnChange} className="form-select" id="selHorarioCita" name="selHorarioCita" value={this.state.selHorarioCita} ref={(selHorarioCita) => (this.inputSelHorarioCita = selHorarioCita) } aria-label="municipio" >
+                      <select required onChange={this.handlerOnChange} className="form-select" id="selHorarioCita" name="selHorarioCita" value={this.state.selHorarioCita} ref={(selHorarioCita) => (this.inputSelHorarioCita = selHorarioCita) } aria-label="Horario de cita" >
                         <option value="">Seleccione</option>
                         <option value="Opcion 1">Opcion 1</option>
                         <option value="Opcion 1">Opcion 1</option>
