@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import firebase from '../../firebase/firebaseConfig'
-//import { useForm } from 'react-hook-form'
+import React, { Component } from 'react';
+import firebase from '../../firebase/firebaseConfig';
 
 export default class Contact extends Component {
   
@@ -59,10 +58,13 @@ export default class Contact extends Component {
       selHorarioCita: '',
       dateFechaCita: '',
       minFechaNac: '',
+      selectedDay: '',
       file: []
     }
     this.reader = new FileReader();
   }
+
+  
 
   // funcion para deshabilitar cambios cuando se hace check en anonimo
   checkAnonimo(){
@@ -199,6 +201,35 @@ export default class Contact extends Component {
       edad--;
     }
     return edad;
+  }
+  
+  // revisa que solamente se seleccione entre semana
+  checarDiaSemana = (event) => {
+    
+    this.setState({ dateFechaCita: event.target.value }, () => {
+      var fecha_seleccionada = new Date(this.state.dateFechaCita);
+      var dia_fecha = fecha_seleccionada.getUTCDay();
+
+      if([6,0].includes(dia_fecha)){
+        this.setState({ dateFechaCita: '' }, () => {
+          alert('Citas disponibles solo en dias laborales');
+        })
+      } else {
+
+        if(fecha_seleccionada.getMonth() < 10 ){
+          var mes = '0' + fecha_seleccionada.getMonth();
+        } else {
+          var mes = fecha_seleccionada.getMonth()
+        }
+        
+          this.setState({ 
+            dateFechaCita: 
+            fecha_seleccionada.getFullYear() + '-' + mes + '-' + fecha_seleccionada.getDate() }, () => {
+          console.log('Fecha guardada: ' + this.state.dateFechaCita);
+        })
+      }
+    });
+
   }
 
   // refresca la vista para una nueva solicitud
@@ -1936,7 +1967,7 @@ export default class Contact extends Component {
                       </span>
                     </div>
                     <div className="col-md-6">
-                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita"  min='2021-09-17' className="form-control w-100" placeholder="fecha de la cita" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} aria-label="Fecha de cita"/>
+                      <input required onChange={this.handlerOnChange, this.checarDiaSemana.bind(this)} type="date" id="dateFechaCita" size="60" min='2021-09-17' className="form-control w-100" placeholder="fecha de la cita" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} aria-label="Fecha de cita"/>
                     </div>
                   </div>
 
