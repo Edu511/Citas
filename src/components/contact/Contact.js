@@ -221,10 +221,16 @@ export default class Contact extends Component {
         } else {
           var mes = fecha_seleccionada.getMonth()
         }
+
+        if(fecha_seleccionada.getDate() < 10 ){
+          var dia = '0' + fecha_seleccionada.getDate();
+        } else {
+          var dia = fecha_seleccionada.getDate()
+        }
         
           this.setState({ 
             dateFechaCita: 
-            fecha_seleccionada.getFullYear() + '-' + mes + '-' + fecha_seleccionada.getDate() }, () => {
+            fecha_seleccionada.getFullYear() + '-' + mes + '-' + dia }, () => {
           console.log('Fecha guardada: ' + this.state.dateFechaCita);
         })
       }
