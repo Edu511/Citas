@@ -13,7 +13,7 @@ export default class Contact extends Component {
       raPersona: 'Fisica',
       txtRFC: '',
       txtRazonSocial: '',
-      selClasPersona: '',
+      selClasPersona: 'Denunciante',
       txtNombre: '',
       txtApPaterno: '',
       txtApMaterno: '',
@@ -48,8 +48,8 @@ export default class Contact extends Component {
       txtEntCalle1: '',
       txtEntCalle2: '',
       txtReferencias: '',
-      selPais: '',
-      selEstado: '',
+      selPais: 'MX',
+      selEstado: 'Hidalgo',
       selMunicipio: '',
       selLocalidad: '',
       txtCodPostal: '',
@@ -58,6 +58,7 @@ export default class Contact extends Component {
       selAgenciaAVisitar: '',
       selHorarioCita: '',
       dateFechaCita: '',
+      minFechaNac: '',
       file: []
     }
     this.reader = new FileReader();
@@ -67,6 +68,10 @@ export default class Contact extends Component {
   checkAnonimo(){
     this.setState({
       swAnonimo: !this.state.swAnonimo
+    })
+
+    this.setState({
+      raPersona: 'Fisica'
     })
   }
   
@@ -435,8 +440,6 @@ export default class Contact extends Component {
           parametrosProtegidos.dateFSuceso &&
           parametrosProtegidos.txtCalle &&
           parametrosProtegidos.txtNumExt &&
-          parametrosProtegidos.txtEntCalle1 &&
-          parametrosProtegidos.txtReferencias &&
           parametrosProtegidos.selPais &&
           parametrosProtegidos.selEstado &&
           parametrosProtegidos.selMunicipio &&
@@ -528,25 +531,22 @@ export default class Contact extends Component {
           parametrosFisica.selClasPersona &&
           parametrosFisica.txtNombre &&
           parametrosFisica.txtApPaterno &&
-          parametrosFisica.txtApMaterno &&
           parametrosFisica.txtNumEdad &&
           parametrosFisica.selSexo &&
           parametrosFisica.selEntidadFederativa &&
-          parametrosFisica.selIdentificacion &&
-          parametrosFisica.fileDocumento &&
           parametrosFisica.txtCurp &&
           parametrosFisica.selNotificacion &&
           parametrosFisica.txtnumTel1 &&
           parametrosFisica.emailCorreo &&
           parametrosFisica.txtNacionalidad &&
           parametrosFisica.selEstadoCivil &&
+          parametrosFisica.selOcupacion &&
+          parametrosFisica.selNivelEstudios &&
           parametrosFisica.txtDescHechos &&
           parametrosFisica.timeHoraSuceso &&
           parametrosFisica.dateFSuceso &&
           parametrosFisica.txtCalle &&
           parametrosFisica.txtNumExt &&
-          parametrosFisica.txtEntCalle1 &&
-          parametrosFisica.txtReferencias &&
           parametrosFisica.selPais &&
           parametrosFisica.selEstado &&
           parametrosFisica.selMunicipio &&
@@ -640,13 +640,14 @@ export default class Contact extends Component {
           parametrosMoral.selNotificacion &&
           parametrosMoral.txtnumTel1 &&
           parametrosMoral.emailCorreo &&
+          parametrosMoral.txtNacionalidad &&
+          parametrosMoral.selOcupacion &&
+          parametrosMoral.selNivelEstudios &&
           parametrosMoral.txtDescHechos &&
           parametrosMoral.timeHoraSuceso &&
           parametrosMoral.dateFSuceso &&
           parametrosMoral.txtCalle &&
           parametrosMoral.txtNumExt &&
-          parametrosMoral.txtEntCalle1 &&
-          parametrosMoral.txtReferencias &&
           parametrosMoral.selPais &&
           parametrosMoral.selEstado &&
           parametrosMoral.selMunicipio &&
@@ -676,6 +677,10 @@ export default class Contact extends Component {
               step: 1,
             });
           }
+      }
+
+      if(this.state.raPersona === 'Moral' && this.state.swAnonimo === false && this.state.txtNumEdad < 18){
+        alert('Solamente pueden registrarse personas mayores de edad bajo el régimen fiscal de persona moral');
       }
     }
   }
@@ -749,7 +754,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">RFC: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3" hidden={this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
-                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} id="txtRFC" type="text" className="form-control" name="txtRFC" value={(this.state.swAnonimo === true || this.state.raPersona === 'Fisica') ? " " : this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
+                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} id="txtRFC" type="text" className="form-control w-100" name="txtRFC" value={(this.state.swAnonimo === true || this.state.raPersona === 'Fisica') ? " " : this.state.txtRFC} ref={txtRFC=>this.inputTxtRFC = txtRFC} />
                   </div>
 
                   {/* Razon social */}
@@ -757,7 +762,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Razon Social: <small className="text-secondary" hidden={ this.state.raPersona === "Fisica" || this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3" hidden={this.state.raPersona === "Fisica" || this.state.swAnonimo === true}>
-                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control" name="txtRazonSocial" value={(this.state.swAnonimo === true || this.state.raPersona === 'Fisica') ? " " : this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
+                    <input required={this.state.raPersona === "Moral" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.raPersona === "Fisica" || this.state.swAnonimo === true} id="txtRazonSocial" type="text" className="form-control w-100" name="txtRazonSocial" value={(this.state.swAnonimo === true || this.state.raPersona === 'Fisica') ? " " : this.state.txtRazonSocial} ref={txtRazonSocial=>this.inputTxtRazonSocial = txtRazonSocial} />
                   </div>
 
                   {/* Nombre */}
@@ -765,7 +770,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Nombre: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control" name="txtNombre" value={(this.state.swAnonimo === true) ? " " : this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtNombre" type="text" className="form-control w-100" name="txtNombre" value={(this.state.swAnonimo === true) ? " " : this.state.txtNombre} ref={txtNombre=>this.inputTxtNombre = txtNombre} />
                   </div>
 
                   {/* Apellido parterno */}
@@ -773,15 +778,15 @@ export default class Contact extends Component {
                     <small className="text-secondary">Apellido Paterno: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control" name="txtApPaterno" value={this.state.swAnonimo === true ? " " : this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtApPaterno" type="text" className="form-control w-100" name="txtApPaterno" value={this.state.swAnonimo === true ? " " : this.state.txtApPaterno} ref={txtApPaterno=>this.inputTxtApPaterno = txtApPaterno} />
                   </div>
                 
                   {/* Apellido materno */}
                   <span>
-                    <small className="text-secondary">Apellido Materno: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                    <small className="text-secondary">Apellido Materno:</small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control" name="txtApMaterno" value={this.state.swAnonimo === true ? " " : this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtApMaterno" type="text" className="form-control w-100" name="txtApMaterno" value={this.state.swAnonimo === true ? " " : this.state.txtApMaterno} ref={txtApMaterno=>this.inputTxtApMaterno = txtApMaterno} />
                   </div>
 
                   {/* Alias */}
@@ -789,7 +794,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Alias: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control" name="txtAlias" value={this.state.swAnonimo === true ? " " : this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
+                    <input onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} id="txtAlias" type="text" className="form-control w-100" name="txtAlias" value={this.state.swAnonimo === true ? " " : this.state.txtAlias} ref={txtAlias=>this.inputTxtAlias = txtAlias}/>
                   </div>
 
                   {/* Fecha de nacimiento */}
@@ -797,10 +802,12 @@ export default class Contact extends Component {
                     <div className="col-md-6">
                       <span>
                         <small className="text-secondary">Fecha de Nacimiento: *</small> 
+                        <br />
+                        <small className="text-danger" hidden={this.state.raPersona === "Fisica" }>Solo mayores de edad</small> 
                       </span>
                     </div>
                     <div className="col-md-6">
-                      <input onChange={this.handleChange_edad} type="date" id="dateFNacimiento" className="form-control" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
+                      <input onChange={this.handleChange_edad} type="date" id="dateFNacimiento" className="form-control w-100" name="dateFNacimiento" value={this.state.dateFNacimiento} ref={dateFNacimiento=>this.inputDateFNacimiento = dateFNacimiento} />
                     </div>
                   </div>
 
@@ -822,7 +829,7 @@ export default class Contact extends Component {
                   {/* Lado derecho */}
                   {/* entidad de nacimiento */}
                   <span>
-                    <small className="text-secondary">Entidad Federativa de Nacimiento: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
+                    <small className="text-secondary">Entidad Federativa de Nacimiento: <small className="text-secondary" hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
@@ -886,7 +893,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Seleccione Documento de Identificación: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} type="file" accept="image/*" onChange={this.cargarDocumento.bind(this)} disabled={this.state.swAnonimo === true} className="form-control" id="inputGroupFile02"/>
+                    <input required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} type="file" accept="image/*" onChange={this.cargarDocumento.bind(this)} disabled={this.state.swAnonimo === true} className="form-control w-100" id="inputGroupFile02"/>
                   </div>
 
                   {/* CURP */}
@@ -894,9 +901,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">CURP: <small className="text-secondary" hidden={ this.state.swAnonimo === true || this.state.raPersona === "Moral"}>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <div className="w-100">
-                      <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control" name="txtCurp" value={this.state.swAnonimo === true ? " " : this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
-                    </div>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} maxLength="18" disabled={this.state.swAnonimo === true} id="txtCurp" type="text" className="form-control w-100" name="txtCurp" value={this.state.swAnonimo === true ? " " : this.state.txtCurp} ref={txtCurp=>this.inputTxtCurp = txtCurp} />
                   </div>
 
                   {/* Correo electronico */}
@@ -904,7 +909,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Correo electrónico :*</small>
                   </span>
                   <div className="form-group mb-3" hidden={ this.state.swAnonimo === false}>
-                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" placeholder="ejemplo@ejemplo.com" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
+                    <input onChange={this.handlerOnChange} className="form-control w-100" id="emailCorreo" type="text" placeholder="ejemplo@ejemplo.com" name="emailCorreo" value={this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>        
                 </div>                
               </div>
@@ -945,7 +950,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Telefono 1: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel1" type="number" name="txtnumTel1" value={this.state.swAnonimo === true ? " " : this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control w-100" id="txtnumTel1" type="number" name="txtnumTel1" value={this.state.swAnonimo === true ? " " : this.state.txtnumTel1} ref={txtnumTel1=>this.inputTxtnumTel1 = txtnumTel1}/>
                   </div>
 
                   {/* telefono 2 */}
@@ -953,7 +958,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Telefono 2: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control" id="txtnumTel2" type="number" name="txtnumTel2" value={this.state.swAnonimo === true ? " " : this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
+                    <input onChange={this.handlerOnChange} onInput={this.maxLengthCheck} disabled={this.state.swAnonimo === true} maxLength="10" className="form-control w-100" id="txtnumTel2" type="number" name="txtnumTel2" value={this.state.swAnonimo === true ? " " : this.state.txtnumTel2} ref={txtnumTel2=>this.inputTxtnumTel2 = txtnumTel2}/>
                   </div>
 
                   {/* Correo electronico */}
@@ -961,7 +966,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Correo electronico: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} className="form-control" id="emailCorreo" type="text" name="emailCorreo" value={this.state.swAnonimo === true ? " " : this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
+                    <input onChange={this.handlerOnChange} className="form-control w-100" id="emailCorreo" type="text" name="emailCorreo" value={this.state.swAnonimo === true ? " " : this.state.emailCorreo} ref={emailCorreo=>this.inputEmailCorreo = emailCorreo}/>
                   </div>
                   
                   {/* nacionalidad */}                  
@@ -1002,9 +1007,9 @@ export default class Contact extends Component {
                 <div className="col-md-6">
                   {/* Ocupacion*/}
                   <span>
-                    <small className="text-secondary">Ocupacion: </small>
+                    <small className="text-secondary">Ocupacion: <small className="text-secondary" hidden={ this.state.swAnonimo === true }>*</small></small>
                   </span>
-                  <div className="form-group mb-3">                    
+                  <div className="form-group mb-3">
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
                       <option value="" >Seleccione...</option>
                       <option value="Abogado">Abogado</option>
@@ -1480,8 +1485,8 @@ export default class Contact extends Component {
               </div>
               <div className="row">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-                  <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
+                  <button className="btn btn-outline-dark fs-6" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
+                  <button className="btn btn-dark fs-6" onClick={this.siguiente.bind(this)} style={{marginTop: "10px"}}>SIGUIENTE</button>
                 </div>
               </div>
             </div>
@@ -1504,7 +1509,7 @@ export default class Contact extends Component {
                   
                   {/* Delito */}
                   <label>
-                     <small> Descripcion de los hechos </small>
+                     <small> Descripcion de los hechos: *</small>
                   </label>
                   <div className="form-group mb-3">
                     <textarea onChange={this.handlerOnChange} id="txtDescHechos" rows="3" className="form-control w-100" name="txtDescHechos" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos}></textarea>
@@ -1516,7 +1521,7 @@ export default class Contact extends Component {
                   </span>
                   <div className="row mb-3 align-items-center">
                     <div className="col">
-                      <input required onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
+                      <input required onChange={this.handlerOnChange} type="date" id="dateFSuceso" className="form-control w-100" name="dateFSuceso" value={this.state.dateFSuceso} ref={dateFSuceso=>this.inputDateFSuceso = dateFSuceso} />
                     </div>
                   </div>
 
@@ -1526,7 +1531,7 @@ export default class Contact extends Component {
                   </span>
                   <div className="row mb-3 align-items-center">
                     <div className="col">
-                      <input required onChange={this.handlerOnChange} type="time" className="form-control" id="timeHoraSuceso" name="timeHoraSuceso" value={this.state.timeHoraSuceso} ref={timeHoraSuceso=>this.inputTimeHoraSuceso = timeHoraSuceso}/>
+                      <input required onChange={this.handlerOnChange} type="time" className="form-control w-100" id="timeHoraSuceso" name="timeHoraSuceso" value={this.state.timeHoraSuceso} ref={timeHoraSuceso=>this.inputTimeHoraSuceso = timeHoraSuceso}/>
                     </div>
                   </div>
                   
@@ -1535,7 +1540,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Calle: *</small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} id="txtCalle" name="txtCalle" value={this.state.txtCalle} type="text" className="form-control" ref={txtCalle=>this.inputTxtCalle = txtCalle} />
+                    <input required onChange={this.handlerOnChange} id="txtCalle" name="txtCalle" value={this.state.txtCalle} type="text" className="form-control w-100" ref={txtCalle=>this.inputTxtCalle = txtCalle} />
                   </div>
 
                   {/* numero exterior */}
@@ -1543,7 +1548,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Numero exterior: *</small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} type="text" className="form-control" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
+                    <input required onChange={this.handlerOnChange} id="txtNumExt" name="txtNumExt" value={this.state.txtNumExt} type="text" className="form-control w-100" ref={txtNumExt=>this.inputTxtNumExt = txtNumExt} />
                   </div>
                   
                   {/* Numero Interior */}
@@ -1551,7 +1556,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Numero interior: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="text" className="form-control" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
+                    <input onChange={this.handlerOnChange} id="txtNumInt" name="txtNumInt" value={this.state.txtNumInt} type="text" className="form-control w-100" ref={txtNumInt=>this.inputTxtNumInt = txtNumInt}/>
                   </div>                
                   
                   {/* Entre calle 1 */}
@@ -1559,7 +1564,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Entre calle 1: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} id="txtEntCalle1" name="txtEntCalle1" value={this.state.txtEntCalle1} type="text" className="form-control" ref={txtEntCalle1=>this.inputTxtEntCalle1 = txtEntCalle1} />
+                    <input required onChange={this.handlerOnChange} id="txtEntCalle1" name="txtEntCalle1" value={this.state.txtEntCalle1} type="text" className="form-control w-100" ref={txtEntCalle1=>this.inputTxtEntCalle1 = txtEntCalle1} />
                   </div>
 
                   {/* Entre calle 2 */}
@@ -1567,7 +1572,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Entre calle 2: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input onChange={this.handlerOnChange} id="txtEntCalle2" name="txtEntCalle2" value={this.state.txtEntCalle2} type="text" className="form-control" ref={(txtEntCalle2) => (this.inputTxtEntCalle2 = txtEntCalle2) }/>
+                    <input onChange={this.handlerOnChange} id="txtEntCalle2" name="txtEntCalle2" value={this.state.txtEntCalle2} type="text" className="form-control w-100" ref={(txtEntCalle2) => (this.inputTxtEntCalle2 = txtEntCalle2) }/>
                   </div>
 
                   {/* Referencias */}
@@ -1575,7 +1580,7 @@ export default class Contact extends Component {
                     <small className="text-secondary">Referencias: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} id="txtReferencias" name="txtReferencias" value={this.state.txtReferencias} type="text" className="form-control" ref={(txtReferencias) => (this.inputTxtReferencias = txtReferencias)} />
+                    <input required onChange={this.handlerOnChange} id="txtReferencias" name="txtReferencias" value={this.state.txtReferencias} type="text" className="form-control w-100" ref={(txtReferencias) => (this.inputTxtReferencias = txtReferencias)} />
                   </div>
                 </div>
 
@@ -1900,12 +1905,18 @@ export default class Contact extends Component {
                     <small className="text-secondary">Codigo Postal: *</small> 
                   </span>
                   <div className="form-group mb-3">
-                    <input required onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
+                    <input required onChange={this.handlerOnChange} id="txtCodPostal" type="text" className="form-control w-100" name="txtCodPostal" value={this.state.txtCodPostal} ref={(txtCodPostal) => (this.inputTxtCodPostal = txtCodPostal)}/>
                   </div>
+
+                  <hr/>
+
+                  <span className="text-center text-md-start">
+                    <h5 className="mb-3">Información para agendar su cita</h5>
+                  </span>
                 
                   {/* Agencia para cita */}
                   <span>
-                    <small className="text-secondary">Agencia a visitar: *</small> 
+                    <small className="text-secondary">Agencia: *</small> 
                   </span>
                   <div className="form-group mb-3 align-items-center">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
@@ -1921,11 +1932,11 @@ export default class Contact extends Component {
                   <div className="row mb-3 align-items-center">
                     <div className="col-md-6">
                       <span>
-                        <small className="text-secondary">Fecha para visitar: *</small> 
+                        <small className="text-secondary">Fecha: *</small> 
                       </span>
                     </div>
                     <div className="col-md-6">
-                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita" className="form-control" placeholder="fecha de la cita" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} aria-label="Fecha de cita"/>
+                      <input required onChange={this.handlerOnChange} type="date" id="dateFechaCita"  min='2021-09-17' className="form-control w-100" placeholder="fecha de la cita" name="dateFechaCita" value={this.state.dateFechaCita} ref={dateFechaCita=>this.inputDateFechaCita = dateFechaCita} aria-label="Fecha de cita"/>
                     </div>
                   </div>
 
@@ -1933,7 +1944,7 @@ export default class Contact extends Component {
                   <div className="row mb-3 align-items-center">
                     <div className="col-md-6">
                       <span>
-                        <small className="text-secondary">Horario para visitar: *</small> 
+                        <small className="text-secondary">Horario: *</small> 
                       </span>
                     </div>
                     <div className="col-md-6">
@@ -1950,8 +1961,8 @@ export default class Contact extends Component {
               </div>
               <div className="row">
                 <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-                  <button className="btn btn-outline-dark" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark" onClick={this.enviar.bind(this)} style={{marginTop: "10px"}}>FINALIZAR</button>
+                  <button className="btn btn-outline-dark fs-6" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
+                  <button className="btn btn-dark fs-6" onClick={this.enviar.bind(this)} style={{marginTop: "10px"}}>FINALIZAR</button>
                 </div>
               </div>
             </div>
@@ -1972,7 +1983,7 @@ export default class Contact extends Component {
                       <p className="card-text">
                         En la brevedad, recibirá una notificación por el medio seleccionado con su numero de cita y formato de solicitud de denuncia
                       </p>
-                      <button className="btn btn-dark" onClick={this.recargar.bind(this)}>Registrar nueva denuncia</button>
+                      <button className="btn btn-dark fs-6" onClick={this.recargar.bind(this)}>Registrar nueva denuncia</button>
                     </div>
                   </div>
                 </div>
