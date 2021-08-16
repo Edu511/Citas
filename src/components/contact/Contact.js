@@ -2,17 +2,11 @@ import React, { Component } from 'react';
 import firebase from '../../firebase/firebaseConfig';
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhot:3000/contact'
-});
 
 export default class Contact extends Component {
   
   constructor(props){
 
-    api.get('/').then(res => {
-      console.log(res.data);
-    });
 
     super(props)
     this.state = {
