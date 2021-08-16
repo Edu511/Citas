@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import firebase from '../../firebase/firebaseConfig';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhot:3000/contact'
+});
 
 export default class Contact extends Component {
   
   constructor(props){
+
+    api.get('/').then(res => {
+      console.log(res.data);
+    });
 
     super(props)
     this.state = {
@@ -209,6 +218,7 @@ export default class Contact extends Component {
     this.setState({ dateFechaCita: event.target.value }, () => {
       var fecha_seleccionada = new Date(this.state.dateFechaCita);
       var dia_fecha = fecha_seleccionada.getUTCDay();
+      var mes, dia;
 
       if([6,0].includes(dia_fecha)){
         this.setState({ dateFechaCita: '' }, () => {
@@ -217,15 +227,15 @@ export default class Contact extends Component {
       } else {
 
         if(fecha_seleccionada.getMonth() < 10 ){
-          var mes = '0' + fecha_seleccionada.getMonth();
+          mes = '0' + fecha_seleccionada.getMonth();
         } else {
-          var mes = fecha_seleccionada.getMonth()
+          mes = fecha_seleccionada.getMonth()
         }
 
         if(fecha_seleccionada.getDate() < 10 ){
-          var dia = '0' + fecha_seleccionada.getDate();
+          dia = '0' + fecha_seleccionada.getDate();
         } else {
-          var dia = fecha_seleccionada.getDate()
+          dia = fecha_seleccionada.getDate()
         }
         
           this.setState({ 
