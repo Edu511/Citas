@@ -2,37 +2,11 @@ import React, { Component } from 'react';
 import firebase from '../../firebase/firebaseConfig';
 import axios from 'axios';
 
-
 export default class Contact extends Component {
 
-  componentDidMount() {
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(
-      response => {
-        // console.log(response.data)
-        this.setState({ catalogoGenero: response.data}, () => {
-          console.log(this.state.catalogoGenero)
-        })
-      }).catch(error => {
-        console.log(error);
-      });
-  }
-  
-  
   constructor(props){
 
-    super(props);
-    
-    var catalogoGenero = [];
-    var catalogoClasPersona = [];
-    var catalogoDocIdentificacion = [];
-    var catalogoNacionalidad = [];
-    var catalogoOcupacion = [];
-    var catalogoLengua = [];
-    var catalogoReligion = [];
-    var catalogoDiscapacidad = [];
-    var catalogoEstado = [];
-    var catalogoMunicipio = [];
-    var catalogoLocalidad = []; 
+    super(props);    
     
     this.state = {
       step: 1,
@@ -56,7 +30,7 @@ export default class Contact extends Component {
       txtnumTel1: '',
       txtnumTel2: '',
       emailCorreo: '',
-      txtNacionalidad: '',
+      txtNacionalidad: 'Mexicana',
       selEstadoCivil: '',
       selOcupacion: '',
       selNivelEstudios: '',
@@ -77,7 +51,7 @@ export default class Contact extends Component {
       txtReferencias: '',
       selPais: 'MX',
       selEstado: 'Hidalgo',
-      selMunicipio: '',
+      selMunicipio: 'Pachuca de Soto',
       selLocalidad: '',
       txtCodPostal: '',
       txtLatitud: '',
@@ -92,6 +66,7 @@ export default class Contact extends Component {
       catalogoDocIdentificacion: [],
       catalogoNacionalidad: [],
       catalogoOcupacion: [],
+      catalogoNivelEstudios: [],
       catalogoLengua: [],
       catalogoReligion: [],
       catalogoDiscapacidad: [],
@@ -103,31 +78,216 @@ export default class Contact extends Component {
       file: []
     }
     this.reader = new FileReader();
-    // this.listarCatalogos();
+  }
+
+  componentDidMount() {
+    this.listarCatalogos();
   }
 
   listarCatalogos = () => {
-    // base_ip y puerto son variable definidas en constructor 
-    // con valores predeterminados, para cambiarlos fácilmente
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(response => {
-      
-      const generoArray = response.data;
-      // console.log(generoArray)
-      
-      for (let i = 0; i < generoArray.maxLength; i++) {
-        this.catalogoGenero.push({
-          nombre: generoArray.nombre
-        });
-        console.log(generoArray[i]);
-      }
-      // this.setState({catalogoGenero: this.catalogoGenero});
-      // console.log(this.catalogoGenero)
+        
+    // catalogoClasPersona
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/ClasificacionPersonas/Listar').then(response => {
+           
+      this.setState({ catalogoClasPersona: response.data});
 
     }).catch(error => { 
 
       console.log(error);
 
     });
+    
+    // catalogoGenero
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(response => {
+           
+      this.setState({ catalogoGenero: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoDocIdentificacion
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar').then(response => {
+
+      this.setState({ catalogoDocIdentificacion: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoDocIdentificacion
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar').then(response => {
+
+      this.setState({ catalogoDocIdentificacion: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoNacionalidad
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Nacionalidads/Listar').then(response => {
+
+      this.setState({ catalogoNacionalidad: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoOcupacion
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Ocupacions/Listar').then(response => {
+
+      this.setState({ catalogoOcupacion: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoNivelEstudios
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/NivelEstudios/Listar').then(response => {
+
+      this.setState({ catalogoNivelEstudios: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoLengua
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Lenguas/Listar').then(response => {
+
+      this.setState({ catalogoLengua: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoReligion
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Religions/Listar').then(response => {
+
+      this.setState({ catalogoReligion: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoDiscapacidad
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Discapacidads/Listar').then(response => {
+
+      this.setState({ catalogoDiscapacidad: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoEstado
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Estadoes/Listar').then(response => {
+
+      this.setState({ catalogoEstado: response.data});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoMunicipio
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + 13).then(response => {
+
+      let municipiosArray = response.data
+      this.setState({ catalogoMunicipio: municipiosArray.sort((a, b) =>{
+          return (a.nombre === b.nombre) ? 0 : ((a.nombre > b.nombre) ? 1 : -1 )
+        }) 
+      });
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoLocalidad
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + 710).then(response => {
+
+      let localidadesArray = response.data
+      this.setState({ catalogoLocalidad: localidadesArray.sort((a, b) =>{
+          return (a.nombre === b.nombre) ? 0 : ((a.nombre > b.nombre) ? 1 : -1 )
+        }) 
+      });
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+  }
+
+  // lista catalogos de municipios de acuerdo al estado seleccionado
+  cargarMunicipios = () => {
+    
+    if(this.state.selEstado){
+
+      let consulta = (elemento) => elemento.nombre === this.state.selEstado;
+      let estado_seleccionado = this.state.catalogoEstado.find(consulta);
+
+      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + estado_seleccionado.idEstado).then(response => {
+           
+        let municipiosArray = response.data
+        this.setState({ catalogoMunicipio: municipiosArray.sort((a, b) =>{
+            return (a.nombre === b.nombre) ? 0 : ((a.nombre > b.nombre) ? 1 : -1 )
+          }) 
+        });
+
+      }).catch(error => { 
+
+        console.log(error);
+
+      });
+    } 
+  }
+
+  // lista catalogos de localidades de acuerdo al municipio seleccionado
+  cargarLocalidades = () => {
+    
+    if(this.state.selMunicipio){
+
+      let consulta = (elemento) => elemento.nombre === this.state.selMunicipio;
+      let municipio_seleccionado = this.state.catalogoMunicipio.find(consulta);
+
+      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + municipio_seleccionado.idMunicipio).then(response => {
+           
+      let localidadesArray = response.data;  
+      this.setState({ catalogoLocalidad: localidadesArray.sort((a, b) =>{
+          return (a.nombre === b.nombre) ? 0 : ((a.nombre > b.nombre) ? 1 : -1 )
+        }) 
+      });
+
+      }).catch(error => { 
+
+        console.log(error);
+
+      });
+    } else {
+      
+      this.setState({ catalogoLocalidad: ''});
+    }
   }
 
   // funcion para deshabilitar cambios cuando se hace check en anonimo
@@ -199,10 +359,6 @@ export default class Contact extends Component {
     }
 
   }
-
-  // listaDisc(){
-  //   return this.state.
-  // }
 
   //Se ocupa de cambiar de seccion
   siguiente = () => {
@@ -791,13 +947,26 @@ export default class Contact extends Component {
     }
   }
 
+  handler_estado = (event) => {
+    this.setState({ estado: event.target.value }, () => {
+      this.setState({ 
+        selMunicipio: '', 
+        selLocalidad: '',
+        catalogoLocalidad: '',
+      }, () => {
+        console.log("selmiunicipio: " + this.state.selMunicipio + " y selLocalidad: " + this.state.selLocalidad);
+      })
+    })
+  }
+
   // Información del archivo subido cuando es cargado
   handlerOnChange = (e) => {
     const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState({ state });
 
-    // this.listarCatalogos();
+    this.cargarMunicipios();
+    this.cargarLocalidades();
 
   }
 
@@ -849,12 +1018,12 @@ export default class Contact extends Component {
                   <div className="form-group mb-3">
                     {/* Select Clasificacion de Persona*/}
                     <select onChange={this.handlerOnChange} className="form-select" id="selClasPersona" name="selClasPersona" value={this.state.selClasPersona} ref={selClasPersona=>this.inputSelClasPersona = selClasPersona}>
-                      <option value="">Seleccione...</option>
-                      <option value="Denunciante">Denunciante</option>
-                      <option value="Inputado">Inputado</option>
-                      <option value="Testigo">Testigo</option>
-                      <option value="Victima Directa">Victima Directa</option>
-                      <option value="Victima Indirecta">Victima Indirecta</option>
+                    {
+                      this.state.catalogoClasPersona ? 
+                        this.state.catalogoClasPersona.map(datos => (
+                            <option key={datos.idClasificacionPersona} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>                      
 
@@ -929,12 +1098,10 @@ export default class Contact extends Component {
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
                       <option value="">Seleccione...</option>
                       {
-                        // this.state.catalogoGenero && this.state.catalogoGenero > 0 ? 
-                        console.log(this.state.catalogoGenero.nombre)
-                        // this.state.catalogoGenero.map(datos => (
-                        //     <option value={datos.nombre}>{datos.nombre}</option>
-                        // ))
-
+                        this.state.catalogoGenero ? 
+                          this.state.catalogoGenero.map(datos => (
+                              <option key={datos.idGenero} value={datos.nombre}>{datos.nombre}</option>
+                          )) : "Cargando..."
                       }
                     </select>
                   </div>
@@ -948,58 +1115,29 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3">
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selEntidadFederativa" name="selEntidadFederativa" value={this.state.selEntidadFederativa} ref={selEntidadFederativa=>this.inputSelEntidadFederativa = selEntidadFederativa}>
-                      <option value="" >Seleccione...</option>
-                      <option value="Aguascalientes">Aguascalientes</option>
-                      <option value="Baja California">Baja California</option>
-                      <option value="Baja California Sur">Baja California Sur</option>
-                      <option value="Campeche">Campeche</option>
-                      <option value="Chiapas">Chiapas</option>
-                      <option value="Chihuahua">Chihuahua</option>
-                      <option value="CDMX">Ciudad de México</option>
-                      <option value="Coahuila">Coahuila</option>
-                      <option value="Colima">Colima</option>
-                      <option value="Durango">Durango</option>
-                      <option value="Estado de México">Estado de México</option>
-                      <option value="Guanajuato">Guanajuato</option>
-                      <option value="Guerrero">Guerrero</option>
-                      <option value="Hidalgo">Hidalgo</option>
-                      <option value="Jalisco">Jalisco</option>
-                      <option value="Michoacán">Michoacán</option>
-                      <option value="Morelos">Morelos</option>
-                      <option value="Nayarit">Nayarit</option>
-                      <option value="Nuevo León">Nuevo León</option>
-                      <option value="Oaxaca">Oaxaca</option>
-                      <option value="Puebla">Puebla</option>
-                      <option value="Querétaro">Querétaro</option>
-                      <option value="Quintana Roo">Quintana Roo</option>
-                      <option value="San Luis Potosí">San Luis Potosí</option>
-                      <option value="Sinaloa">Sinaloa</option>
-                      <option value="Sonora">Sonora</option>
-                      <option value="Tabasco">Tabasco</option>
-                      <option value="Tamaulipas">Tamaulipas</option>
-                      <option value="Tlaxcala">Tlaxcala</option>
-                      <option value="Veracruz">Veracruz</option>
-                      <option value="Yucatán">Yucatán</option>
-                      <option value="Zacatecas">Zacatecas</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoEstado ? 
+                        this.state.catalogoEstado.map(datos => (
+                            <option key={datos.idEstado} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
-
+                  
+                  {/* select documento de identificación */}
                   <span>
                     <small className="text-secondary">Documento de Identificación: </small> 
                   </span>
                   <div className="form-group mb-3">
-                    {/* Select Documento de Identificacion*/}
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selIdentificacion" name="selIdentificacion" value={this.state.selIdentificacion} ref={selIdentificacion=>this.inputSelIdentificacion = selIdentificacion}>
-                      <option value="" >Seleccione...</option>
-                      <option value="INE">INE</option>
-                      <option value="Licencia de Conducir">Licencia de Conducir</option>
-                      <option value="Pasaporte">Pasaporte</option>
-                      <option value="Cedula Profesional">Cédula Profesional</option>
-                      <option value="Cartilla Militar">Cartilla del Servicio Militar Nacional</option>
-                      <option value="Credencial Laboral">Credencial de Identificacion Laboral</option>
-                      <option value="Credencial de Derechohabiente">Credencial de Derechohabiente</option>
-                      <option value="Acta de Nacimiento">Acta de Nacimiento</option>
-                      <option value="CURP">CURP</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoDocIdentificacion ? 
+                        this.state.catalogoDocIdentificacion.map(datos => (
+                            <option key={datos.idDocIdentificacion} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
                       
@@ -1090,11 +1228,13 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3">
                     <select required={this.state.raPersona === "Moral"} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="txtNacionalidad" type="text" name="txtNacionalidad" value={this.state.swAnonimo === true ? " " : this.state.txtNacionalidad} ref={txtNacionalidad=>this.inputTxtNacionalidad = txtNacionalidad}>
-                      <option value="">Seleccione</option>
-                      <option value="Opcion 1">Opcion 1</option>
-                      <option value="Opcion 1">Opcion 1</option>
-                      <option value="Opcion 1">Opcion 1</option>
-                      <option value="Opcion 1">Opcion 1</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoNacionalidad ? 
+                        this.state.catalogoNacionalidad.map(datos => (
+                            <option key={datos.idNacionalidad} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
                   
@@ -1109,9 +1249,7 @@ export default class Contact extends Component {
                       <option value="Soltero">Soltero(a)</option>
                       <option value="Casado(a)">Casado(a)</option>
                       <option value="Divorciado(a)">Divorciado(a)</option>
-                      <option value="Separación en Proceso Judicial">
-                        Separación en Proceso Judicial
-                      </option>
+                      <option value="Separación en Proceso Judicial"> Separación en Proceso Judicial </option>
                       <option value="Viudo(a)">Viudo(a)</option>
                       <option value="Concubinato">Concubinato</option>
                     </select>
@@ -1126,234 +1264,13 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3">
                     <select onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selOcupacion" name="selOcupacion" value={this.state.selOcupacion} ref={selOcupacion=>this.inputSelOcupacion = selOcupacion}>
-                      <option value="" >Seleccione...</option>
-                      <option value="Abogado">Abogado</option>
-                      <option value="Actor, Actriz, Director de Espectáculos">
-                        Actor, Actriz, Director de Espectáculos
-                      </option>
-                      <option value="Actuario">Actuario</option>
-                      <option value="Administrador">Administrador</option>
-                      <option value="Aduanero/Agente de Aduanas/Inspector de Frontera">
-                        Aduanero/Agente de Aduanas/Inspector de Frontera
-                      </option>
-                      <option value="Aeromozo/Azafata">Aeromozo/Azafata</option>
-                      <option value="Agente/Intermediario/Corredor Inmobiliario">
-                        Agente/Intermediario/Corredor Inmobiliario
-                      </option>
-                      <option value="Agente de Bolsa">Agente de Bolsa</option>
-                      <option value="Agente de Inmigración/Migración">
-                        Agente de Inmigración/Migración
-                      </option>
-                      <option value="Agente de Turismo/Viajes">
-                        Agente de Turismo/Viajes
-                      </option>
-                      <option value="Agente/Intemediario/Corredor de Seguros">
-                        Agente/Intemediario/Corredor de Seguros
-                      </option>
-                      <option value="Agricultor, Agrónomo, Agrologo, Arboricultor">
-                        Agricultor, Agrónomo, Agrologo, Arboricultor
-                      </option>
-                      <option value="Albañil, Obrero de Construcción">
-                        Albañil, Obrero de Construcción
-                      </option>
-                      <option value="Ama de Casa">Ama de Casa</option>
-                      <option value="Analista de Sistemas y Computacion">
-                        Analista de Sistemas y Computacion
-                      </option>
-                      <option value="Antropólogo, Arqueologo, Etnólogo">
-                        Antropólogo, Arqueologo, Etnólogo
-                      </option>
-                      <option value="Archivero">Archivero</option>
-                      <option value="Armador de Barco">Armador de Barco</option>
-                      <option value="Arquitecto">Arquitecto</option>
-                      <option value="Artesano">Artesano</option>
-                      <option value="Asistente Social">Asistente Social</option>
-                      <option value="Autor Literario, Escritor, Critico">
-                        Autor Literario, Escritor, Critico
-                      </option>
-                      <option value="Avicultor">Avicultor</option>
-                      <option value="Bacteriólogo, Farmacólogo, Biólogo, Cientifico">
-                        Bacteriólogo, Farmacólogo, Biólogo, Cientifico
-                      </option>
-                      <option value="Basurero/Barrendero">
-                        Basurero/Barrendero
-                      </option>
-                      <option value="Cajero">Cajero</option>
-                      <option value="Camarero/Barman/Mesero/Chef">
-                        Camarero/Barman/Mesero/Chef
-                      </option>
-                      <option value="Cambista, Compra/Venta de Moneda">
-                        Cambista, Compra/Venta de Moneda
-                      </option>
-                      <option value="Campesino">Campesino</option>
-                      <option value="Capataz">Capataz</option>
-                      <option value="Cargador">Cargador</option>
-                      <option value="Carpintero">Carpintero</option>
-                      <option value="Cartero">Cartero</option>
-                      <option value="Cerrajero">Cerrajero</option>
-                      <option value="Cobrador">Cobrador</option>
-                      <option value="Comerciante/Vendedor">
-                        Comerciante/Vendedor
-                      </option>
-                      <option value="Conductor, Chofer/Taxista">
-                        Conductor, Chofer/Taxista
-                      </option>
-                      <option value="Conserje/Portero/Guardián/Vigilante">
-                        Conserje/Portero/Guardián/Vigilante
-                      </option>
-                      <option value="Constructor">Constructor</option>
-                      <option value="Contador">Contador</option>
-                      <option value="Contratista">Contratista</option>
-                      <option value="Corte y Confección de Ropa/Fabricante de Prendas">
-                        Corte y Confección de Ropa/Fabricante de Prendas
-                      </option>
-                      <option value="Cosmetólogo, Peluquero y Barbero">
-                        Cosmetólogo, Peluquero y Barbero
-                      </option>
-                      <option value="Decorador, Dibujante, Publicista">
-                        Decorador, Dibujante, Publicista
-                      </option>
-                      <option value="Dentista / Odontólogo">
-                        Dentista / Odontólogo
-                      </option>
-                      <option value="Deportista Profesional, Atleta, Arbitro">
-                        Deportista Profesional, Atleta, Arbitro
-                      </option>
-                      <option value="Distribuidor">Distribuidor</option>
-                      <option value="Docente">Docente</option>
-                      <option value="Economista">Economista</option>
-                      <option value="Electricista">Electricista</option>
-                      <option value="Empleado(a)del hogar / Nana">
-                        Empleado(a)del hogar / Nana
-                      </option>
-                      <option value="Empresario Exportador/Empresario Importador">
-                        Empresario Exportador/Empresario Importador
-                      </option>
-                      <option value="Enfermero">Enfermero</option>
-                      <option value="Enbalsamador">Enbalsamador</option>
-                      <option value="Escultor">Escultor</option>
-                      <option value="Estudiante">Estudiante</option>
-                      <option value="Fotógrafo/Operadores de cámara, cine y TV, Locutor">
-                        Fotógrafo/Operadores de cámara, cine y TV, Locutor
-                      </option>
-                      <option value="Ganadero">Ganadero</option>
-                      <option value="Gasfitero">Gasfitero</option>
-                      <option value="Historiador">Historiador</option>
-                      <option value="Ingeniero">Ingeniero</option>
-                      <option value="Interprete, Traductor">
-                        Interprete, Traductor
-                      </option>
-                      <option value="Jardinero">Jardinero</option>
-                      <option value="Jockey">Jockey</option>
-                      <option value="Joyero y/o Platero / Orfebre">
-                        Joyero y/o Platero / Orfebre
-                      </option>
-                      <option value="Jubilado / Pensionista">
-                        Jubilado / Pensionista
-                      </option>
-                      <option value="Laboratorista (Técnico)">
-                        Laboratorista (Técnico)
-                      </option>
-                      <option value="Liquidador, Reclamaciones/Seguros">
-                        Liquidador, Reclamaciones/Seguros
-                      </option>
-                      <option value="Maquinista / Operador de maquinaria">
-                        Maquinista / Operador de maquinaria
-                      </option>
-                      <option value="Martillero / Subastador">
-                        Martillero / Subastador
-                      </option>
-                      <option value="Mayorista, comercio al por mayor">
-                        Mayorista, comercio al por mayor
-                      </option>
-                      <option value="Mecánico">Mecánico</option>
-                      <option value="Medico / Cirujano">
-                        Medico / Cirujano
-                      </option>
-                      <option value="Metalurgista">Metalurgista</option>
-                      <option value="Miembro de las Fuerzas Armadas">
-                        Miembro de las Fuerzas Armadas
-                      </option>
-                      <option value="Nutricionista">Nutricionista</option>
-                      <option value="Obrero / Operador">
-                        Obrero / Operador
-                      </option>
-                      <option value="Obstetriz">Obstetriz</option>
-                      <option value="Organizador de Eventos">
-                        Organizador de Eventos
-                      </option>
-                      <option value="Panadero / Pastelero">
-                        Panadero / Pastelero
-                      </option>
-                      <option value="Paramédico">Paramédico</option>
-                      <option value="Periodista">Periodista</option>
-                      <option value="Perito">Perito</option>
-                      <option value="Pescador">Pescador</option>
-                      <option value="Piloto">Piloto</option>
-                      <option value="Pintor">Pintor</option>
-                      <option value="Policiá Municipal">
-                        Policiá Municipal
-                      </option>
-                      <option value="Policiá PNP">Policiá PNP</option>
-                      <option value="Productor de Cine / Radio / televisión / Teatro">
-                        Productor de Cine / Radio / televisión / Teatro
-                      </option>
-                      <option value="Productor, Cultivos Extensivos">
-                        Productor, Cultivos Extensivos
-                      </option>
-                      <option value="Programador">Programador</option>
-                      <option value="Psicólogo / Terapeuta">
-                        Psicólogo / Terapeuta
-                      </option>
-                      <option value="Quiropráctico/Kinesiterapeuta (Kinesiólogos)">
-                        Quiropráctico/Kinesiterapeuta (Kinesiólogos)
-                      </option>
-                      <option value="Relacionista Publico e Industrial">
-                        Relacionista Publico e Industrial
-                      </option>
-                      <option value="Relojero">Relojero</option>
-                      <option value="Reparación de Automóviles, Pintor Retocador">
-                        Reparación de Automóviles, Pintor Retocador
-                      </option>
-                      <option value="Reparador de Aparatos Electrodomésticos">
-                        Reparador de Aparatos Electrodomésticos
-                      </option>
-                      <option value="Repartidor">Repartidor</option>
-                      <option value="Sacerdote/Monja">Sacerdote/Monja</option>
-                      <option value="Secretaria, Recepcionista, Telefonista">
-                        Secretaria, Recepcionista, Telefonista
-                      </option>
-                      <option value="Seguridad / Guardaespaldas / Guardia de Seguridad">
-                        Seguridad / Guardaespaldas / Guardia de Seguridad
-                      </option>
-                      <option value="Servicio de Almacenamiento / Almacenero">
-                        Servicio de Almacenamiento / Almacenero
-                      </option>
-                      <option value="Servicio de Alquiler de Vehículos">
-                        Servicio de Alquiler de Vehículos
-                      </option>
-                      <option value="Servicios de Alquiler de Videos, Equipos de Sonido">
-                        Servicios de Alquiler de Videos, Equipos de Sonido
-                      </option>
-                      <option value="Sociólogo">Sociólogo</option>
-                      <option value="Tasador">Tasador</option>
-                      <option value="Técnico">Técnico</option>
-                      <option value="Torero">Torero</option>
-                      <option value="Tramitador">Tramitador</option>
-                      <option value="Transporte de Carga y/o Mudanza">
-                        Transporte de Carga y/o Mudanza
-                      </option>
-                      <option value="Transportista">Transportista</option>
-                      <option value="Vendedor Ambulante">
-                        Vendedor Ambulante
-                      </option>
-                      <option value="Veterinario, Zoólogo, Zootécnico">
-                        Veterinario, Zoólogo, Zootécnico
-                      </option>
-                      <option value="Visitador Medico">Visitador Medico</option>
-                      <option value="Zapatero">Zapatero</option>
-                      <option value="Otro">Otro</option>
-                      <option value="No Declara">No Declara</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoOcupacion ? 
+                        this.state.catalogoOcupacion.map(datos => (
+                            <option key={datos.idOcupacion} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
 
@@ -1364,50 +1281,13 @@ export default class Contact extends Component {
                   <div className="form-group mb-3">
                     {/* Select Nivel de Estudios*/}
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} disabled={this.state.swAnonimo === true} className="form-select" id="selNivelEstudios" name="selNivelEstudios" value={this.state.selNivelEstudios} ref={selNivelEstudios=>this.inputSelNivelEstudios = selNivelEstudios}>
-                      <option value="" >Seleccione...</option>
-                      <option value="Preescolar Incompleta">Preescolar Incompleta</option>
-                      <option value="Preescolar">Preescolar</option>
-                      <option value="Primaria Incompleta">
-                        Primaria Incompleta
-                      </option>
-                      <option value="Primaria">Primaria</option>
-                      <option value="Secundaria Incompleta">
-                        Secundaria Incompleta
-                      </option>
-                      <option value="Secundaria">Secundaria</option>
-                      <option value="Bachillerato/Preparatoria Incompleta">
-                        Bachillerato/Preparatoria Incompleta
-                      </option>
-                      <option value="Bachillerato/Preparatoria">
-                        Bachillerato/Preparatoria
-                      </option>
-                      <option value="Técnica Incompleta">
-                        Técnica Incompleta
-                      </option>
-                      <option value="Técnica">Técnica</option>
-                      <option value="Técnico Superior Universitario Incompleta">
-                        Técnico Superior Universitario Incompleta
-                      </option>
-                      <option value="Técnico Superior Universitario">
-                        Técnico Superior Universitario
-                      </option>
-                      <option value="Licenciatura Incompleta">
-                        Licenciatura Incompleta
-                      </option>
-                      <option value="Licenciatura">Licenciatura</option>
-                      <option value="Especialidad Incompleta">
-                        Especialidad Incompleta
-                      </option>
-                      <option value="Especialidad">Especialidad</option>
-                      <option value="Maestría Incompleta">
-                        Maestría Incompleta
-                      </option>
-                      <option value="Maestría">Maestría</option>
-                      <option value="Doctorado Incompleto">
-                        Doctorado Incompleto
-                      </option>
-                      <option value="Doctorado">Doctorado</option>
-                      <option value="Sin estudios">Sin estudios</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoNivelEstudios ? 
+                        this.state.catalogoNivelEstudios.map(datos => (
+                            <option key={datos.idNivelestudios} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
 
@@ -1417,85 +1297,13 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selLengua" name="selLengua" value={this.state.selLengua} ref={selLengua=>this.inputSelLengua = selLengua}>
-                      <option value="" >Seleccione...</option>
-                      <option value="Akateko">Akateko</option>
-                      <option value="Amuzgo">Amuzgo</option>
-                      <option value="Awakateko">Awakateko</option>
-                      <option value="Ayapaneco">Ayapaneco</option>
-                      <option value="Cora">Cora</option>
-                      <option value="Cucapá">Cucapá</option>
-                      <option value="Cuicateco">Cuicateco</option>
-                      <option value="Chatino">Chatino</option>
-                      <option value="Chichimeco">Chichimeco</option>
-                      <option value="Chinanteco">Chinanteco</option>
-                      <option value="Chocholteco">Chocholteco</option>
-                      <option value="Chontal de Oaxaca">
-                        Chontal de Oaxaca
-                      </option>
-                      <option value="Chontal de Tabasco">
-                        Chontal de Tabasco
-                      </option>
-                      <option value="Chuj">Chuj</option>
-                      <option value="Ch'ol">Ch'ol</option>
-                      <option value="Guarijío">Guarijío</option>
-                      <option value="Huasteco">Huasteco</option>
-                      <option value="Huave">Huave</option>
-                      <option value="Huichol">Huichol</option>
-                      <option value="Ixcateco">Ixcateco</option>
-                      <option value="Ixil">Ixil</option>
-                      <option value="Jakalteko">Jakalteko</option>
-                      <option value="Kaqchikel">Kaqchikel</option>
-                      <option value="Kickapoo">Kickapoo</option>
-                      <option value="Kiliwa">Kiliwa</option>
-                      <option value="Kumiai">Kumiai</option>
-                      <option value="Ku'ahl III">Ku'ahl III</option>
-                      <option value="K'iche'">K'iche'</option>
-                      <option value="Lacandón">Lacandón</option>
-                      <option value="Mam">Mam</option>
-                      <option value="Matlatzinca">Matlatzinca</option>
-                      <option value="Maya">Maya</option>
-                      <option value="Mayo">Mayo</option>
-                      <option value="Mazahua">Mazahua</option>
-                      <option value="Mazateco">Mazateco</option>
-                      <option value="Mixe">Mixe</option>
-                      <option value="Mixteco">Mixteco</option>
-                      <option value="Náhuatl">Náhuatl</option>
-                      <option value="Oluteco">Oluteco</option>
-                      <option value="Otomí">Otomí</option>
-                      <option value="Paipai">Paipai</option>
-                      <option value="Pame">Pame</option>
-                      <option value="Pápago">Pápago</option>
-                      <option value="Pima">Pima</option>
-                      <option value="Popoloca">Popoloca</option>
-                      <option value="Popoluca de la Sierra">
-                        Popoluca de la Sierra
-                      </option>
-                      <option value="Qato'k">Qato'k</option>
-                      <option value="Q'anjob'al">Q'anjob'al</option>
-                      <option value="Q'eqchí'">Q'eqchí'</option>
-                      <option value="Sayulteco">Sayulteco</option>
-                      <option value="Seri">Seri</option>
-                      <option value="Tarahumara">Tarahumara</option>
-                      <option value="Tarasco">Tarasco</option>
-                      <option value="Teko">Teko</option>
-                      <option value="Tepehua">Tepehua</option>
-                      <option value="Tepehuano del norte">
-                        Tepehuano del norte
-                      </option>
-                      <option value="Tepehuano del sur">
-                        Tepehuano del sur
-                      </option>
-                      <option value="Texistepequeño">Texistepequeño</option>
-                      <option value="Tojolabal">Tojolabal</option>
-                      <option value="Totonaco">Totonaco</option>
-                      <option value="Triqui">Triqui</option>
-                      <option value="Tlahuica">Tlahuica</option>
-                      <option value="Tlapaneco">Tlapaneco</option>
-                      <option value="Tseltal">Tseltal</option>
-                      <option value="Tsotsil">Tsotsil</option>
-                      <option value="Yaqui">Yaqui</option>
-                      <option value="Zapoteco">Zapoteco</option>
-                      <option value="Zoque IX">Zoque IX</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoLengua ? 
+                        this.state.catalogoLengua.map(datos => (
+                            <option key={datos.idLengua} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
 
@@ -1505,40 +1313,13 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3" hidden={this.state.raPersona === "Moral" || this.state.swAnonimo === true}>
                     <select onChange={this.handlerOnChange} disabled={this.state.raPersona === "Moral" || this.state.swAnonimo === true} className="form-select" id="selReligion" name="selReligion" value={this.state.selReligion} ref={selReligion=>this.inputSelReligion = selReligion}>
-                      <option value="" >Seleccione...</option>
-                      <option value="Cristianismo">Cristianismo</option>
-                      <option value="Catolicismo">Catolicismo</option>
-                      <option value="Ortodoxos">Ortodoxos</option>
-                      <option value="Protestantismo histórico o reformado">
-                        Protestantismo histórico o reformado
-                      </option>
-                      <option value="Pentecostalismo">Pentecostalismo</option>
-                      <option value="Iglesias evangélicas">
-                        Iglesias evangélicas
-                      </option>
-                      <option value="Iglesias cristianas">
-                        Iglesias cristianas
-                      </option>
-                      <option value="Religiones bíblicas diferentes de evangélicas">
-                        Religiones bíblicas diferentes de evangélicas
-                      </option>
-                      <option value="Religiones de origen oriental">
-                        Religiones de origen oriental
-                      </option>
-                      <option value="Judaísmo">Judaísmo</option>
-                      <option value="New age">New age</option>
-                      <option value="Escuelas esotéricas">
-                        Escuelas esotéricas
-                      </option>
-                      <option value="Raíces étnicas">Raíces étnicas</option>
-                      <option value="Espiritualistas">Espiritualistas</option>
-                      <option value="Otros movimientos religiosos">
-                        Otros movimientos religiosos
-                      </option>
-                      <option value="Religión especifica">
-                        Religión especifica
-                      </option>
-                      <option value="Sin religión">Sin religión</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoReligion ? 
+                        this.state.catalogoReligion.map(datos => (
+                            <option key={datos.idReligion}  value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
 
@@ -1580,19 +1361,13 @@ export default class Contact extends Component {
                     {/* Select Discapacidad*/}
                     <div className="col-md-6">
                       <select required={this.state.swDiscapacidad === true} onChange={this.handlerOnChange} disabled={this.state.swDiscapacidad === false} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.selDiscapacidad} ref={selDiscapacidad=>this.inputSelDiscapacidad = selDiscapacidad}>
-                        <option value="" >Seleccione...</option>
-                        <option value="Autismo">Autismo</option>
-                        <option value="Deficiencia Visual">Deficiencia Visual</option>
-                        <option value="Discapacidad Fisica">Discapacidad Fisica</option>
-                        <option value="Enfermedades Mentales">Enfermedades Mentales</option>
-                        <option value="Transtorno del Lenguaje">Transtorno del Lenguaje</option>
-                        <option value="Dificutades en el Aprendizaje">Dificutades en el Aprendizaje</option>
-                        <option value="Enfermedad Cronica">Enfermedad Cronica</option>
-                        <option value="Discapacidad Auditiva">Discapacidad Auditiva</option>
-                        <option value="Discapacidad Intelectual">Discapacidad Intelectual</option>
-                        <option value="Perdida de Memoria">Perdida de Memoria</option>
-                        <option value="Otra">Otra</option>
-                        <option value="Ninguna">Ninguna</option>
+                      <option value="">Seleccione</option>+
+                      {
+                        this.state.catalogoDiscapacidad ? 
+                          this.state.catalogoDiscapacidad.map(datos => (
+                              <option key={datos.idDiscapacidad}  value={datos.nombre}>{datos.nombre}</option>
+                          )) : "Cargando..."
+                      }
                       </select>
                     </div>
                   </div>
@@ -1956,40 +1731,14 @@ export default class Contact extends Component {
                     <small className="text-secondary">Estado: *</small> 
                   </span>
                   <div className="form-group mb-3">
-                    <select required onChange={this.handlerOnChange} className="form-select" id="selEstado" name="selEstado" value={this.state.selEstado} ref={(selEstado) => (this.inputSelEstado = selEstado)} aria-label="estado" >
-                      <option value="">Seleccione...</option>
-                      <option value="Aguascalientes">Aguascalientes</option>
-                      <option value="Baja California">Baja California</option>
-                      <option value="Baja California Sur">Baja California Sur</option>
-                      <option value="Campeche">Campeche</option>
-                      <option value="Chiapas">Chiapas</option>
-                      <option value="Chihuahua">Chihuahua</option>
-                      <option value="Ciudad de México">Ciudad de México</option>
-                      <option value="Coahuila de Zaragoza">Coahuila de Zaragoza</option>
-                      <option value="Colima">Colima</option>
-                      <option value="Durango">Durango</option>
-                      <option value="Estado de México">Estado de México</option>
-                      <option value="Guanajuato">Guanajuato</option>
-                      <option value="Guerrero">Guerrero</option>
-                      <option value="Hidalgo">Hidalgo</option>
-                      <option value="Jalisco">Jalisco</option>
-                      <option value="Michoacán">Michoacán</option>
-                      <option value="Morelos">Morelos</option>
-                      <option value="Nayarit">Nayarit</option>
-                      <option value="Nuevo León">Nuevo León</option>
-                      <option value="Oaxaca">Oaxaca</option>
-                      <option value="Puebla">Puebla</option>
-                      <option value="Querétaro">Querétaro</option>
-                      <option value="Quintana Roo">Quintana Roo</option>
-                      <option value="San Luis Potosí">San Luis Potosí</option>
-                      <option value="Sinaloa">Sinaloa</option>
-                      <option value="Sonora">Sonora</option>
-                      <option value="Tabasco">Tabasco</option>
-                      <option value="Tamaulipas">Tamaulipas</option>
-                      <option value="Tlaxcala">Tlaxcala</option>
-                      <option value="Veracruz">Veracruz</option>
-                      <option value="Yucatán">Yucatán</option>
-                      <option value="Zacatecas">Zacatecas</option>
+                    <select required onChange={this.handlerOnChange, this.handler_estado.bind(this)} className="form-select" id="selEstado" name="selEstado" value={this.state.selEstado} ref={(selEstado) => (this.inputSelEstado = selEstado)} aria-label="estado" >
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoEstado ? 
+                        this.state.catalogoEstado.map(datos => (
+                            <option key={datos.idEstado} value={datos.nombre}>{datos.nombre}</option>
+                        )) : "Cargando..."
+                    }
                     </select>
                   </div>
 
@@ -1999,8 +1748,13 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selMunicipio" name="selMunicipio" value={this.state.selMunicipio} ref={(selMunicipio) => (this.inputSelMunicipio = selMunicipio) } aria-label="municipio" >
-                      <option value="">Seleccione...</option>
-                      <option value="Opcion 1">Opcion 1</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoMunicipio ? 
+                        this.state.catalogoMunicipio.map(datos => (
+                            <option key={datos.idMunicipio} value={datos.idEstado}>{datos.nombre}</option>
+                        )) : <option value="">seleccione estado</option>
+                    }
                     </select>
                   </div>
                   
@@ -2010,8 +1764,13 @@ export default class Contact extends Component {
                   </span>
                   <div className="form-group mb-3">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selLocalidad" name="selLocalidad" ref={(selLocalidad) => (this.inputSelLocalidad = selLocalidad)} aria-label="municipio">
-                      <option value="">Seleccione...</option>
-                      <option value="Opcion 1">Opcion 1</option>
+                    <option value="">Seleccione</option>
+                    {
+                      this.state.catalogoLocalidad ? 
+                        this.state.catalogoLocalidad.map(datos => (
+                            <option key={datos.idLocalidad} value={datos.nombre}>{datos.nombre}</option>
+                        )) : <option value="" disabled>seleccione municipio</option>
+                    }
                     </select>
                   </div>
 
