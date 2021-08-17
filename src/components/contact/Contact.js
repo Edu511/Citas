@@ -4,11 +4,36 @@ import axios from 'axios';
 
 
 export default class Contact extends Component {
+
+  componentDidMount() {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(
+      response => {
+        // console.log(response.data)
+        this.setState({ catalogoGenero: response.data}, () => {
+          console.log(this.state.catalogoGenero)
+        })
+      }).catch(error => {
+        console.log(error);
+      });
+  }
+  
   
   constructor(props){
 
-
-    super(props)
+    super(props);
+    
+    var catalogoGenero = [];
+    var catalogoClasPersona = [];
+    var catalogoDocIdentificacion = [];
+    var catalogoNacionalidad = [];
+    var catalogoOcupacion = [];
+    var catalogoLengua = [];
+    var catalogoReligion = [];
+    var catalogoDiscapacidad = [];
+    var catalogoEstado = [];
+    var catalogoMunicipio = [];
+    var catalogoLocalidad = []; 
+    
     this.state = {
       step: 1,
       swAnonimo: false,
@@ -62,12 +87,48 @@ export default class Contact extends Component {
       dateFechaCita: '',
       minFechaNac: '',
       selectedDay: '',
+      catalogoGenero: [],
+      catalogoClasPersona: [],
+      catalogoDocIdentificacion: [],
+      catalogoNacionalidad: [],
+      catalogoOcupacion: [],
+      catalogoLengua: [],
+      catalogoReligion: [],
+      catalogoDiscapacidad: [],
+      catalogoEstado: [],
+      catalogoMunicipio: [],
+      catalogoLocalidad: [],
+      base_ip: '192.168.14.180',
+      puerto: 44360,
       file: []
     }
     this.reader = new FileReader();
+    // this.listarCatalogos();
   }
 
-  
+  listarCatalogos = () => {
+    // base_ip y puerto son variable definidas en constructor 
+    // con valores predeterminados, para cambiarlos fácilmente
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(response => {
+      
+      const generoArray = response.data;
+      // console.log(generoArray)
+      
+      for (let i = 0; i < generoArray.maxLength; i++) {
+        this.catalogoGenero.push({
+          nombre: generoArray.nombre
+        });
+        console.log(generoArray[i]);
+      }
+      // this.setState({catalogoGenero: this.catalogoGenero});
+      // console.log(this.catalogoGenero)
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+  }
 
   // funcion para deshabilitar cambios cuando se hace check en anonimo
   checkAnonimo(){
@@ -138,6 +199,10 @@ export default class Contact extends Component {
     }
 
   }
+
+  // listaDisc(){
+  //   return this.state.
+  // }
 
   //Se ocupa de cambiar de seccion
   siguiente = () => {
@@ -731,6 +796,9 @@ export default class Contact extends Component {
     const state = this.state;
     state[e.target.name] = e.target.value;
     this.setState({ state });
+
+    // this.listarCatalogos();
+
   }
 
   render() {
@@ -860,8 +928,14 @@ export default class Contact extends Component {
                     {/* Select Sexo*/}
                     <select required={this.state.raPersona === "Fisica" || this.state.swAnonimo === false} onChange={this.handlerOnChange} className="form-select" id="selSexo" name="selSexo" value={this.state.selSexo} ref={selSexo=>this.inputSelSexo = selSexo}>
                       <option value="">Seleccione...</option>
-                      <option value="Masculino">Masculino</option>
-                      <option value="Femenino">Femenino</option>
+                      {
+                        // this.state.catalogoGenero && this.state.catalogoGenero > 0 ? 
+                        console.log(this.state.catalogoGenero.nombre)
+                        // this.state.catalogoGenero.map(datos => (
+                        //     <option value={datos.nombre}>{datos.nombre}</option>
+                        // ))
+
+                      }
                     </select>
                   </div>
                 </div>
