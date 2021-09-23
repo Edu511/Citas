@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../../firebase/firebaseConfig';
 import axios from 'axios';
+import https from 'https';
+
 
 export default class Contact extends Component {
 
@@ -73,21 +75,28 @@ export default class Contact extends Component {
       catalogoEstado: [],
       catalogoMunicipio: [],
       catalogoLocalidad: [],
-      base_ip: '192.168.14.180',
+      base_ip: '187.237.240.68',
       puerto: 44360,
       file: []
     }
     this.reader = new FileReader();
   }
 
+  // carga los elementos mencionados despues del DOM de react
   componentDidMount() {
     this.listarCatalogos();
+    this.cargarHorariosDisponibles();
   }
 
+  // devuelve los catalogos estáticos desde la API
   listarCatalogos = () => {
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    }); 
         
     // catalogoClasPersona
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/ClasificacionPersonas/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/ClasificacionPersonas/Listar', { httpsAgent: agent }).then(response => {
            
       this.setState({ catalogoClasPersona: response.data});
 
@@ -98,7 +107,7 @@ export default class Contact extends Component {
     });
     
     // catalogoGenero
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar', { httpsAgent: agent }).then(response => {
            
       this.setState({ catalogoGenero: response.data});
 
@@ -109,7 +118,7 @@ export default class Contact extends Component {
     });
 
     // catalogoDocIdentificacion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoDocIdentificacion: response.data});
 
@@ -120,7 +129,7 @@ export default class Contact extends Component {
     });
 
     // catalogoDocIdentificacion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoDocIdentificacion: response.data});
 
@@ -131,7 +140,7 @@ export default class Contact extends Component {
     });
 
     // catalogoNacionalidad
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Nacionalidads/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Nacionalidads/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoNacionalidad: response.data});
 
@@ -142,7 +151,7 @@ export default class Contact extends Component {
     });
 
     // catalogoOcupacion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Ocupacions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Ocupacions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoOcupacion: response.data});
 
@@ -153,7 +162,7 @@ export default class Contact extends Component {
     });
 
     // catalogoNivelEstudios
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/NivelEstudios/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/NivelEstudios/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoNivelEstudios: response.data});
 
@@ -164,7 +173,7 @@ export default class Contact extends Component {
     });
 
     // catalogoLengua
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Lenguas/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Lenguas/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoLengua: response.data});
 
@@ -175,7 +184,7 @@ export default class Contact extends Component {
     });
 
     // catalogoReligion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Religions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Religions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoReligion: response.data});
 
@@ -186,7 +195,7 @@ export default class Contact extends Component {
     });
 
     // catalogoDiscapacidad
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Discapacidads/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Discapacidads/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoDiscapacidad: response.data});
 
@@ -197,7 +206,7 @@ export default class Contact extends Component {
     });
 
     // catalogoEstado
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Estadoes/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Estadoes/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoEstado: response.data});
 
@@ -208,7 +217,7 @@ export default class Contact extends Component {
     });
 
     // catalogoMunicipio
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + 13).then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + 13, { httpsAgent: agent }).then(response => {
 
       let municipiosArray = response.data
       this.setState({ catalogoMunicipio: municipiosArray.sort((a, b) =>{
@@ -223,7 +232,7 @@ export default class Contact extends Component {
     });
 
     // catalogoLocalidad
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + 710).then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + 710, { httpsAgent: agent }).then(response => {
 
       let localidadesArray = response.data
       this.setState({ catalogoLocalidad: localidadesArray.sort((a, b) =>{
@@ -265,13 +274,17 @@ export default class Contact extends Component {
 
   // lista catalogos de localidades de acuerdo al municipio seleccionado
   cargarLocalidades = () => {
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    }); 
     
     if(this.state.selMunicipio){
 
       let consulta = (elemento) => elemento.nombre === this.state.selMunicipio;
       let municipio_seleccionado = this.state.catalogoMunicipio.find(consulta);
 
-      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + municipio_seleccionado.idMunicipio).then(response => {
+      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + municipio_seleccionado.idMunicipio, { httpsAgent: agent }).then(response => {
            
       let localidadesArray = response.data;  
       this.setState({ catalogoLocalidad: localidadesArray.sort((a, b) =>{
@@ -288,6 +301,33 @@ export default class Contact extends Component {
       
       this.setState({ catalogoLocalidad: ''});
     }
+  }
+
+  cargarHorariosDisponibles = () => {
+
+    let ip_address = '187.237.240.68';
+    let puerto = 44394;
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    });    
+
+    // let datos_requeridos = {
+    //     DistritoId: 
+		// 		IdAgencia: 
+		// 		fecha: 
+    // }
+    // catalogoClasPersona
+    // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos).then(response => {
+           
+    //   this.setState({ catalogoClasPersona: response.data});
+
+    // }).catch(error => { 
+
+    //   console.log(error);
+
+    // });
+    
   }
 
   // funcion para deshabilitar cambios cuando se hace check en anonimo
@@ -618,16 +658,57 @@ export default class Contact extends Component {
           // parametrosAnonimo.txtLongitud
           )
           {
-            firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
-            {
-              this.setState({
-                step: 4,
-              });
-            }).catch((e)=>
-            {
-              console.log(e);
-              alert("Faltan campos por llenar")
-            })
+
+            let datos_pre_denuncia = {
+              DistritoId: '',
+              PRegistroId: '',
+              StatusAnonimo: true,
+              TipoPersona: parametrosAnonimo.selClasPersona,
+              RFC: parametrosAnonimo.txtRFC,
+              RazonSocial: parametrosAnonimo.txtRazonSocial,
+              Nombre: parametrosAnonimo.txtNombre,
+              ApellidoPaterno: parametrosAnonimo.txtApPaterno,
+              ApellidoMaterno: parametrosAnonimo.txtApMaterno,
+              StatusAlias: parametrosAnonimo.txtAlias,
+              FechaNacimiento: parametrosAnonimo.dateFNacimiento,
+              EntidadFederativa: parametrosAnonimo.selEntidadFederativa,
+              CURP: parametrosAnonimo.txtCurp,
+              Sexo: parametrosAnonimo.selSexo,
+              EstadoCivil: parametrosAnonimo.selEstadoCivil,
+              Genero: parametrosAnonimo.selLGBT,
+              Telefono1: parametrosAnonimo.txtnumTel1,
+              Telefono2: parametrosAnonimo.txtnumTel2,
+              Correo: parametrosAnonimo.emailCorreo,
+              Medionotificacion: parametrosAnonimo.selNotificacion,
+              Nacionalidad: parametrosAnonimo.txtNacionalidad,
+              Ocupacion: parametrosAnonimo.selOcupacion,
+              NivelEstudio: parametrosAnonimo.selNivelEstudios,
+              Lengua: parametrosAnonimo.selLengua,
+              Religion: parametrosAnonimo.selReligion,
+              Discapacidad: parametrosAnonimo.swDiscapacidad,
+              TipoDiscapacidad: parametrosAnonimo.selDiscapacidad,
+              DatosProtegidos: true,
+              Parentesco: '',
+              Edad: parametrosAnonimo.txtNumEdad,
+              Relacion: ' ',
+              EstadoId: parametrosAnonimo.selEstado,
+              MunicipioId: parametrosAnonimo.selMunicipio,
+              LocalidadId: parametrosAnonimo.selLocalidad
+            }
+
+
+
+
+            // firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
+            // {
+            //   this.setState({
+            //     step: 4,
+            //   });
+            // }).catch((e)=>
+            // {
+            //   console.log(e);
+            //   alert("Faltan campos por llenar")
+            // })
           }else{
             alert("Por favor llene su formulario")
             this.setState({
