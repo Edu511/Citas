@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../../firebase/firebaseConfig';
 import axios from 'axios';
+import https from 'https';
+
 
 export default class Contact extends Component {
 
@@ -70,24 +72,34 @@ export default class Contact extends Component {
       catalogoLengua: [],
       catalogoReligion: [],
       catalogoDiscapacidad: [],
+      catalogoDelitos: [],
+      catalogoDistritos: [],
+      catalogoAgencias: [],
       catalogoEstado: [],
       catalogoMunicipio: [],
       catalogoLocalidad: [],
-      base_ip: '192.168.14.180',
+      base_ip: '187.237.240.68',
       puerto: 44360,
       file: []
     }
     this.reader = new FileReader();
   }
 
+  // carga los elementos mencionados despues del DOM de react
   componentDidMount() {
     this.listarCatalogos();
+    this.cargarHorariosDisponibles();
   }
 
+  // devuelve los catalogos estáticos desde la API
   listarCatalogos = () => {
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    }); 
         
     // catalogoClasPersona
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/ClasificacionPersonas/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/ClasificacionPersonas/Listar', { httpsAgent: agent }).then(response => {
            
       this.setState({ catalogoClasPersona: response.data});
 
@@ -98,7 +110,7 @@ export default class Contact extends Component {
     });
     
     // catalogoGenero
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Generoes/Listar', { httpsAgent: agent }).then(response => {
            
       this.setState({ catalogoGenero: response.data});
 
@@ -109,7 +121,7 @@ export default class Contact extends Component {
     });
 
     // catalogoDocIdentificacion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoDocIdentificacion: response.data});
 
@@ -120,7 +132,7 @@ export default class Contact extends Component {
     });
 
     // catalogoDocIdentificacion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/DocIdentificacions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoDocIdentificacion: response.data});
 
@@ -131,7 +143,7 @@ export default class Contact extends Component {
     });
 
     // catalogoNacionalidad
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Nacionalidads/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Nacionalidads/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoNacionalidad: response.data});
 
@@ -142,7 +154,7 @@ export default class Contact extends Component {
     });
 
     // catalogoOcupacion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Ocupacions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Ocupacions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoOcupacion: response.data});
 
@@ -153,7 +165,7 @@ export default class Contact extends Component {
     });
 
     // catalogoNivelEstudios
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/NivelEstudios/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/NivelEstudios/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoNivelEstudios: response.data});
 
@@ -164,7 +176,7 @@ export default class Contact extends Component {
     });
 
     // catalogoLengua
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Lenguas/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Lenguas/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoLengua: response.data});
 
@@ -175,7 +187,7 @@ export default class Contact extends Component {
     });
 
     // catalogoReligion
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Religions/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Religions/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoReligion: response.data});
 
@@ -186,7 +198,7 @@ export default class Contact extends Component {
     });
 
     // catalogoDiscapacidad
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Discapacidads/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Discapacidads/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoDiscapacidad: response.data});
 
@@ -196,8 +208,54 @@ export default class Contact extends Component {
 
     });
 
+    // catalogoDelito
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Delitoes/Listar', { httpsAgent: agent }).then(response => {
+      
+      this.setState({ catalogoDelitos: response.data});
+
+
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoDistrito
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Distritoes/Listar', { httpsAgent: agent }).then(response => {
+
+      let distritos = [
+        { distrito: response.data[12].nombre, id_distrito: response.data[12].idDistrito},
+        { distrito: response.data[7].nombre, id_distrito: response.data[7].idDistrito},
+        { distrito: response.data[17].nombre, id_distrito: response.data[17].idDistrito},
+        { distrito: response.data[18].nombre, id_distrito: response.data[18].idDistrito},
+      ];
+      console.log(distritos);
+      this.setState({ catalogoDistritos: distritos});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoAgencias
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Agencias/Listar', { httpsAgent: agent }).then(response => {
+      console.log(response.data)
+      let distritos = [
+        
+      ];
+      console.log(distritos);
+      this.setState({ catalogoDistritos: distritos});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
     // catalogoEstado
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Estadoes/Listar').then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Estadoes/Listar', { httpsAgent: agent }).then(response => {
 
       this.setState({ catalogoEstado: response.data});
 
@@ -208,7 +266,7 @@ export default class Contact extends Component {
     });
 
     // catalogoMunicipio
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + 13).then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + 13, { httpsAgent: agent }).then(response => {
 
       let municipiosArray = response.data
       this.setState({ catalogoMunicipio: municipiosArray.sort((a, b) =>{
@@ -223,7 +281,7 @@ export default class Contact extends Component {
     });
 
     // catalogoLocalidad
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + 710).then(response => {
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + 710, { httpsAgent: agent }).then(response => {
 
       let localidadesArray = response.data
       this.setState({ catalogoLocalidad: localidadesArray.sort((a, b) =>{
@@ -265,13 +323,17 @@ export default class Contact extends Component {
 
   // lista catalogos de localidades de acuerdo al municipio seleccionado
   cargarLocalidades = () => {
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    }); 
     
     if(this.state.selMunicipio){
 
       let consulta = (elemento) => elemento.nombre === this.state.selMunicipio;
       let municipio_seleccionado = this.state.catalogoMunicipio.find(consulta);
 
-      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + municipio_seleccionado.idMunicipio).then(response => {
+      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Localidads/MostrarPorMPO/' + municipio_seleccionado.idMunicipio, { httpsAgent: agent }).then(response => {
            
       let localidadesArray = response.data;  
       this.setState({ catalogoLocalidad: localidadesArray.sort((a, b) =>{
@@ -288,6 +350,57 @@ export default class Contact extends Component {
       
       this.setState({ catalogoLocalidad: ''});
     }
+  }
+
+  cargarHorariosDisponibles = (fecha) => {
+
+    let ip_address = '187.237.240.68';
+    let puerto = 44394;
+    let id_distrito = null;
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    });
+    
+    switch (this.state.selAgenciaAVisitar) {
+      case 'pachuca':
+        id_distrito = catalogoDistritos[0].nombre;
+        break;
+
+      case 'tula':
+        id_distrito = catalogoDistritos[2].nombre;
+        break;
+
+      case 'tulancingo':
+        id_distrito = catalogoDistritos[3].nombre;
+        break;
+
+      case 'ixmiquilpan':
+        id_distrito = catalogoDistritos[1].nombre;
+        break;
+    
+      default:
+        id_distrito = '';
+        break;
+    }
+
+    let datos_requeridos = {
+       DistritoId: '',
+				IdAgencia: '',
+				fecha: new Date(fecha).toISOString()
+    };
+
+    // catalogoClasPersona
+    // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
+           
+    //   this.setState({ catalogoClasPersona: response.data});
+
+    // }).catch(error => { 
+
+    //   console.log(error);
+
+    // });
+    
   }
 
   // funcion para deshabilitar cambios cuando se hace check en anonimo
@@ -618,16 +731,57 @@ export default class Contact extends Component {
           // parametrosAnonimo.txtLongitud
           )
           {
-            firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
-            {
-              this.setState({
-                step: 4,
-              });
-            }).catch((e)=>
-            {
-              console.log(e);
-              alert("Faltan campos por llenar")
-            })
+
+            let datos_pre_denuncia = {
+              DistritoId: '',
+              PRegistroId: '',
+              StatusAnonimo: true,
+              TipoPersona: parametrosAnonimo.selClasPersona,
+              RFC: parametrosAnonimo.txtRFC,
+              RazonSocial: parametrosAnonimo.txtRazonSocial,
+              Nombre: parametrosAnonimo.txtNombre,
+              ApellidoPaterno: parametrosAnonimo.txtApPaterno,
+              ApellidoMaterno: parametrosAnonimo.txtApMaterno,
+              StatusAlias: parametrosAnonimo.txtAlias,
+              FechaNacimiento: parametrosAnonimo.dateFNacimiento,
+              EntidadFederativa: parametrosAnonimo.selEntidadFederativa,
+              CURP: parametrosAnonimo.txtCurp,
+              Sexo: parametrosAnonimo.selSexo,
+              EstadoCivil: parametrosAnonimo.selEstadoCivil,
+              Genero: parametrosAnonimo.selLGBT,
+              Telefono1: parametrosAnonimo.txtnumTel1,
+              Telefono2: parametrosAnonimo.txtnumTel2,
+              Correo: parametrosAnonimo.emailCorreo,
+              Medionotificacion: parametrosAnonimo.selNotificacion,
+              Nacionalidad: parametrosAnonimo.txtNacionalidad,
+              Ocupacion: parametrosAnonimo.selOcupacion,
+              NivelEstudio: parametrosAnonimo.selNivelEstudios,
+              Lengua: parametrosAnonimo.selLengua,
+              Religion: parametrosAnonimo.selReligion,
+              Discapacidad: parametrosAnonimo.swDiscapacidad,
+              TipoDiscapacidad: parametrosAnonimo.selDiscapacidad,
+              DatosProtegidos: true,
+              Parentesco: '',
+              Edad: parametrosAnonimo.txtNumEdad,
+              Relacion: ' ',
+              EstadoId: parametrosAnonimo.selEstado,
+              MunicipioId: parametrosAnonimo.selMunicipio,
+              LocalidadId: parametrosAnonimo.selLocalidad
+            }
+
+
+
+
+            // firebase.database().ref("pruebaCentAnonimo").push(parametrosAnonimo).then(()=>
+            // {
+            //   this.setState({
+            //     step: 4,
+            //   });
+            // }).catch((e)=>
+            // {
+            //   console.log(e);
+            //   alert("Faltan campos por llenar")
+            // })
           }else{
             alert("Por favor llene su formulario")
             this.setState({
@@ -967,6 +1121,7 @@ export default class Contact extends Component {
 
     this.cargarMunicipios();
     this.cargarLocalidades();
+    this.cargarHorariosDisponibles();
 
   }
 
@@ -1401,9 +1556,21 @@ export default class Contact extends Component {
                   <label>
                      <small> Descripcion de los hechos: *</small>
                   </label>
-                  <div className="form-group mb-3">
+                  {/* <div className="form-group mb-3">
                     <textarea onChange={this.handlerOnChange} id="txtDescHechos" rows="3" className="form-control w-100" name="txtDescHechos" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos}></textarea>
-                  </div>
+                  </div> */}
+                  {/* Select Discapacidad*/}
+                  <div className="col-md-6">
+                      <select required={this.state.txtDescHechos === true} onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos}>
+                      <option value="">Seleccione</option>+
+                      {
+                        this.state.catalogoDelitos ? 
+                          this.state.catalogoDelitos.map(datos => (
+                              <option key={datos.idDelito}  value={datos.idDelito}>{datos.nombre}</option>
+                          )) : "Cargando..."
+                      }
+                      </select>
+                    </div>
 
                   {/* fecha del suceso */}
                   <span>
@@ -1795,10 +1962,10 @@ export default class Contact extends Component {
                   <div className="form-group mb-3 align-items-center">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
                       <option value="">Seleccione</option>
-                      <option value="CESIS Pachuca">CESIS Pachuca</option>
-                      <option value="CESIS Tula">CESIS Tula</option>
-                      <option value="CESIS Tulancingo">CESIS Tulancingo</option>
-                      <option value="CESIS Ixmiquilpan">CESIS Ixmiquilpan</option>
+                      <option value="pachuca">CESIS Pachuca</option>
+                      <option value="tula">CESIS Tula</option>
+                      <option value="tulancingo">CESIS Tulancingo</option>
+                      <option value="ixmiquilpan">CESIS Ixmiquilpan</option>
                     </select>
                   </div>
 
