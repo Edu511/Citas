@@ -72,6 +72,9 @@ export default class Contact extends Component {
       catalogoLengua: [],
       catalogoReligion: [],
       catalogoDiscapacidad: [],
+      catalogoDelitos: [],
+      catalogoDistritos: [],
+      catalogoAgencias: [],
       catalogoEstado: [],
       catalogoMunicipio: [],
       catalogoLocalidad: [],
@@ -205,6 +208,52 @@ export default class Contact extends Component {
 
     });
 
+    // catalogoDelito
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Delitoes/Listar', { httpsAgent: agent }).then(response => {
+      
+      this.setState({ catalogoDelitos: response.data});
+
+
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoDistrito
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Distritoes/Listar', { httpsAgent: agent }).then(response => {
+
+      let distritos = [
+        { distrito: response.data[12].nombre, id_distrito: response.data[12].idDistrito},
+        { distrito: response.data[7].nombre, id_distrito: response.data[7].idDistrito},
+        { distrito: response.data[17].nombre, id_distrito: response.data[17].idDistrito},
+        { distrito: response.data[18].nombre, id_distrito: response.data[18].idDistrito},
+      ];
+      console.log(distritos);
+      this.setState({ catalogoDistritos: distritos});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
+    // catalogoAgencias
+    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Agencias/Listar', { httpsAgent: agent }).then(response => {
+      console.log(response.data)
+      let distritos = [
+        
+      ];
+      console.log(distritos);
+      this.setState({ catalogoDistritos: distritos});
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+
     // catalogoEstado
     axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Estadoes/Listar', { httpsAgent: agent }).then(response => {
 
@@ -303,22 +352,46 @@ export default class Contact extends Component {
     }
   }
 
-  cargarHorariosDisponibles = () => {
+  cargarHorariosDisponibles = (fecha) => {
 
     let ip_address = '187.237.240.68';
     let puerto = 44394;
+    let id_distrito = null;
 
     const agent = new https.Agent({  
       rejectUnauthorized: false
-    });    
+    });
+    
+    switch (this.state.selAgenciaAVisitar) {
+      case 'pachuca':
+        id_distrito = catalogoDistritos[0].nombre;
+        break;
 
-    // let datos_requeridos = {
-    //     DistritoId: 
-		// 		IdAgencia: 
-		// 		fecha: 
-    // }
+      case 'tula':
+        id_distrito = catalogoDistritos[2].nombre;
+        break;
+
+      case 'tulancingo':
+        id_distrito = catalogoDistritos[3].nombre;
+        break;
+
+      case 'ixmiquilpan':
+        id_distrito = catalogoDistritos[1].nombre;
+        break;
+    
+      default:
+        id_distrito = '';
+        break;
+    }
+
+    let datos_requeridos = {
+       DistritoId: '',
+				IdAgencia: '',
+				fecha: new Date(fecha).toISOString()
+    };
+
     // catalogoClasPersona
-    // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos).then(response => {
+    // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
            
     //   this.setState({ catalogoClasPersona: response.data});
 
@@ -1048,6 +1121,7 @@ export default class Contact extends Component {
 
     this.cargarMunicipios();
     this.cargarLocalidades();
+    this.cargarHorariosDisponibles();
 
   }
 
@@ -1482,9 +1556,21 @@ export default class Contact extends Component {
                   <label>
                      <small> Descripcion de los hechos: *</small>
                   </label>
-                  <div className="form-group mb-3">
+                  {/* <div className="form-group mb-3">
                     <textarea onChange={this.handlerOnChange} id="txtDescHechos" rows="3" className="form-control w-100" name="txtDescHechos" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos}></textarea>
-                  </div>
+                  </div> */}
+                  {/* Select Discapacidad*/}
+                  <div className="col-md-6">
+                      <select required={this.state.txtDescHechos === true} onChange={this.handlerOnChange} className="form-select" id="selDiscapacidad" name="selDiscapacidad" value={this.state.txtDescHechos} ref={txtDescHechos=>this.inputTxtDescHechos = txtDescHechos}>
+                      <option value="">Seleccione</option>+
+                      {
+                        this.state.catalogoDelitos ? 
+                          this.state.catalogoDelitos.map(datos => (
+                              <option key={datos.idDelito}  value={datos.idDelito}>{datos.nombre}</option>
+                          )) : "Cargando..."
+                      }
+                      </select>
+                    </div>
 
                   {/* fecha del suceso */}
                   <span>
@@ -1876,10 +1962,10 @@ export default class Contact extends Component {
                   <div className="form-group mb-3 align-items-center">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
                       <option value="">Seleccione</option>
-                      <option value="CESIS Pachuca">CESIS Pachuca</option>
-                      <option value="CESIS Tula">CESIS Tula</option>
-                      <option value="CESIS Tulancingo">CESIS Tulancingo</option>
-                      <option value="CESIS Ixmiquilpan">CESIS Ixmiquilpan</option>
+                      <option value="pachuca">CESIS Pachuca</option>
+                      <option value="tula">CESIS Tula</option>
+                      <option value="tulancingo">CESIS Tulancingo</option>
+                      <option value="ixmiquilpan">CESIS Ixmiquilpan</option>
                     </select>
                   </div>
 
