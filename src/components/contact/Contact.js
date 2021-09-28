@@ -78,8 +78,10 @@ export default class Contact extends Component {
       catalogoEstado: [],
       catalogoMunicipio: [],
       catalogoLocalidad: [],
+      catalogoPreHecho: [],
       base_ip: '187.237.240.68',
       puerto: 44360,
+      puerto2: 44394,
       file: []
     }
     this.reader = new FileReader();
@@ -88,7 +90,21 @@ export default class Contact extends Component {
   // carga los elementos mencionados despues del DOM de react
   componentDidMount() {
     this.listarCatalogos();
-    this.cargarHorariosDisponibles();
+    // this.cargarHorariosDisponibles();
+  }
+
+  listaPreRegistro = () => {    
+    axios({
+      method: 'post',
+      url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreRegistros/GenerarPreRegistro',
+      data: {
+        DistritoId: catalogoDistritos.idDistrito,
+        PAtencionId: "", 
+        FechaHoraSuceso: this.state.timeHoraSuceso,
+        FechaHoraSuceso2: this.state.timeHoraSuceso,
+        rbreve: this.state.txtDescHechos,
+      }
+    })
   }
 
   // devuelve los catalogos estáticos desde la API
@@ -225,10 +241,10 @@ export default class Contact extends Component {
     axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Distritoes/Listar', { httpsAgent: agent }).then(response => {
 
       let distritos = [
-        { distrito: response.data[12].nombre, id_distrito: response.data[12].idDistrito},
-        { distrito: response.data[7].nombre, id_distrito: response.data[7].idDistrito},
-        { distrito: response.data[17].nombre, id_distrito: response.data[17].idDistrito},
-        { distrito: response.data[18].nombre, id_distrito: response.data[18].idDistrito},
+        { distrito: response.data[12].nombre, id_distrito: response.data[12].idDistrito, id_agencia: response.data[12].idAgencia},
+        { distrito: response.data[7].nombre, id_distrito: response.data[7].idDistrito, id_agencia: response.data[7].idAgencia},
+        { distrito: response.data[17].nombre, id_distrito: response.data[17].idDistrito, id_agencia: response.data[17].idAgencia},
+        { distrito: response.data[18].nombre, id_distrito: response.data[18].idDistrito, id_agencia: response.data[18].idAgencia},
       ];
       console.log(distritos);
       this.setState({ catalogoDistritos: distritos});
@@ -352,56 +368,56 @@ export default class Contact extends Component {
     }
   }
 
-  cargarHorariosDisponibles = (fecha) => {
+  // cargarHorariosDisponibles = (fecha) => {
 
-    let ip_address = '187.237.240.68';
-    let puerto = 44394;
-    let id_distrito = null;
+  //   let ip_address = '187.237.240.68';
+  //   let puerto = 44394;
+  //   let id_distrito = null;
 
-    const agent = new https.Agent({  
-      rejectUnauthorized: false
-    });
+  //   const agent = new https.Agent({  
+  //     rejectUnauthorized: false
+  //   });
     
-    switch (this.state.selAgenciaAVisitar) {
-      case 'pachuca':
-        id_distrito = catalogoDistritos[0].nombre;
-        break;
+  //   switch (this.state.selAgenciaAVisitar) {
+  //     case 'pachuca':
+  //       id_distrito = catalogoDistritos[0].nombre;
+  //       break;
 
-      case 'tula':
-        id_distrito = catalogoDistritos[2].nombre;
-        break;
+  //     case 'tula':
+  //       id_distrito = catalogoDistritos[2].nombre;
+  //       break;
 
-      case 'tulancingo':
-        id_distrito = catalogoDistritos[3].nombre;
-        break;
+  //     case 'tulancingo':
+  //       id_distrito = catalogoDistritos[3].nombre;
+  //       break;
 
-      case 'ixmiquilpan':
-        id_distrito = catalogoDistritos[1].nombre;
-        break;
+  //     case 'ixmiquilpan':
+  //       id_distrito = catalogoDistritos[1].nombre;
+  //       break;
     
-      default:
-        id_distrito = '';
-        break;
-    }
+  //     default:
+  //       id_distrito = '';
+  //       break;
+  //   }
 
-    let datos_requeridos = {
-       DistritoId: '',
-				IdAgencia: '',
-				fecha: new Date(fecha).toISOString()
-    };
+  //   let datos_requeridos = {
+  //      DistritoId: '',
+	// 			IdAgencia: '',
+	// 			fecha: new Date(fecha).toISOString()
+  //   };
 
-    // catalogoClasPersona
-    // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
+  //   // catalogoClasPersona
+  //   // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
            
-    //   this.setState({ catalogoClasPersona: response.data});
+  //   //   this.setState({ catalogoClasPersona: response.data});
 
-    // }).catch(error => { 
+  //   // }).catch(error => { 
 
-    //   console.log(error);
+  //   //   console.log(error);
 
-    // });
+  //   // });
     
-  }
+  // }
 
   // funcion para deshabilitar cambios cuando se hace check en anonimo
   checkAnonimo(){
