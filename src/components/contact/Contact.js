@@ -13,6 +13,7 @@ export default class Contact extends Component {
     this.state = {
       step: 1,
       swAnonimo: false,
+      datoProt: false,
       raPersona: 'Fisica',
       txtRFC: '',
       txtRazonSocial: '',
@@ -93,16 +94,81 @@ export default class Contact extends Component {
     // this.cargarHorariosDisponibles();
   }
 
-  listaPreRegistro = () => {    
+  envioRegistros = () => {
+
     axios({
       method: 'post',
       url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreRegistros/GenerarPreRegistro',
       data: {
-        DistritoId: catalogoDistritos.idDistrito,
+        DistritoId: this.catalogoDistritos.idDistrito,
+        Asignado: false, 
+        Ndenuncia: ""
+      }
+    });
+
+    axios({
+      method: 'post',
+      url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreAtenciones/Crear',
+      data: {
+        DistritoId: this.catalogoDistritos.idDistrito,
+        PRegistroId: "",
+        StatusAnonimo: this.state.swAnonimo,
+        TipoPersona: this.state.selClasPersona,
+        RFC: this.state.txtRFC,
+        RazonSocial: this.state.txtRazonSocial,
+        Nombre: this.state.txtNombre,
+        ApellidoPaterno: this.state.txtApPaterno,
+        ApellidoMaterno: this.state.txtApMaterno,
+        StatusAlias: this.state.txtAlias,
+        FechaNacimiento: this.state.dateFNacimiento,
+        EntidadFederativa: this.state.selEntidadFederativa,
+        CURP: this.state.txtCurp,
+        Sexo: this.state.selSexo,
+        EstadoCivil: this.state.inputSelEstadoCivil,
+        Genero: this.state.selLGBT,
+        Telefono1: this.state.txtnumTel1,
+        Telefono2: this.state.txtnumTel2,
+        Correo: this.state.emailCorreo,
+        Medionotificacion: this.state.selNotificacion,
+        Nacionalidad: this.state.txtNacionalidad,
+        Ocupacion: this.state.selOcupacion,
+        NivelEstudios: this.state.selNivelEstudios,
+        Lengua: this.state.selLengua,
+        Religion: this.state.selReligion,
+        Discapacidad: this.state.selDiscapacidad,
+        DatosProtegidos: this.state.datoProt,
+        Parentesco: "",
+        Edad: this.state.txtNumEdad,
+        Relacion: "",
+        EstadoId: this.state.selEstado,
+        MunicipioId: this.state.selMunicipio,
+        LocalidadId: this.state.selLocalidad
+      }
+    });
+
+    axios({
+      method: 'post',
+      url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreHecho/Crear',
+      data: {
+        DistritoId: this.catalogoDistritos.idDistrito,
         PAtencionId: "", 
         FechaHoraSuceso: this.state.timeHoraSuceso,
         FechaHoraSuceso2: this.state.timeHoraSuceso,
+        FechaReporte: this.state.dateFSuceso,
         rbreve: this.state.txtDescHechos,
+        texto: ""
+      }
+    });
+
+    axios({
+      method: 'post',
+      url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreCitas/Crear',
+      data: {
+        PRegistroId: "",
+        fecha: this.state.dateFechaCita, 
+        Hora: this.state.selHorarioCita,
+        AgenciaId: this.state.idAgencia,
+        distritoId: this.catalogoDistritos.idDistrito
       }
     })
   }
@@ -552,6 +618,12 @@ export default class Contact extends Component {
     if (mes_actual < 0 || (mes_actual === 0 && hoy.getDate() < fecha_nacimiento.getDate())) 
     {
       edad--;
+
+      if (edad <= 17) {
+        this.setState({
+          datoProt: true
+        })
+      }
     }
     return edad;
   }
