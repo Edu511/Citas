@@ -222,28 +222,10 @@ export default class Contact extends Component {
     });
 
     // catalogoDistrito
-    axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Distritoes/Listar', { httpsAgent: agent }).then(response => {
-
-      let distritos = [
-        { distrito: response.data[12].nombre, id_distrito: response.data[12].idDistrito},
-        { distrito: response.data[7].nombre, id_distrito: response.data[7].idDistrito},
-        { distrito: response.data[17].nombre, id_distrito: response.data[17].idDistrito},
-        { distrito: response.data[18].nombre, id_distrito: response.data[18].idDistrito},
-      ];
-      console.log(distritos);
-      this.setState({ catalogoDistritos: distritos});
-
-    }).catch(error => { 
-
-      console.log(error);
-
-    });
-
-    // catalogoAgencias
     axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Agencias/Listar', { httpsAgent: agent }).then(response => {
-      console.log(response.data)
       let distritos = [
-        
+        { distrito: response.data[10].nombreDistrito, id_distrito: response.data[10].distritoId, id_agencia: response.data[10].idAgencia },
+        { distrito: response.data[1].nombreDistrito, id_distrito: response.data[1].distritoId, id_agencia: response.data[1].idAgencia },
       ];
       console.log(distritos);
       this.setState({ catalogoDistritos: distritos});
@@ -352,11 +334,13 @@ export default class Contact extends Component {
     }
   }
 
-  cargarHorariosDisponibles = (fecha) => {
+  cargarHorariosDisponibles = () => {
 
     let ip_address = '187.237.240.68';
     let puerto = 44394;
     let id_distrito = null;
+    let id_agencia = null;
+    let fecha = new Date().toISOString(this.state.dateFechaCita) || new Date().toISOString();
 
     const agent = new https.Agent({  
       rejectUnauthorized: false
@@ -364,42 +348,39 @@ export default class Contact extends Component {
     
     switch (this.state.selAgenciaAVisitar) {
       case 'pachuca':
-        id_distrito = catalogoDistritos[0].nombre;
-        break;
-
-      case 'tula':
-        id_distrito = catalogoDistritos[2].nombre;
+        id_distrito = this.state.catalogoDistritos[0].id_distrito;
+        id_agencia = this.state.catalogoDistritos[0].id_agencia;
         break;
 
       case 'tulancingo':
-        id_distrito = catalogoDistritos[3].nombre;
-        break;
-
-      case 'ixmiquilpan':
-        id_distrito = catalogoDistritos[1].nombre;
+        id_distrito = this.state.catalogoDistritos[1].id_distrito;
+        id_agencia = this.state.catalogoDistritos[1].id_agencia;
         break;
     
       default:
         id_distrito = '';
+        id_agencia = '';
         break;
     }
 
     let datos_requeridos = {
-       DistritoId: '',
-				IdAgencia: '',
-				fecha: new Date(fecha).toISOString()
+       DistritoId: id_distrito,
+				IdAgencia: id_agencia,
+				fecha: fecha
     };
 
-    // catalogoClasPersona
-    // axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
+    console.log(datos_requeridos);
+
+    axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
            
-    //   this.setState({ catalogoClasPersona: response.data});
+      console.log(response)
+      // this.setState({ catalogoClasPersona: response.data});
 
-    // }).catch(error => { 
+    }).catch(error => { 
 
-    //   console.log(error);
+      console.log(error);
 
-    // });
+    });
     
   }
 
@@ -1962,10 +1943,8 @@ export default class Contact extends Component {
                   <div className="form-group mb-3 align-items-center">
                     <select required onChange={this.handlerOnChange} className="form-select" id="selAgenciaAVisitar" name="selAgenciaAVisitar" value={this.state.selAgenciaAVisitar} ref={(selAgenciaAVisitar) => (this.inputSelAgenciaAVisitar = selAgenciaAVisitar) } aria-label="agencia a visitar" >
                       <option value="">Seleccione</option>
-                      <option value="pachuca">CESIS Pachuca</option>
-                      <option value="tula">CESIS Tula</option>
-                      <option value="tulancingo">CESIS Tulancingo</option>
-                      <option value="ixmiquilpan">CESIS Ixmiquilpan</option>
+                      <option value="pachuca">CESI Pachuca</option>
+                      <option value="tulancingo">CESI Tulancingo</option>
                     </select>
                   </div>
 

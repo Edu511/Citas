@@ -1,0 +1,356 @@
+LISTA DE SERVICIOS EN EL SERVDOR PUBLICO DE CENTANERIO
+
+CATALOGOS
+
+Nivel de estudios:
+https://187.237.240.68:44360/api/NivelEstudios/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE NIVELES DE ESTUDIOS
+
+Nacionalidades
+https://187.237.240.68:44360/api/Nacionalidads/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE NACIONALIDADES
+
+
+Lenguas:
+https://187.237.240.68:44360/api/Lenguas/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE LENGUAS INDIGENAS
+ Clasificación Personas:
+ https://187.237.240.68:44360/api/ClasificacionPersonas/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE CLASIFICACION DE PERSONAS
+ Generos:
+ https://187.237.240.68:44360/api/Generoes/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE GENEROS
+ Ocupaciones:
+ https://187.237.240.68:44360/api/Ocupacions/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE OCUPACIONES
+ Religiones:
+ https://187.237.240.68:44360/api/Religions/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE RELIGIONES
+Discapacidades:
+ https://187.237.240.68:44360/api/Discapacidads/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE DISCAPACIDADES
+ 
+ Identificaciones:
+ https://187.237.240.68:44360/api/DocIdentificacions/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE TIPOS DE IDENTIFIACIONES
+ 
+ 
+ Estados:
+ https://187.237.240.68:44360/api/Estadoes/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE ESTADOS
+ 
+ Delitos:
+ https://187.237.240.68:44360/api/Delitoes/Listar	
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE DELITOS CLASIFICADOS
+ 
+ Agencias:
+ https://187.237.240.68:44360/api/Agencias/Listar
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NO
+		
+		DEVUELVE
+				 LISTA DE AGENCIAS DE LA PGJH
+ 
+ Municipios:
+ https://187.237.240.68:44360/api/Municipios/ListarPorEstado/		
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NUMERO DE ESTADO EN LA URL DESPUES DE UN SLASH (ejemplo ListarPorEstado/13)
+		
+		DEVUELVE
+				 LISTA DE MUNICIPIOS FILTRADOS POR ESTADO
+
+Localidades:
+ https://187.237.240.68:44360/api/Localidads/MostrarPorMPO/
+        AUTENTIFICACION:
+				NO
+		METODO:
+				GET
+		
+		REQUIERE:
+				NUMERO DE MUNICIPIO EN LA URL DESPUES DE UN SLASH (ejemplo MostrarPorMPO/80)
+		
+		DEVUELVE
+				 LISTA DE LOCALIDADES FILTRADAS POR MUNICIPIO
+
+Horarios Disponibles:
+ https://187.237.240.68:44394/api/PreHorariosDisponibles/Listarpordia
+        AUTENTIFICACION:
+				NO
+		METODO:
+				POST
+		
+		REQUIERE:
+				Guid DistritoId
+				Guid IdAgencia
+				date fecha
+		
+		DEVUELVE
+				 LISTA DE ESPACIOS DISPONIBLES EN UNA AGENCIA POR HORARIO
+
+ 
+ 
+ SERVICIOS PARA GENERAR REGISTROS
+ 
+ PreRegistro:
+ https://187.237.240.68:44394/api/PreRegistros/GenerarPreRegistro
+        
+        AUTENTIFICACION:
+				NO
+		METODO:
+				POST
+		
+		REQUIERE:
+				Guid DistritoId
+				Boolean Asignado
+				string Ndenuncia
+		
+		DEVUELVE
+				prereg -> Guid Numero de Preregistro
+
+PreAtencion:
+ https://187.237.240.68:44394/api/PreAtenciones/Crear
+        
+        AUTENTIFICACION:
+				NO
+		METODO:
+				POST
+		
+		REQUIERE:
+				Guid DistritoId
+				Guid PRegistroId
+				Boolean StatusAnonimo
+				string TipoPersona
+				string RFC
+				string RazonSocial
+				string Nombre
+				string ApellidoPaterno
+				string ApellidoMaterno
+				Boolean StatusAlias
+				DateTime FechaNacimiento
+				string EntidadFederativa
+				string CURP
+				string Sexo
+				string EstadoCivil
+				string Genero
+				string Telefono1
+				string Telefono2
+				string Correo
+				string Medionotificacion
+				string Nacionalidad
+				string Ocupacion
+				string NivelEstudio
+				string Lengua
+				string Religion
+				Boolean Discapacidad
+				string TipoDiscapacidad
+				Boolean DatosProtegidos
+				string Parentesco
+				int Edad
+				int Relacion
+				int EstadoId
+				int MunicipioId
+				int LocalidadId 	
+		DEVUELVE
+				idpatencion -> Id de la pre atencion ,personaid-> id de persona,direccionPersonal -> id de la direccion de la persona ,rap -> id del PreRaP
+ 
+ PreHecho:
+ 
+  https://187.237.240.68:44394/api/PreHecho/Crear
+          
+        AUTENTIFICACION:
+				NO
+		METODO:
+				POST
+		
+		REQUIERE:
+				Guid DistritoId
+				Guid PAtencionId
+				datetime FechaHoraSuceso
+				datetime FechaHoraSuceso2
+				datetime FechaReporte
+				string rbreve
+				string texto	
+				
+		DEVUELVE
+				idHecho -> id Del PreHecho
+
+ PreRDH:
+
+ 
+  https://187.237.240.68:44394/api/PreHecho/Crear
+          
+        AUTENTIFICACION:
+				NO
+		METODO:
+				POST
+		
+		REQUIERE:
+				Guid DistritoId
+				Guid PHechoId
+				Guid DelitoId
+				string TipoFuero
+				string TipoDeclaracion
+				string ResultadoDelito
+				string GraveNoGrave
+				boolean Equiparado
+				string IntensionDelito
+				string ViolenciaSinViolencia
+				string Tipo
+				string Concurso
+				string ClasificaOrdenResult
+				boolean ArmaFuego
+				boolean ArmaBlanca
+				decimal MontoRobado
+				string Hipotesis
+		DEVUELVE
+				rdh -> id Del RDH (registro del delito)
+				
+
+ PreCitas:
+ https://187.237.240.68:44394/api/PreCitas/Crear
+        
+        AUTENTIFICACION:
+				NO
+		METODO:
+				POST
+		
+		REQUIERE:
+				Guid PRegistroId
+				DateTime fecha
+				TimeSpan Hora
+				Guid AgenciaId
+				Guid distritoId
+		
+		DEVUELVE
+				idcita -> id de la cita				
+pachuca
+ id_agencia: ADDCB529-8BA7-4014-A359-055DFC1CE4D8
+ horario de inicio: 9:00 a.m.
+ horario de cierre: 5:00 p.m.
+ densidad: 2
+
+tulancingo
+  id_agencia: 03FFD2D1-D791-41D6-A2F8-016F35F9B37
+  horario de inicio: 9:00 a.m.
+  horario de cierre: 5:00 p.m.
+  densidad: 2
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
