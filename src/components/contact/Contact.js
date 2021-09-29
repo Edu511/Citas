@@ -83,7 +83,12 @@ export default class Contact extends Component {
       base_ip: '187.237.240.68',
       puerto: 44360,
       puerto2: 44394,
-      file: []
+      file: [],
+
+      prereg: '',
+      idpatencion: '',
+      idHecho: '',
+      idCita: ''
     }
     this.reader = new FileReader();
   }
@@ -104,6 +109,10 @@ export default class Contact extends Component {
         Asignado: false, 
         Ndenuncia: ""
       }
+    }).then(function (res){
+      this.setState({prereg: res.data});
+    }).catch(function (error){
+      console.log(error);
     });
 
     axios({
@@ -111,7 +120,7 @@ export default class Contact extends Component {
       url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreAtenciones/Crear',
       data: {
         DistritoId: this.catalogoDistritos.idDistrito,
-        PRegistroId: "",
+        PRegistroId: this.state.prereg,
         StatusAnonimo: this.state.swAnonimo,
         TipoPersona: this.state.selClasPersona,
         RFC: this.state.txtRFC,
@@ -144,6 +153,10 @@ export default class Contact extends Component {
         MunicipioId: this.state.selMunicipio,
         LocalidadId: this.state.selLocalidad
       }
+    }).then(function (res){
+      this.setState({idpatencion: res.data});
+    }).catch(function (error){
+      console.log(error);
     });
 
     axios({
@@ -151,26 +164,34 @@ export default class Contact extends Component {
       url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreHecho/Crear',
       data: {
         DistritoId: this.catalogoDistritos.idDistrito,
-        PAtencionId: "", 
+        PAtencionId: this.state.idpatencion, 
         FechaHoraSuceso: this.state.timeHoraSuceso,
         FechaHoraSuceso2: this.state.timeHoraSuceso,
         FechaReporte: this.state.dateFSuceso,
         rbreve: this.state.txtDescHechos,
         texto: ""
       }
+    }).then(function (res){
+      this.setState({idHecho: res.data});
+    }).catch(function (error){
+      console.log(error);
     });
 
     axios({
       method: 'post',
       url: 'https://' + this.state.base_ip + ':' + this.state.puerto2 + '/api/PreCitas/Crear',
       data: {
-        PRegistroId: "",
+        PRegistroId: this.state.prereg,
         fecha: this.state.dateFechaCita, 
         Hora: this.state.selHorarioCita,
         AgenciaId: this.state.idAgencia,
         distritoId: this.catalogoDistritos.idDistrito
       }
-    })
+    }).then(function (res){
+      this.setState({idCita: res.data});
+    }).catch(function (error){
+      console.log(error);
+    });
   }
 
   // devuelve los catalogos estáticos desde la API
@@ -2091,7 +2112,7 @@ export default class Contact extends Component {
               <div className="row">
                 <div className="col d-grid gap-2 d-md-flex justify-content-md-end mb-3">
                   <button className="btn btn-outline-dark fs-6" onClick={this.anterior.bind(this)} style={{marginTop: "10px"}}>ANTERIOR</button>
-                  <button className="btn btn-dark fs-6" onClick={this.enviar.bind(this)} style={{marginTop: "10px"}}>FINALIZAR</button>
+                  <button className="btn btn-dark fs-6" onClick={this.enviar.bind(this) && this.envioRegistros.bind(this)} style={{marginTop: "10px"}}>FINALIZAR</button>
                 </div>
               </div>
             </div>
