@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import url from 'url';
 import middleware from './middlewares/index.js';
-import './utils/googleapis/gapi.js';
+import authorize from './utils/googleapis/gapi.js';
 
 // importación de rutas...
 import mainRoutes from './routes/main.routes.js'
@@ -13,6 +13,7 @@ dotenv.config();
 const app = express();
 const base_url = url.host;
 const cors_credentials = process.env.NODE_ENV === 'production' ? true : false;
+// authorize(process.env.GAPI_CLIENT_ID, process.env.GAPI_CLIENT_SECRET);
 
 // Middlewares
 middleware(app);
@@ -22,7 +23,6 @@ app.get('/', (req, res) => {
     console.log('----------> Conectados a back-end <----------');
     res.send('----------> Conectados a back-end <----------');
 })
-
 app.use(mainRoutes);
 
 //Conexion a servidor

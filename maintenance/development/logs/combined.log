@@ -2,3 +2,21 @@
 
 2021-09-29 19:36:50:3650 [undefined] http: POST /mail/send 200 77 - 12.208 ms
 
+2021-09-30 09:45:34:4534 [undefined] http: POST /mail/send 200 80 - 27.606 ms
+
+2021-09-30 09:46:29:4629 [undefined] http: POST /mail/send 200 80 - 6.259 ms
+
+2021-09-30 09:47:32:4732 [undefined] http: POST /mail/send 200 80 - 13.633 ms
+
+2021-09-30 09:47:56:4756 [undefined] http: POST /mail/send 200 80 - 7.572 ms
+
+2021-09-30 09:48:22:4822 [undefined] http: POST /mail/send 200 80 - 1.822 ms
+
+2021-09-30 09:50:32:5032 [undefined] http: POST /mail/send 200 80 - 2.049 ms
+
+2021-09-30 10:11:36:1136 [undefined] http: POST /mail/send 404 149 - 2.586 ms
+
+2021-09-30 10:12:05:125 [undefined] http: POST /correo/enviar 404 153 - 0.341 ms
+
+2021-09-30 10:12:15:1215 [undefined] http: POST /correo/enviar 200 80 - 17.897 ms
+

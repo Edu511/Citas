@@ -7,7 +7,7 @@ import { check, validationResult  } from 'express-validator';
 const router = Router();
 
 //Enviar correos electrónicos
-router.post('/mail/send', [ 
+router.post('/correo/enviar', [ 
     check('correo').not().isEmpty().trim().escape(),
     check('asunto').not().isEmpty().trim().escape(),
     check('mensaje').not().isEmpty().trim().escape(),
@@ -25,6 +25,7 @@ router.post('/mail/send', [
                 }));
         })
         .catch((error) => {
+            console.log(error)
             res.send(JSON.stringify({
                 estado: 'fallido',
                 mensaje: 'Los datos no han sido registrados',

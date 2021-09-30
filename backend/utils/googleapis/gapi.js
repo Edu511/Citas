@@ -1,34 +1,31 @@
 import fs from 'fs';
 import readline from 'readline';
 import { google } from 'googleapis';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const client_id = process.env.GAPI_CLIENT_ID;
+const client_secret = process.env.GAPI_CLIENT_SECRET;
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
     'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/gmail.send'
 ];
+
+const redirect_uris =  [
+  "https://www.googleapis.com/auth/gmail.readonly",
+  "https://www.googleapis.com/auth/gmail.send"
+  ]
+
+
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = '../backend/server/utils/googleapis/token.json';
 
-// Load client secrets from a local file.
-fs.readFile('../backend/server/utils/googleapis/credentials.json', (err, content) => {
-  if (err) return console.log('Error loading client secret file:', err);
-  // Authorize a client with credentials, then call the Gmail API.
-  authorize(JSON.parse(content), listLabels);
-});
-
-/**
- * Create an OAuth2 client with the given credentials, and then execute the
- * given callback function.
- * @param {Object} credentials The authorization client credentials.
- * @param {function} callback The callback to call with the authorized client.
- */
-function authorize(credentials, callback) {
-  const client_secret = credentials.client_secret;
-  const client_id = credentials.client_id;
-  const redirect_uris = credentials.redirect_uris;
+export default function authorize(callback = listLabel()) {
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
@@ -38,14 +35,11 @@ function authorize(credentials, callback) {
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(oAuth2Client);
   });
+
+  return oAuth2Client;
 }
 
-/**
- * Get and store new token after prompting for user authorization, and then
- * execute the given callback with the authorized OAuth2 client.
- * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
- * @param {getEventsCallback} callback The callback for the authorized client.
- */
+
 function getNewToken(oAuth2Client, callback) {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
@@ -71,11 +65,6 @@ function getNewToken(oAuth2Client, callback) {
   });
 }
 
-/**
- * Lists the labels in the user's account.
- *
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
 function listLabels(auth) {
   const gmail = google.gmail({version: 'v1', auth});
 

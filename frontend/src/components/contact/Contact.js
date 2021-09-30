@@ -89,7 +89,6 @@ export default class Contact extends Component {
   // carga los elementos mencionados despues del DOM de react
   componentDidMount() {
     this.listarCatalogos();
-    this.cargarHorariosDisponibles();
   }
 
   // devuelve los catalogos estáticos desde la API
@@ -380,8 +379,18 @@ export default class Contact extends Component {
     axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
            
       console.log(response)
-      let localidadesArray = response.data;
-      this.setState({ horariosDisponibles: localidadesArray}, (response) => {
+      let datos = response.data;
+      let horarios = [];
+
+      for (let index = 0; index < datos.length; index++) {
+        horarios.push({
+          hora: datos[index].hora,
+          espacios: datos[index].espacios
+        });
+        
+      }
+
+      this.setState({ horariosDisponibles: horarios}, (response) => {
         console.log(response)
         }
       );
@@ -560,7 +569,7 @@ export default class Contact extends Component {
           this.setState({ 
             dateFechaCita: 
             fecha_seleccionada.getFullYear() + '-' + mes + '-' + dia }, () => {
-          console.log('Fecha guardada: ' + this.state.dateFechaCita);
+            console.log('Fecha guardada: ' + this.state.dateFechaCita);
         })
       }
     });
@@ -624,6 +633,43 @@ export default class Contact extends Component {
       return false
     }
   }
+
+  // Enviar correo a personas pertinentes
+  enviarCorreo = () => {
+    let datos_correo_usuario = {
+      correo: this.state.emailCorreo,
+      asunto: 'Datos de cita para atención temprana - PGJEH',
+      mensaje: 'Gracias por tu cooperación, se ha agenado una cita el dia ' + this.state.dateFechaCita + 
+      ' a las ' + this.state.selHorarioCita + 
+      'en las oficinas del Centro de Atencion Temprana ' + this.state.selAgenciaAVisitar + 
+      'Recuerda presentarte con esta solicitud 15 minutos antes de tu cita para revisar tus datos personales'
+    }
+
+    let datos_correo_acuse = {
+      correo: 'sthefanyrangel.it@gmail.com',
+      asunto: 'Nueva cita generada en el portal de denincuas PGJEH',
+      mensaje: 'Hola, se ha agendado una cita el dia ' + this.state.dateFechaCita + 
+      ' a las ' + this.state.selHorarioCita + 
+      'en las oficinas del Centro de Atencion Temprana ' + this.state.selAgenciaAVisitar + 
+      'Recuerde requisitar el acuse generado por correo desde el mismo portal'
+    }
+
+    axios.post('https://localhost:5000/correo/enviar', datos_correo_usuario).then(response => {
+           
+      console.log(response)
+      axios.post('https://localhost:5000/correo/enviar', datos_correo_acuse).then(response => {
+        console.log(response)
+
+      }).catch(error => { 
+        console.log(error);
+      });
+
+    }).catch(error => { 
+
+      console.log(error);
+
+    });
+  }
   
   //Función para enviar el formulario
   enviar(e) {
@@ -645,7 +691,7 @@ export default class Contact extends Component {
 
     } else {
       
-      // si los datos que se vana enviar son anonimos
+      // si los datos que se van a enviar son anonimos
       if(this.state.swAnonimo){
         const parametrosAnonimo = {
           swAnonimo: true,
@@ -1089,6 +1135,8 @@ export default class Contact extends Component {
       if(this.state.raPersona === 'Moral' && this.state.swAnonimo === false && this.state.txtNumEdad < 18){
         alert('Solamente pueden registrarse personas mayores de edad bajo el régimen fiscal de persona moral');
       }
+
+      this.enviarCorreo();
     }
   }
 
@@ -1113,7 +1161,6 @@ export default class Contact extends Component {
     this.cargarMunicipios();
     this.cargarLocalidades();
     this.cargarHorariosDisponibles();
-
   }
 
   render() {
@@ -1979,11 +2026,12 @@ export default class Contact extends Component {
                     </div>
                     <div className="col-md-6">
                       <select required onChange={this.handlerOnChange} className="form-select" id="selHorarioCita" name="selHorarioCita" value={this.state.selHorarioCita} ref={(selHorarioCita) => (this.inputSelHorarioCita = selHorarioCita) } aria-label="Horario de cita" >
-                        <option value="">Seleccione</option>
-                        <option value="Opcion 1">Opcion 1</option>
-                        <option value="Opcion 1">Opcion 1</option>
-                        <option value="Opcion 1">Opcion 1</option>
-                        <option value="Opcion 1">Opcion 1</option>
+                        {
+                          this.state.horariosDisponibles ? 
+                            this.state.horariosDisponibles.map(datos => (
+                                <option key={datos.hora} value={datos.hora}>{datos.hora}</option>
+                            )) : <option value="" disabled>seleccione</option>
+                        }
                       </select>
                     </div>
                   </div>
@@ -2014,6 +2062,7 @@ export default class Contact extends Component {
                         En la brevedad, recibirá una notificación por el medio seleccionado con su numero de cita y formato de solicitud de denuncia
                       </p>
                       <button className="btn btn-dark fs-6" onClick={this.recargar.bind(this)}>Registrar nueva denuncia</button>
+                      <button className="btn btn-dark fs-6" onClick={this.enviarCorreo}>Registrar nueva denuncia</button>
                     </div>
                   </div>
                 </div>
