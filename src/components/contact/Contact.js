@@ -78,6 +78,7 @@ export default class Contact extends Component {
       catalogoEstado: [],
       catalogoMunicipio: [],
       catalogoLocalidad: [],
+      horariosDisponibles: [],
       base_ip: '187.237.240.68',
       puerto: 44360,
       file: []
@@ -281,13 +282,17 @@ export default class Contact extends Component {
 
   // lista catalogos de municipios de acuerdo al estado seleccionado
   cargarMunicipios = () => {
+
+    const agent = new https.Agent({  
+      rejectUnauthorized: false
+    }); 
     
     if(this.state.selEstado){
 
       let consulta = (elemento) => elemento.nombre === this.state.selEstado;
       let estado_seleccionado = this.state.catalogoEstado.find(consulta);
 
-      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + estado_seleccionado.idEstado).then(response => {
+      axios.get('https://'+ this.state.base_ip + ':' + this.state.puerto + '/api/Municipios/ListarPorEstado/' + estado_seleccionado.idEstado, { httpsAgent: agent }).then(response => {
            
         let municipiosArray = response.data
         this.setState({ catalogoMunicipio: municipiosArray.sort((a, b) =>{
@@ -334,6 +339,7 @@ export default class Contact extends Component {
     }
   }
 
+  // regresar los horarios disponibles
   cargarHorariosDisponibles = () => {
 
     let ip_address = '187.237.240.68';
@@ -374,7 +380,11 @@ export default class Contact extends Component {
     axios.post('https://'+ ip_address + ':' + puerto + '/api/PreHorariosDisponibles/Listarpordia', datos_requeridos, { httpsAgent: agent }).then(response => {
            
       console.log(response)
-      // this.setState({ catalogoClasPersona: response.data});
+      let localidadesArray = response.data;
+      this.setState({ horariosDisponibles: localidadesArray}, (response) => {
+        console.log(response)
+        }
+      );
 
     }).catch(error => { 
 
@@ -2015,3 +2025,4 @@ export default class Contact extends Component {
     )
   }
 }
+

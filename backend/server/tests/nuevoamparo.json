@@ -1,0 +1,116 @@
+
+  {
+    "login": {
+      "email_username": "alma@test.com",
+      "password": "alma123"
+    },
+    
+    "jucio_amparo": {
+      "id_autor": "1",
+      "fecha_registro": "2017-11-01 16:00:49.349",
+      "fecha_expedicion": "2017-11-01 16:00:49.349",
+      "numero_amparo": "NHA/684-2021",
+      "quejoso": "Alma Marcela Gonzalez Cuartada",
+      "juzgado": "quinto",
+      "autoridades_responsables": "PGJEH",
+      "fecha_informe": "2017-11-01 16:00:49.349",
+      "resolucion_incidente": "protege",
+      "resolucion_principal": "difamacion",
+      "fecha_interposicion_recursos": "2017-11-01 16:00:49.349",
+      "recursos": "insercion",
+      "ejecutoria": "2017-11-01 16:00:49.349",
+      "observaciones": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras malesuada dui quis dictum consectetur. Praesent vestibulum ipsum nec dolor feugiat tristique. Mauris sed urna ut odio ornare porttitor. Sed commodo convallis mauris, ut tempus magna finibus eu. In facilisis scelerisque enim, vel sodales augue scelerisque quis.",
+      "estado": "en progreso"
+    },
+
+    "autoridad responsable": {
+      "autoridad_responsable": "CNDH", 
+      "ubicacion": "Tizayuca"
+    },
+  
+    "movimiento": {
+      "fecha": "2017-11-01 16:00:49.349", 
+      "movimiento": "Insercion de juicio_amparo",
+      "id_responsable": "2",
+      "id_amparo": "1"
+    },
+
+    "notificacion": {
+      "fecha": "2017-11-01T22:00:49.349Z",
+      "mensaje": "Nueva autoridad registrada",
+      "comentarios": "Registrado por fanny desde la laptop",
+      "id_juicio_amparo": "1"
+    }, 
+
+    "rol": {
+      "nombre": "Prueba",
+      "crear_juicios": true,
+      "consultar_juicios": true,
+      "editar_juicios": true,
+      "eliminar_juicios": true,
+      "crear_roles": true,
+      "asignar_permisos": true,
+      "editar_id_autor": true,
+      "editar_fecha_registro": true,
+      "editar_fecha_expedicion": true,
+      "editar_numero_amparo": true,
+      "editar_quejoso": true,
+      "editar_juzgado": true,
+      "editar_autoridades_responsables": true,
+      "editar_fecha_informe": true,
+      "editar_resolucion_incidente": true,
+      "editar_resolucion_principal": true,
+      "editar_fecha_interposicion_recursos": true,
+      "editar_recursos": true,
+      "editar_resolucion_recurso": true,
+      "editar_ejecutoria": true,
+      "editar_observaciones": true,
+      "editar_estado": true
+    },
+
+    "usuario": {
+      "clave": "9",
+      "id_rol": 1,
+      "id_modulo_servicio": "9",
+      "usuario": "Prueba",
+      "nombre": "PruebaUno",
+      "direccion": "Av. Siempreviva 777",
+      "telefono": "5512345678",
+      "email": "prueba@admin.com",
+      "puesto": "Administrador",
+      "password": "prueba123",
+      "condicion": "Normal",
+      "titular": "El mismo",
+      "estado_cuenta": "Activo"
+    },
+
+    "usuario2": {
+      "clave": 12345,
+      "id_rol": 1,
+      "id_modulo_servicio": 23,
+      "usuario": "administrador_fanny",
+      "nombre": "sthefany rangel",
+      "direccion": "AV. de la luz #123",
+      "telefono": "5512345678",
+      "email": "fanny@test.com",
+      "puesto": "desarrollador",
+      "password": "fanny123",
+      "condicion": "regular",
+      "titular": "PGJEH",
+      "estado_cuenta": "activo"
+    },
+
+    "autoridad_juicio": {
+      "id_autoridad": 3, 
+      "id_juicio": 6
+    },
+
+    "busqueda": {
+      "busqueda": "loquesea"
+    },
+
+    "filtro": {
+      "columna": "movimiento",
+      "direccion": "ASC"
+    }
+}
