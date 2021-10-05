@@ -20,3 +20,93 @@
 
 2021-09-30 10:12:15:1215 [undefined] http: POST /correo/enviar 200 80 - 17.897 ms
 
+2021-10-05 10:28:25:2825 [undefined] http: POST /correo/enviar 200 80 - 84.656 ms
+
+2021-10-05 10:29:29:2929 [undefined] http: POST /correo/enviar 200 80 - 28.886 ms
+
+2021-10-05 11:06:56:656 [undefined] http: POST /correo/enviar 200 80 - 16.449 ms
+
+2021-10-05 11:07:45:745 [undefined] http: POST /correo/enviar 200 80 - 10.214 ms
+
+2021-10-05 11:09:44:944 [undefined] http: POST /correo/enviar 200 80 - 13.473 ms
+
+2021-10-05 11:10:11:1011 [undefined] http: POST /correo/enviar 200 80 - 12.005 ms
+
+2021-10-05 11:10:47:1047 [undefined] http: POST /correo/enviar 200 80 - 18.046 ms
+
+2021-10-05 11:11:49:1149 [undefined] http: POST /correo/enviar 200 80 - 13.362 ms
+
+2021-10-05 11:14:56:1456 [undefined] http: POST /correo/enviar 200 80 - 14.078 ms
+
+2021-10-05 11:17:02:172 [undefined] http: POST /correo/enviar 200 80 - 13.256 ms
+
+2021-10-05 11:20:47:2047 [undefined] http: POST /correo/enviar 200 80 - 11.070 ms
+
+2021-10-05 11:20:55:2055 [undefined] http: POST /correo/enviar 200 80 - 12.680 ms
+
+2021-10-05 11:21:12:2112 [undefined] http: POST /correo/enviar 200 80 - 14.202 ms
+
+2021-10-05 11:22:05:225 [undefined] http: POST /correo/enviar 200 80 - 13.096 ms
+
+2021-10-05 11:22:59:2259 [undefined] http: POST /correo/enviar 200 80 - 11.840 ms
+
+2021-10-05 11:23:35:2335 [undefined] http: POST /correo/enviar 200 80 - 29.089 ms
+
+2021-10-05 11:24:37:2437 [undefined] http: POST /correo/enviar 200 80 - 36.678 ms
+
+2021-10-05 11:25:52:2552 [undefined] http: POST /correo/enviar 200 80 - 8.419 ms
+
+2021-10-05 11:26:07:267 [undefined] http: POST /correo/enviar 200 80 - 11.265 ms
+
+2021-10-05 11:26:35:2635 [undefined] http: POST /correo/enviar 200 80 - 7.531 ms
+
+2021-10-05 11:27:12:2712 [undefined] http: POST /correo/enviar 200 80 - 8.299 ms
+
+2021-10-05 11:27:45:2745 [undefined] http: POST /correo/enviar 200 80 - 9.863 ms
+
+2021-10-05 11:28:32:2832 [undefined] http: POST /correo/enviar 200 80 - 6.187 ms
+
+2021-10-05 11:29:06:296 [undefined] http: POST /correo/enviar 200 80 - 6.319 ms
+
+2021-10-05 11:32:07:327 [undefined] http: POST /correo/enviar 200 80 - 6.310 ms
+
+2021-10-05 11:34:14:3414 [undefined] http: POST /correo/enviar 200 80 - 6.303 ms
+
+2021-10-05 11:35:23:3523 [undefined] http: POST /correo/enviar 200 80 - 1.593 ms
+
+2021-10-05 11:38:10:3810 [undefined] http: POST /correo/enviar 200 80 - 6.224 ms
+
+2021-10-05 11:43:10:4310 [undefined] http: POST /correo/enviar 200 77 - 8.885 ms
+
+2021-10-05 11:43:56:4356 [undefined] http: POST /correo/enviar 200 77 - 15.183 ms
+
+2021-10-05 11:44:35:4435 [undefined] http: POST /correo/enviar 200 77 - 14.843 ms
+
+2021-10-05 11:44:57:4457 [undefined] http: POST /correo/enviar 200 100 - 11.920 ms
+
+2021-10-05 11:45:17:4517 [undefined] http: POST /correo/enviar 200 100 - 16.569 ms
+
+2021-10-05 11:46:02:462 [undefined] http: POST /correo/enviar 200 89 - 9.709 ms
+
+2021-10-05 11:46:31:4631 [undefined] http: POST /correo/enviar 200 72 - 9.268 ms
+
+2021-10-05 11:46:59:4659 [undefined] http: POST /correo/enviar 200 72 - 14.932 ms
+
+2021-10-05 11:47:36:4736 [undefined] http: POST /correo/enviar 200 72 - 3.491 ms
+
+2021-10-05 12:27:50:2750 [undefined] http: OPTIONS /correo/enviar 200 4 - 19.153 ms
+
+2021-10-05 12:29:19:2919 [undefined] http: OPTIONS /correo/enviar 200 4 - 0.922 ms
+
+2021-10-05 12:29:33:2933 [undefined] http: OPTIONS /correo/enviar 200 4 - 0.417 ms
+
+2021-10-05 12:30:56:3056 [undefined] http: OPTIONS /correo/enviar 200 4 - 0.387 ms
+
+2021-10-05 12:31:51:3151 [undefined] http: OPTIONS /correo/enviar 200 4 - 0.785 ms
+
+2021-10-05 12:33:01:331 [undefined] http: OPTIONS /correo/enviar 200 4 - 0.360 ms
+
+2021-10-05 12:39:24:3924 [undefined] http: OPTIONS /correo/enviar 200 4 - 2.874 ms
+
+2021-10-05 12:41:07:417 [undefined] http: OPTIONS /correo/enviar 200 4 - 0.624 ms
+

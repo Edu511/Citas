@@ -17,19 +17,20 @@ router.post('/correo/enviar', [
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     } else {
-        var respuesta = enviarCorreos(req, res).then(respuesta => {
+        enviarCorreos(req, res).then(respuesta => {
+            
             res.send(JSON.stringify({
-                    estado: 'completado',
-                    mensaje: 'Los datos han sido registrados correctamente',
-                    datos: respuesta
-                }));
-        })
+                estado: 'completado',
+                mensaje: 'El correo ha sido enviado con éxito',
+                respuesta: respuesta,
+            }));
+    })
         .catch((error) => {
-            console.log(error)
+            console.error(new Error(error))
             res.send(JSON.stringify({
                 estado: 'fallido',
-                mensaje: 'Los datos no han sido registrados',
-                datos: error
+                mensaje: 'Error al enviar el correo, revise información del error',
+                error: error
             }));
         });
     }

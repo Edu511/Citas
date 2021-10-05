@@ -15,7 +15,7 @@ const middleware =  (app) => {
     app.use(bodyParser);
     app.use(express.urlencoded({ extended: false }));
     app.use(morganMiddleware);
-    
+    console.log('>>>>>>>>>>>>>>>>>>>>>>       Middlewares configurados        <<<<<<<<<<<<<<<<<<<<<<<<<<<')
 };
 
 export default middleware;

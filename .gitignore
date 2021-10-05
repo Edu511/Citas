@@ -4,5 +4,7 @@
 package-lock.json 
 .env
 /dist
-/server/maintenance/
-/server/maintenance/logs
+/backend/maintenance/
+/backend/maintenance/logs
+/backend/utils/googleapis/token.json
+/backend/utils/googleapis/credentials.json

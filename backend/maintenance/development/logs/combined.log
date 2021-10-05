@@ -72,3 +72,9 @@
 
 2021-09-30 13:55:20:5520 [undefined] http: GET / 200 45 - 29.339 ms
 
+2021-10-05 10:25:45:2545 [undefined] http: POST /correo/enviar 200 80 - 68.615 ms
+
+2021-10-05 10:27:06:276 [undefined] http: POST /correo/enviar 200 80 - 49.529 ms
+
+2021-10-05 10:27:44:2744 [undefined] http: POST /correo/enviar 200 80 - 22.892 ms
+
